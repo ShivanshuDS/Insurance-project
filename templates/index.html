@@ -3,108 +3,673 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Insurance Cost Predictor</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>MediCost AI — Insurance Cost Predictor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            font-family: 'Arial', sans-serif;
+        :root {
+            --bg:      #f5f0e8;
+            --bg2:     #ede8de;
+            --ink:     #1a1209;
+            --ink2:    #3d3425;
+            --muted:   #8a7d68;
+            --accent:  #c8502a;
+            --green:   #2a7a5e;
+            --gold:    #d4a843;
+            --blue:    #2a5ea0;
+            --card:    #fdfaf4;
+            --border:  #d6cdb8;
+            --shadow:  rgba(26,18,9,0.12);
         }
-        .container {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            padding: 40px;
-            margin-top: 50px;
+        [data-theme="dark"] {
+            --bg:    #0f0d0a;  --bg2:   #181410;
+            --ink:   #f0ead8;  --ink2:  #c8bfaa;
+            --muted: #7a7060;  --card:  #1c1812;
+            --border:#2e2820;  --shadow:rgba(0,0,0,0.4);
         }
-        h1 {
-            color: #333;
-            text-align: center;
-            margin-bottom: 30px;
-            font-weight: bold;
-        }
-        .form-label {
-            font-weight: 600;
-            color: #555;
-        }
-        .btn-primary {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            border: none;
-            padding: 12px 30px;
-            font-size: 18px;
-            border-radius: 25px;
-            transition: all 0.3s ease;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        .prediction-result {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 30px;
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            color: #28a745;
-        }
-        .form-control {
-            border-radius: 8px;
-            border: 2px solid #ddd;
-            transition: border-color 0.3s ease;
-        }
-        .form-control:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-        }
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
+        body { font-family:'DM Sans','Segoe UI',sans-serif; background:var(--bg); color:var(--ink); min-height:100vh; transition:background .3s,color .3s; }
+
+        /* Grain */
+        body::before { content:''; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.03;
+            background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            background-size:200px; }
+
+        /* ── NAV ── */
+        .topbar { position:sticky; top:0; z-index:200; display:flex; align-items:center; justify-content:space-between; padding:14px 36px;
+            background:rgba(245,240,232,.92); backdrop-filter:blur(16px); border-bottom:1px solid var(--border); transition:background .3s; }
+        [data-theme="dark"] .topbar { background:rgba(15,13,10,.92); }
+        .logo { font-family:'Playfair Display',Georgia,serif; font-size:1.35rem; font-weight:900; letter-spacing:-.01em; color:var(--ink); }
+        .logo span { color:var(--accent); }
+        .topbar-right { display:flex; align-items:center; gap:10px; }
+        .nav-pill { font-size:.78rem; font-weight:600; text-transform:uppercase; letter-spacing:.07em; color:var(--muted);
+            background:none; border:1px solid var(--border); padding:6px 14px; border-radius:100px; cursor:pointer;
+            text-decoration:none; display:inline-flex; align-items:center; gap:6px; transition:all .2s; }
+        .nav-pill:hover { border-color:var(--accent); color:var(--accent); }
+        .theme-btn { width:36px; height:36px; border-radius:50%; background:var(--card); border:1px solid var(--border); cursor:pointer;
+            font-size:1rem; display:flex; align-items:center; justify-content:center; transition:all .2s; }
+        .theme-btn:hover { border-color:var(--accent); transform:rotate(20deg); }
+
+        /* ── HERO ── */
+        .hero { padding:64px 36px 44px; max-width:1120px; margin:0 auto; position:relative; z-index:1; }
+        .hero-tag { display:inline-flex; align-items:center; gap:8px; font-size:.72rem; font-weight:700; text-transform:uppercase;
+            letter-spacing:.12em; color:var(--accent); background:rgba(200,80,42,.08); border:1px solid rgba(200,80,42,.2);
+            padding:5px 14px; border-radius:100px; margin-bottom:18px; }
+        .hero-title { font-family:'Playfair Display',Georgia,serif; font-size:clamp(2rem,5vw,3.8rem);
+            font-weight:900; line-height:1.08; letter-spacing:-.02em; margin-bottom:14px; }
+        .hero-title em { color:var(--accent); font-style:normal; }
+        .hero-sub { font-size:1rem; font-weight:300; color:var(--muted); line-height:1.7; max-width:520px; margin-bottom:28px; }
+        .hero-stats { display:flex; gap:28px; flex-wrap:wrap; padding:18px 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); margin-bottom:44px; }
+        .stat { display:flex; flex-direction:column; gap:2px; }
+        .stat-num { font-family:'Playfair Display',Georgia,serif; font-size:1.7rem; font-weight:900; color:var(--ink); line-height:1; }
+        .stat-label { font-size:.74rem; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; }
+
+        /* ── LAYOUT ── */
+        .main-layout { max-width:1120px; margin:0 auto; padding:0 36px 80px; display:grid; grid-template-columns:1fr 360px; gap:28px; position:relative; z-index:1; }
+
+        /* ── FORM PANEL ── */
+        .form-panel { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:36px; box-shadow:0 8px 40px var(--shadow); animation:riseIn .5s cubic-bezier(.22,1,.36,1) both; }
+        @keyframes riseIn { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+
+        .form-progress { display:flex; gap:6px; margin-bottom:28px; }
+        .progress-step { flex:1; height:4px; border-radius:2px; background:var(--border); transition:background .3s; }
+        .progress-step.done { background:var(--accent); }
+
+        .sec-title { font-family:'Playfair Display',Georgia,serif; font-size:1rem; font-weight:700; color:var(--ink);
+            margin-bottom:18px; padding-bottom:10px; border-bottom:1px solid var(--border);
+            display:flex; align-items:center; gap:8px; }
+        .sec-icon { width:28px; height:28px; border-radius:7px; background:rgba(200,80,42,.1); display:flex; align-items:center; justify-content:center; font-size:.85rem; }
+
+        .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:26px; }
+        .form-group { display:flex; flex-direction:column; gap:6px; }
+        .form-group.full { grid-column:1/-1; }
+
+        label { font-size:.76rem; font-weight:600; text-transform:uppercase; letter-spacing:.07em; color:var(--muted); display:flex; align-items:center; gap:5px; }
+        .ltip { font-size:.63rem; font-weight:400; text-transform:none; letter-spacing:0; font-style:italic; }
+
+        input[type="number"], select {
+            background:var(--bg); border:1.5px solid var(--border); border-radius:9px; color:var(--ink);
+            font-family:'DM Sans',sans-serif; font-size:.95rem; padding:10px 13px; width:100%;
+            transition:border-color .2s,box-shadow .2s; outline:none; -moz-appearance:textfield; }
+        input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appearance:none}
+        input:focus,select:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(200,80,42,.1); background:var(--card); }
+        input.invalid { border-color:#e53e3e; box-shadow:0 0 0 3px rgba(229,62,62,.1); }
+        input.valid   { border-color:var(--green); }
+        select option { background:var(--card); color:var(--ink); }
+
+        /* Radios */
+        .radio-group { display:flex; gap:8px; }
+        .radio-option { flex:1; }
+        .radio-option input[type="radio"] { display:none; }
+        .radio-option label { display:flex; align-items:center; justify-content:center; gap:6px; padding:10px 8px;
+            border-radius:9px; border:1.5px solid var(--border); background:var(--bg); cursor:pointer;
+            font-size:.86rem; font-weight:500; text-transform:none; letter-spacing:0; color:var(--ink2); transition:all .2s; }
+        .radio-option input[type="radio"]:checked + label { border-color:var(--accent); background:rgba(200,80,42,.08); color:var(--accent); font-weight:600; }
+        .radio-option label:hover { border-color:var(--accent); }
+
+        /* Age slider */
+        .slider-wrap { display:flex; flex-direction:column; gap:4px; }
+        .slider-hdr { display:flex; justify-content:space-between; }
+        .slider-val { font-family:'Playfair Display',Georgia,serif; font-size:1.05rem; font-weight:700; color:var(--accent); }
+        input[type="range"] { -webkit-appearance:none; width:100%; height:5px; background:var(--border); border-radius:3px; border:none; padding:0; cursor:pointer; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--accent); border-radius:50%; border:3px solid var(--card); box-shadow:0 2px 6px rgba(200,80,42,.3); }
+        .range-lbl { display:flex; justify-content:space-between; font-size:.68rem; color:var(--muted); }
+
+        /* BMI meter */
+        .bmi-bar { height:7px; border-radius:4px; overflow:hidden; background:linear-gradient(to right,#2a7a5e 0%,#d4a843 35%,#c8502a 60%,#8b1a1a 100%); position:relative; margin-top:6px; }
+        .bmi-dot { position:absolute; top:-3px; width:13px; height:13px; border-radius:50%; background:var(--ink); border:2px solid var(--card); transform:translateX(-50%); transition:left .4s cubic-bezier(.34,1.56,.64,1); }
+        .bmi-lbl { font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.07em; margin-top:3px; }
+
+        /* Counter */
+        .counter-wrap { display:flex; align-items:center; gap:10px; }
+        .c-btn { width:34px; height:34px; border-radius:8px; background:var(--bg2); border:1.5px solid var(--border); font-size:1.1rem; font-weight:700; cursor:pointer; color:var(--ink2); display:flex; align-items:center; justify-content:center; transition:all .15s; }
+        .c-btn:hover { border-color:var(--accent); color:var(--accent); }
+        .c-disp { font-family:'Playfair Display',Georgia,serif; font-size:1.3rem; font-weight:900; color:var(--ink); min-width:30px; text-align:center; }
+
+        /* Submit */
+        .submit-btn { width:100%; padding:14px; font-family:'Playfair Display',Georgia,serif; font-size:1rem; font-weight:700;
+            color:#fff; background:var(--accent); border:none; border-radius:11px; cursor:pointer;
+            transition:transform .2s,box-shadow .2s; box-shadow:0 4px 20px rgba(200,80,42,.3);
+            display:flex; align-items:center; justify-content:center; gap:8px; margin-top:8px; }
+        .submit-btn:hover { transform:translateY(-3px); box-shadow:0 10px 36px rgba(200,80,42,.4); }
+        .submit-btn:active { transform:translateY(0); }
+
+        /* Error msg */
+        #validationMsg { display:none; padding:10px 14px; background:rgba(229,62,62,.08); border:1px solid rgba(229,62,62,.3); border-radius:8px; font-size:.82rem; color:#c53030; margin-bottom:14px; }
+
+        /* ── SIDEBAR ── */
+        .sidebar { display:flex; flex-direction:column; gap:18px; }
+        .side-card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:22px; box-shadow:0 4px 18px var(--shadow); animation:riseIn .5s cubic-bezier(.22,1,.36,1) both; }
+        .side-card:nth-child(1){animation-delay:.08s}.side-card:nth-child(2){animation-delay:.16s}.side-card:nth-child(3){animation-delay:.24s}.side-card:nth-child(4){animation-delay:.32s}
+        .sc-title { font-family:'Playfair Display',Georgia,serif; font-size:.9rem; font-weight:700; color:var(--ink); margin-bottom:12px; display:flex; align-items:center; gap:7px; }
+
+        /* Result */
+        .result-card { border-color:rgba(200,80,42,.25); background:linear-gradient(135deg,rgba(200,80,42,.05),rgba(212,168,67,.03)); }
+        .r-empty { text-align:center; color:var(--muted); font-size:.86rem; padding:10px 0; line-height:1.6; }
+        .r-amount { font-family:'Playfair Display',Georgia,serif; font-size:2.2rem; font-weight:900; color:var(--accent); line-height:1; margin-bottom:3px; animation:popIn .5s cubic-bezier(.22,1,.36,1); }
+        @keyframes popIn { from{opacity:0;transform:scale(.85)} to{opacity:1;transform:scale(1)} }
+        .r-period { font-size:.76rem; color:var(--muted); margin-bottom:12px; }
+        .r-breakdown { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px; }
+        .r-item { background:var(--bg); border-radius:8px; padding:9px 11px; border:1px solid var(--border); }
+        .r-lbl { font-size:.64rem; text-transform:uppercase; letter-spacing:.07em; color:var(--muted); margin-bottom:2px; }
+        .r-val { font-size:.9rem; font-weight:700; color:var(--ink); }
+        .copy-btn { width:100%; margin-top:12px; padding:8px; font-size:.78rem; font-weight:600; color:var(--accent);
+            background:rgba(200,80,42,.08); border:1px solid rgba(200,80,42,.2); border-radius:8px; cursor:pointer; transition:background .2s; }
+        .copy-btn:hover { background:rgba(200,80,42,.14); }
+
+        /* Risk */
+        .risk-track { height:10px; border-radius:5px; overflow:hidden; background:var(--border); margin-bottom:6px; }
+        .risk-fill { height:100%; border-radius:5px; transition:width .8s cubic-bezier(.34,1.56,.64,1),background .4s; }
+        .risk-lbz { display:flex; justify-content:space-between; font-size:.66rem; color:var(--muted); }
+        .risk-tag { display:inline-block; font-size:.7rem; font-weight:700; padding:3px 10px; border-radius:100px; text-transform:uppercase; letter-spacing:.06em; margin-top:8px; }
+        .rlow    {background:rgba(42,122,94,.15);color:var(--green)}
+        .rmed    {background:rgba(212,168,67,.15);color:var(--gold)}
+        .rhigh   {background:rgba(200,80,42,.15);color:var(--accent)}
+        .rvhigh  {background:rgba(139,26,26,.15);color:#8b1a1a}
+
+        /* Chart */
+        .chart-wrap { position:relative; height:150px; }
+
+        /* History */
+        .h-list { display:flex; flex-direction:column; gap:7px; max-height:210px; overflow-y:auto; }
+        .h-item { display:flex; justify-content:space-between; align-items:center; padding:8px 11px; background:var(--bg); border-radius:8px; border:1px solid var(--border); font-size:.8rem; cursor:pointer; transition:border-color .2s; }
+        .h-item:hover { border-color:var(--accent); }
+        .h-cost { font-weight:700; color:var(--accent); }
+        .h-info { color:var(--muted); font-size:.7rem; }
+        .h-empty { text-align:center; color:var(--muted); font-size:.8rem; padding:12px; }
+        .clr-btn { font-size:.7rem; color:var(--muted); cursor:pointer; text-decoration:underline; background:none; border:none; margin-top:6px; display:block; width:100%; text-align:right; }
+        .clr-btn:hover { color:var(--accent); }
+
+        /* ── INFO SECTION ── */
+        .info-section { max-width:1120px; margin:0 auto; padding:0 36px 80px; position:relative; z-index:1; }
+        .sec-hdr { font-family:'Playfair Display',Georgia,serif; font-size:1.55rem; font-weight:900; color:var(--ink); margin-bottom:22px; letter-spacing:-.01em; }
+        .info-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-bottom:44px; }
+        .i-card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:22px; transition:transform .2s,border-color .2s; }
+        .i-card:hover { transform:translateY(-4px); border-color:var(--accent); }
+        .i-icon { font-size:1.7rem; margin-bottom:10px; }
+        .i-title { font-family:'Playfair Display',Georgia,serif; font-size:.9rem; font-weight:700; color:var(--ink); margin-bottom:7px; }
+        .i-text { font-size:.82rem; color:var(--muted); line-height:1.65; font-weight:300; }
+
+        /* Tips */
+        .tip-list { display:flex; flex-direction:column; gap:8px; max-width:700px; margin-bottom:44px; }
+        .tip-item { display:flex; gap:10px; align-items:flex-start; padding:10px 12px; background:var(--card); border-radius:9px; border:1px solid var(--border); font-size:.82rem; color:var(--ink2); line-height:1.5; transition:border-color .2s; }
+        .tip-item:hover { border-color:var(--accent); }
+        .ti { font-size:.95rem; flex-shrink:0; margin-top:1px; }
+
+        /* FAQ */
+        .faq-list { display:flex; flex-direction:column; gap:10px; }
+        .faq-item { background:var(--card); border:1px solid var(--border); border-radius:11px; overflow:hidden; }
+        .faq-q { width:100%; text-align:left; padding:15px 18px; background:none; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.9rem; font-weight:600; color:var(--ink); display:flex; justify-content:space-between; align-items:center; transition:color .2s; }
+        .faq-q:hover { color:var(--accent); }
+        .chevron { transition:transform .3s; font-size:.78rem; }
+        .faq-q.open .chevron { transform:rotate(180deg); }
+        .faq-a { max-height:0; overflow:hidden; transition:max-height .35s cubic-bezier(.4,0,.2,1),padding .2s; font-size:.84rem; color:var(--muted); line-height:1.7; font-weight:300; padding:0 18px; }
+        .faq-a.open { max-height:200px; padding:0 18px 14px; }
+
+        /* ── MODAL ── */
+        .m-overlay { position:fixed; inset:0; z-index:300; background:rgba(26,18,9,.6); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .3s; }
+        .m-overlay.open { opacity:1; pointer-events:all; }
+        .modal { background:var(--card); border:1px solid var(--border); border-radius:18px; padding:32px; max-width:480px; width:90%; transform:scale(.95); transition:transform .3s; box-shadow:0 20px 60px var(--shadow); }
+        .m-overlay.open .modal { transform:scale(1); }
+        .m-title { font-family:'Playfair Display',Georgia,serif; font-size:1.25rem; font-weight:900; margin-bottom:14px; color:var(--ink); }
+        .m-body { font-size:.88rem; color:var(--muted); line-height:1.7; margin-bottom:18px; }
+        .m-close { background:var(--accent); color:#fff; border:none; border-radius:8px; padding:9px 22px; cursor:pointer; font-weight:600; font-size:.86rem; transition:opacity .2s; }
+        .m-close:hover { opacity:.85; }
+
+        /* ── TOAST ── */
+        .toast-wrap { position:fixed; bottom:22px; right:22px; z-index:400; display:flex; flex-direction:column; gap:8px; }
+        .toast { background:var(--ink); color:var(--bg); border-radius:9px; padding:11px 16px; font-size:.82rem; font-weight:500; display:flex; align-items:center; gap:8px; box-shadow:0 8px 24px var(--shadow); animation:toastIn .3s cubic-bezier(.22,1,.36,1); max-width:300px; }
+        @keyframes toastIn { from{opacity:0;transform:translateX(36px)} to{opacity:1;transform:translateX(0)} }
+        .toast.out { animation:toastOut .3s forwards; }
+        @keyframes toastOut { to{opacity:0;transform:translateX(36px)} }
+
+        /* ── SCROLL TOP ── */
+        .scroll-top { position:fixed; bottom:22px; left:22px; z-index:400; width:38px; height:38px; border-radius:50%; background:var(--accent); color:#fff; border:none; cursor:pointer; font-size:.9rem; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 14px rgba(200,80,42,.35); opacity:0; transform:translateY(8px); transition:opacity .3s,transform .3s; }
+        .scroll-top.vis { opacity:1; transform:translateY(0); }
+
+        /* ── FOOTER ── */
+        footer { border-top:1px solid var(--border); padding:24px 36px; display:flex; align-items:center; justify-content:space-between; background:var(--bg2); position:relative; z-index:1; }
+        .f-logo { font-family:'Playfair Display',Georgia,serif; font-weight:900; color:var(--ink); font-size:.95rem; }
+        .f-logo span { color:var(--accent); }
+        .f-text { font-size:.74rem; color:var(--muted); }
+        .f-links { display:flex; gap:14px; }
+        .f-links a { font-size:.74rem; color:var(--muted); text-decoration:none; }
+        .f-links a:hover { color:var(--accent); }
+
+        hr.divider { border:none; border-top:1px solid var(--border); margin:28px 0; }
+
+        /* ── RESPONSIVE ── */
+        @media(max-width:900px) { .main-layout{grid-template-columns:1fr} .sidebar{order:-1} .info-grid{grid-template-columns:1fr 1fr} }
+        @media(max-width:580px) { .topbar{padding:12px 16px} .hero,.main-layout,.info-section{padding-left:16px;padding-right:16px} .form-panel{padding:22px 16px} .form-grid{grid-template-columns:1fr} .hero-stats{gap:18px} .info-grid{grid-template-columns:1fr} footer{flex-direction:column;gap:10px;text-align:center} }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🩺 Insurance Cost Predictor</h1>
-        <form method="POST" action="/predict">
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="age" class="form-label">Age</label>
-                    <input type="number" class="form-control" id="age" name="age" required min="18" max="100" placeholder="Enter your age">
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="gender" class="form-label">Gender</label>
-                    <select class="form-control" id="gender" name="gender" required>
-                        <option value="">Select Gender</option>
-                        <option value="female">Female</option>
-                        <option value="male">Male</option>
-                    </select>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="bmi" class="form-label">BMI</label>
-                    <input type="number" class="form-control" id="bmi" name="bmi" required step="0.1" min="10" max="50" placeholder="Enter your BMI">
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="region" class="form-label">Region</label>
-                    <select class="form-control" id="region" name="region" required>
-                        <option value="">Select Region</option>
-                        <option value="southwest">Southwest</option>
-                        <option value="southeast">Southeast</option>
-                        <option value="northwest">Northwest</option>
-                        <option value="northeast">Northeast</option>
-                    </select>
-                </div>
-            </div>
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary">Predict Insurance Cost</button>
-            </div>
-        </form>
-        {% if prediction %}
-        <div class="prediction-result">
-            💰 Predicted Insurance Cost: ${{ prediction }}
-        </div>
-        {% endif %}
+
+<!-- NAV -->
+<nav class="topbar">
+    <div class="logo">Medi<span>Cost</span> AI</div>
+    <div class="topbar-right">
+        <a href="#how-it-works" class="nav-pill">How it works</a>
+        <a href="#faq" class="nav-pill">FAQ</a>
+        <button class="theme-btn" id="themeBtn">🌙</button>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-tag">🩺 ML-Powered Estimation</div>
+    <h1 class="hero-title">Predict Your<br><em>Insurance Cost</em><br>Instantly</h1>
+    <p class="hero-sub">Enter your health profile and get an accurate, ML-powered estimate of your annual medical insurance cost — no account needed.</p>
+    <div class="hero-stats">
+        <div class="stat"><div class="stat-num">1,338</div><div class="stat-label">Training records</div></div>
+        <div class="stat"><div class="stat-num">~87%</div><div class="stat-label">Model accuracy</div></div>
+        <div class="stat"><div class="stat-num">4</div><div class="stat-label">US regions</div></div>
+        <div class="stat"><div class="stat-num">&lt;1s</div><div class="stat-label">Prediction time</div></div>
+    </div>
+</section>
+
+<!-- MAIN LAYOUT -->
+<div class="main-layout">
+
+    <!-- ════ FORM ════ -->
+    <div class="form-panel">
+        <!-- Progress -->
+        <div class="form-progress" id="fProg">
+            <div class="progress-step"></div><div class="progress-step"></div>
+            <div class="progress-step"></div><div class="progress-step"></div>
+            <div class="progress-step"></div><div class="progress-step"></div>
+        </div>
+
+        <form method="POST" action="/predict" id="mainForm" novalidate>
+
+            <!-- SECTION 1 -->
+            <div class="sec-title"><div class="sec-icon">👤</div> Personal Information</div>
+            <div class="form-grid">
+
+                <!-- Age -->
+                <div class="form-group">
+                    <label>Age <span class="ltip">(18–100)</span></label>
+                    <div class="slider-wrap">
+                        <div class="slider-hdr">
+                            <span style="font-size:.72rem;color:var(--muted)">Drag or type</span>
+                            <span class="slider-val" id="ageVal">30</span>
+                        </div>
+                        <input type="range" id="ageSlider" min="18" max="100" value="30">
+                        <div class="range-lbl"><span>18</span><span>100</span></div>
+                    </div>
+                    <input type="number" name="age" id="age" value="30" min="18" max="100" required placeholder="e.g. 30">
+                </div>
+
+                <!-- Gender -->
+                <div class="form-group">
+                    <label>Gender</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" name="gender" id="gF" value="female" required>
+                            <label for="gF">♀ Female</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="gender" id="gM" value="male">
+                            <label for="gM">♂ Male</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BMI -->
+                <div class="form-group">
+                    <label>BMI <span class="ltip">(body mass index)</span></label>
+                    <input type="number" name="bmi" id="bmi" step="0.1" min="10" max="60" required placeholder="e.g. 24.5">
+                    <div class="bmi-bar"><div class="bmi-dot" id="bmiDot" style="left:0%"></div></div>
+                    <div style="display:flex;justify-content:space-between;font-size:.62rem;color:var(--muted);margin-top:2px">
+                        <span>Under</span><span>Normal</span><span>Over</span><span>Obese</span>
+                    </div>
+                    <div class="bmi-lbl" id="bmiLbl" style="color:var(--muted)">—</div>
+                </div>
+
+                <!-- Region -->
+                <div class="form-group">
+                    <label>Region</label>
+                    <select name="region" id="region" required>
+                        <option value="">— Select region —</option>
+                        <option value="southwest">🤠 Southwest</option>
+                        <option value="southeast">🌴 Southeast</option>
+                        <option value="northwest">🌲 Northwest</option>
+                        <option value="northeast">🗽 Northeast</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <!-- SECTION 2 -->
+            <div class="sec-title"><div class="sec-icon">❤️</div> Health Information</div>
+            <div class="form-grid">
+
+                <!-- Smoker -->
+                <div class="form-group">
+                    <label>Smoker status</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" name="smoker" id="sNo" value="no" required>
+                            <label for="sNo">🚭 Non-smoker</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="smoker" id="sYes" value="yes">
+                            <label for="sYes">🚬 Smoker</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Children -->
+                <div class="form-group">
+                    <label>Children / Dependants</label>
+                    <div class="counter-wrap">
+                        <button type="button" class="c-btn" id="cMinus">−</button>
+                        <div class="c-disp" id="cDisp">0</div>
+                        <button type="button" class="c-btn" id="cPlus">+</button>
+                        <input type="hidden" name="children" id="cInput" value="0">
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Validation -->
+            <div id="validationMsg"></div>
+
+            <button type="submit" class="submit-btn" id="subBtn">
+                <span id="subTxt">💰 Predict My Insurance Cost</span>
+            </button>
+
+            <p style="text-align:center;font-size:.72rem;color:var(--muted);margin-top:8px">🔒 No data stored. For estimation purposes only.</p>
+        </form>
+    </div>
+
+    <!-- ════ SIDEBAR ════ -->
+    <div class="sidebar">
+
+        <!-- Result -->
+        <div class="side-card result-card">
+            <div class="sc-title">💰 Prediction Result</div>
+            <div id="resultArea">
+                <p class="r-empty">Fill in your details and click predict to see your estimated annual insurance cost.</p>
+            </div>
+        </div>
+
+        <!-- Risk -->
+        <div class="side-card">
+            <div class="sc-title">⚡ Risk Profile</div>
+            <div class="risk-track"><div class="risk-fill" id="rFill" style="width:0%;background:var(--green)"></div></div>
+            <div class="risk-lbz"><span>Low</span><span>Medium</span><span>High</span><span>V.High</span></div>
+            <div id="rTag" class="risk-tag rlow" style="display:none">—</div>
+            <p style="font-size:.76rem;color:var(--muted);margin-top:8px" id="rHint">Risk profile appears after prediction.</p>
+        </div>
+
+        <!-- Chart -->
+        <div class="side-card">
+            <div class="sc-title">📊 Cost Comparison</div>
+            <div class="chart-wrap"><canvas id="compChart"></canvas></div>
+            <p style="font-size:.7rem;color:var(--muted);margin-top:6px" id="chartHint">Chart appears after prediction.</p>
+        </div>
+
+        <!-- History -->
+        <div class="side-card">
+            <div class="sc-title">🕘 Recent Predictions</div>
+            <div class="h-list" id="hList"><div class="h-empty">No predictions yet.</div></div>
+            <button class="clr-btn" id="clrBtn" style="display:none">Clear history</button>
+        </div>
+
+    </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="info-section" id="how-it-works">
+    <h2 class="sec-hdr">💡 How Insurance Costs Are Calculated</h2>
+    <div class="info-grid">
+        <div class="i-card"><div class="i-icon">🎂</div><div class="i-title">Age Factor</div><p class="i-text">Older individuals pay higher premiums. Medical needs rise significantly after 50, increasing insurer risk substantially.</p></div>
+        <div class="i-card"><div class="i-icon">🚬</div><div class="i-title">Smoking Status</div><p class="i-text">Smokers pay up to 3× more than non-smokers. Tobacco use is the single biggest driver of premium increases.</p></div>
+        <div class="i-card"><div class="i-icon">⚖️</div><div class="i-title">BMI Impact</div><p class="i-text">Higher BMI means greater health risk. A BMI above 30 (obese range) can significantly raise premiums.</p></div>
+        <div class="i-card"><div class="i-icon">👨‍👩‍👧</div><div class="i-title">Dependants</div><p class="i-text">Each additional child adds a modest premium increase. Family plans cost more than individual plans.</p></div>
+        <div class="i-card"><div class="i-icon">🗺️</div><div class="i-title">Region</div><p class="i-text">Healthcare costs vary by US region. The Southeast tends to have higher costs due to lifestyle factors.</p></div>
+        <div class="i-card"><div class="i-icon">🤖</div><div class="i-title">ML Model</div><p class="i-text">Trained on 1,338 real insurance records using a regression model to estimate costs from your profile.</p></div>
+    </div>
+
+    <hr class="divider">
+    <h2 class="sec-hdr">✅ Tips to Reduce Your Cost</h2>
+    <div class="tip-list">
+        <div class="tip-item"><div class="ti">🚭</div><div>Quit smoking — smokers pay $23,000+ annually vs ~$8,000 for non-smokers. The biggest single change you can make.</div></div>
+        <div class="tip-item"><div class="ti">⚖️</div><div>Maintain a healthy BMI (18.5–24.9). Even a modest weight reduction reduces risk factors and can lower premiums.</div></div>
+        <div class="tip-item"><div class="ti">🏃</div><div>Exercise regularly. Active lifestyles reduce chronic disease risk, which insurers factor into long-term pricing models.</div></div>
+        <div class="tip-item"><div class="ti">📋</div><div>Choose a higher-deductible plan if healthy — lower monthly premiums in exchange for higher out-of-pocket costs when needed.</div></div>
+        <div class="tip-item"><div class="ti">🔍</div><div>Compare plans annually during open enrollment. Old plans often miss better, cheaper options that have since appeared.</div></div>
+    </div>
+
+    <hr class="divider">
+    <h2 class="sec-hdr" id="faq">❓ Frequently Asked Questions</h2>
+    <div class="faq-list">
+        <div class="faq-item">
+            <button class="faq-q" type="button">How accurate is this prediction? <span class="chevron">▾</span></button>
+            <div class="faq-a">The model achieves approximately 87% accuracy on test data, trained on the Kaggle Medical Cost Personal Dataset. It's an estimate — your actual premium depends on your specific insurer and chosen plan.</div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-q" type="button">Is my data stored or shared? <span class="chevron">▾</span></button>
+            <div class="faq-a">No. Your inputs are used only to generate a prediction server-side and are not stored, logged, or shared with any third party. History is stored locally in your browser only.</div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-q" type="button">Why does smoking have such a large effect? <span class="chevron">▾</span></button>
+            <div class="faq-a">Tobacco use strongly correlates with costly conditions like cancer, heart disease, and lung disease. Insurers price this risk heavily — often adding $10,000–$15,000 per year to premiums.</div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-q" type="button">What dataset was the model trained on? <span class="chevron">▾</span></button>
+            <div class="faq-a">The publicly available "Medical Cost Personal Dataset" from Kaggle, containing 1,338 real insurance records with age, sex, BMI, children, smoker status, region, and annual charges.</div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-q" type="button">Can I use this for actual insurance decisions? <span class="chevron">▾</span></button>
+            <div class="faq-a">This is for educational and estimation purposes only. Always consult a licensed insurance broker or financial advisor for real purchasing decisions.</div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="f-logo">Medi<span>Cost</span> AI</div>
+    <div class="f-text">© 2025 · For educational use only · Not financial advice</div>
+    <div class="f-links"><a href="#how-it-works">How it works</a><a href="#faq">FAQ</a></div>
+</footer>
+
+<!-- SMOKER MODAL -->
+<div class="m-overlay" id="smokerModal">
+    <div class="modal">
+        <div class="m-title">⚠️ High Smoking Surcharge</div>
+        <div class="m-body">Smoking is the largest single cost factor in health insurance. Smokers typically pay <strong>2–4× more</strong> than non-smokers. Quitting smoking could save you <strong>$10,000–$15,000/year</strong> in premiums.</div>
+        <button class="m-close" onclick="closeModal('smokerModal')">Got it</button>
+    </div>
+</div>
+
+<!-- BMI WARNING MODAL -->
+<div class="m-overlay" id="bmiModal">
+    <div class="modal">
+        <div class="m-title">⚠️ Obesity Range BMI</div>
+        <div class="m-body">Your BMI is in the obese range (30+). This significantly increases insurance premiums. Even a modest reduction in BMI (5–10%) can meaningfully reduce your premium costs and improve your health outcomes.</div>
+        <button class="m-close" onclick="closeModal('bmiModal')">Got it</button>
+    </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-wrap" id="toastWrap"></div>
+
+<!-- SCROLL TOP -->
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ── THEME ──────────────────────────────────────
+const themeBtn = document.getElementById('themeBtn');
+let dark = localStorage.getItem('theme')==='dark';
+applyTheme();
+themeBtn.addEventListener('click',()=>{dark=!dark;localStorage.setItem('theme',dark?'dark':'light');applyTheme();});
+function applyTheme(){document.documentElement.setAttribute('data-theme',dark?'dark':'light');themeBtn.textContent=dark?'☀️':'🌙';}
+
+// ── AGE SLIDER ─────────────────────────────────
+const slider=document.getElementById('ageSlider'),ageInp=document.getElementById('age'),ageVal=document.getElementById('ageVal');
+slider.addEventListener('input',()=>{ageInp.value=slider.value;ageVal.textContent=slider.value;prog();});
+ageInp.addEventListener('input',()=>{const v=Math.min(100,Math.max(18,+ageInp.value||18));slider.value=v;ageVal.textContent=v;prog();});
+
+// ── BMI METER ──────────────────────────────────
+const bmiInp=document.getElementById('bmi'),bmiDot=document.getElementById('bmiDot'),bmiLbl=document.getElementById('bmiLbl');
+bmiInp.addEventListener('input',()=>{
+    const v=parseFloat(bmiInp.value);
+    if(isNaN(v)){bmiDot.style.left='0%';bmiLbl.textContent='—';bmiLbl.style.color='var(--muted)';return;}
+    bmiDot.style.left=Math.min(100,Math.max(0,((v-10)/50)*100))+'%';
+    if(v<18.5){bmiLbl.textContent='📉 Underweight';bmiLbl.style.color='var(--green)';}
+    else if(v<25){bmiLbl.textContent='✅ Normal weight';bmiLbl.style.color='var(--green)';}
+    else if(v<30){bmiLbl.textContent='⚠️ Overweight';bmiLbl.style.color='var(--gold)';}
+    else{bmiLbl.textContent='🔴 Obese range';bmiLbl.style.color='var(--accent)';}
+    prog();
+});
+
+// ── COUNTER ────────────────────────────────────
+let kids=0;
+const cDisp=document.getElementById('cDisp'),cInput=document.getElementById('cInput');
+document.getElementById('cPlus').addEventListener('click',()=>{if(kids<10){kids++;cDisp.textContent=kids;cInput.value=kids;prog();}});
+document.getElementById('cMinus').addEventListener('click',()=>{if(kids>0){kids--;cDisp.textContent=kids;cInput.value=kids;prog();}});
+
+// ── PROGRESS ───────────────────────────────────
+const steps=document.querySelectorAll('.progress-step');
+function prog(){
+    let d=0;
+    if(ageInp.value)d++;
+    if(document.querySelector('[name="gender"]:checked'))d++;
+    if(bmiInp.value)d++;
+    if(document.getElementById('region').value)d++;
+    if(document.querySelector('[name="smoker"]:checked'))d++;
+    d++; // children always counted
+    steps.forEach((s,i)=>s.classList.toggle('done',i<d));
+}
+document.querySelectorAll('[name="gender"],[name="smoker"]').forEach(r=>r.addEventListener('change',prog));
+document.getElementById('region').addEventListener('change',prog);
+
+// ── VALIDATION & SUBMIT ────────────────────────
+document.getElementById('mainForm').addEventListener('submit',function(e){
+    const errors=[];
+    const a=+ageInp.value, b=parseFloat(bmiInp.value);
+    if(!a||a<18||a>100) errors.push('Age must be 18–100.');
+    if(!document.querySelector('[name="gender"]:checked')) errors.push('Select your gender.');
+    if(!b||b<10||b>60) errors.push('BMI must be 10–60.');
+    if(!document.getElementById('region').value) errors.push('Select your region.');
+    if(!document.querySelector('[name="smoker"]:checked')) errors.push('Select smoker status.');
+
+    const msg=document.getElementById('validationMsg');
+    if(errors.length){
+        e.preventDefault();
+        msg.style.cssText='display:block;padding:10px 14px;background:rgba(229,62,62,.08);border:1px solid rgba(229,62,62,.3);border-radius:8px;font-size:.82rem;color:#c53030;margin-bottom:14px';
+        msg.innerHTML='⚠️ Please fix:<ul style="margin:5px 0 0 16px">'+errors.map(x=>`<li>${x}</li>`).join('')+'</ul>';
+        msg.scrollIntoView({behavior:'smooth',block:'nearest'});
+    } else {
+        msg.style.display='none';
+        document.getElementById('subTxt').textContent='Calculating…';
+        document.getElementById('subBtn').style.opacity='.7';
+        // Smoker warning
+        if(document.querySelector('[name="smoker"][value="yes"]:checked')) openModal('smokerModal');
+        // High BMI warning
+        if(parseFloat(bmiInp.value)>=30) setTimeout(()=>openModal('bmiModal'),800);
+    }
+});
+
+// ── SHOW RESULT ────────────────────────────────
+let chart=null;
+function showResult(amt){
+    amt=parseFloat(amt);
+    const m=(amt/12).toFixed(2), w=(amt/52).toFixed(2), d=(amt/365).toFixed(2), h=(amt/8760).toFixed(2);
+    document.getElementById('resultArea').innerHTML=`
+        <div class="r-amount">$${amt.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</div>
+        <div class="r-period">Estimated annual insurance cost</div>
+        <div class="r-breakdown">
+            <div class="r-item"><div class="r-lbl">Monthly</div><div class="r-val">$${parseFloat(m).toLocaleString()}</div></div>
+            <div class="r-item"><div class="r-lbl">Weekly</div><div class="r-val">$${parseFloat(w).toLocaleString()}</div></div>
+            <div class="r-item"><div class="r-lbl">Daily</div><div class="r-val">$${d}</div></div>
+            <div class="r-item"><div class="r-lbl">Per Hour</div><div class="r-val">$${h}</div></div>
+        </div>
+        <button class="copy-btn" onclick="copyResult(${amt})">📋 Copy result</button>
+    `;
+
+    // Risk
+    const pct=Math.min(100,(amt/65000)*100);
+    const rf=document.getElementById('rFill'),rt=document.getElementById('rTag');
+    rf.style.width=pct+'%'; rt.style.display='inline-block';
+    if(pct<25){rf.style.background='#2a7a5e';rt.className='risk-tag rlow';rt.textContent='✅ Low Risk';document.getElementById('rHint').textContent='Below average — great health profile!';}
+    else if(pct<50){rf.style.background='#d4a843';rt.className='risk-tag rmed';rt.textContent='⚠️ Medium Risk';document.getElementById('rHint').textContent='Around the US average. Some improvements possible.';}
+    else if(pct<75){rf.style.background='#c8502a';rt.className='risk-tag rhigh';rt.textContent='🔴 High Risk';document.getElementById('rHint').textContent='Above average. Smoking or high BMI likely driving costs.';}
+    else{rf.style.background='#8b1a1a';rt.className='risk-tag rvhigh';rt.textContent='🚨 Very High Risk';document.getElementById('rHint').textContent='Well above average. Quitting smoking would significantly reduce this.';}
+
+    // Chart
+    document.getElementById('chartHint').textContent='Your cost vs. national averages';
+    const ctx=document.getElementById('compChart').getContext('2d');
+    if(chart)chart.destroy();
+    chart=new Chart(ctx,{
+        type:'bar',
+        data:{
+            labels:['You','Non-smoker Avg','Smoker Avg'],
+            datasets:[{
+                data:[amt,8435,28000],
+                backgroundColor:[amt>8435?'rgba(200,80,42,.8)':'rgba(42,122,94,.8)','rgba(42,94,160,.55)','rgba(139,26,26,.6)'],
+                borderRadius:6,borderSkipped:false
+            }]
+        },
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+            scales:{y:{ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'k',color:'#8a7d68',font:{size:10}},grid:{color:'rgba(0,0,0,0.05)'}},
+                    x:{ticks:{color:'#8a7d68',font:{size:9}},grid:{display:false}}}}
+    });
+
+    saveHistory(amt);
+    showToast('✅ Prediction complete!');
+}
+
+function copyResult(amt){
+    navigator.clipboard.writeText(`Estimated annual insurance cost: $${amt.toFixed(2)}`).then(()=>showToast('📋 Copied to clipboard!'));
+}
+
+// ── HISTORY ────────────────────────────────────
+function saveHistory(amt){
+    let h=JSON.parse(localStorage.getItem('ins_hist')||'[]');
+    h.unshift({amt,age:ageInp.value||'?',bmi:bmiInp.value||'?',smoker:document.querySelector('[name="smoker"]:checked')?.value||'?',t:new Date().toLocaleTimeString()});
+    if(h.length>8)h=h.slice(0,8);
+    localStorage.setItem('ins_hist',JSON.stringify(h));
+    renderHistory();
+}
+function renderHistory(){
+    const h=JSON.parse(localStorage.getItem('ins_hist')||'[]');
+    const el=document.getElementById('hList'),btn=document.getElementById('clrBtn');
+    if(!h.length){el.innerHTML='<div class="h-empty">No predictions yet.</div>';btn.style.display='none';return;}
+    btn.style.display='block';
+    el.innerHTML=h.map((x,i)=>`<div class="h-item" onclick="showResult(${x.amt})"><div><div class="h-cost">$${parseFloat(x.amt).toLocaleString('en-US',{maximumFractionDigits:0})}</div><div class="h-info">Age ${x.age} · BMI ${x.bmi} · ${x.smoker}</div></div><div class="h-info">${x.t}</div></div>`).join('');
+}
+document.getElementById('clrBtn').addEventListener('click',()=>{localStorage.removeItem('ins_hist');renderHistory();showToast('🗑️ History cleared');});
+renderHistory();
+
+// ── TOAST ──────────────────────────────────────
+function showToast(msg,dur=3000){
+    const t=document.createElement('div');t.className='toast';t.textContent=msg;
+    document.getElementById('toastWrap').appendChild(t);
+    setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),300);},dur);
+}
+
+// ── MODAL ──────────────────────────────────────
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.m-overlay').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
+
+// ── FAQ ────────────────────────────────────────
+document.querySelectorAll('.faq-q').forEach(btn=>{
+    btn.addEventListener('click',()=>{const a=btn.nextElementSibling,o=btn.classList.toggle('open');a.classList.toggle('open',o);});
+});
+
+// ── SCROLL TOP ─────────────────────────────────
+const stBtn=document.getElementById('scrollTop');
+window.addEventListener('scroll',()=>stBtn.classList.toggle('vis',scrollY>400));
+
+// ── FLASK BRIDGE ───────────────────────────────
+{% if prediction %}
+window.addEventListener('DOMContentLoaded',()=>showResult({{ prediction }}));
+{% endif %}
+</script>
 </body>
 </html>
