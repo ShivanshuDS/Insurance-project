@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>InsureAI – Privacy Policy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --v:#7c4dff;--r:#f06292;--t:#26c6da;--g:#43d98a;--a:#ffb300;--b:#4a90e2;
+      --td:#2d2250;--tm:#6b5b95;--ts:#a89bc4;--bg:#f5f0ff;
+      --sw:260px;--rxl:24px;--rlg:18px;--rmd:12px;--rsm:8px;
+      --sc:0 2px 16px rgba(124,77,255,.08);--sh:0 8px 32px rgba(124,77,255,.18);
+      --fd:'Playfair Display',serif;--fb:'Nunito',sans-serif;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:var(--fb);background:var(--bg);color:var(--td);min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
+    body::before{content:'';position:fixed;inset:0;z-index:0;
+      background:
+        radial-gradient(ellipse 70% 55% at 5% 0%,rgba(252,228,236,.70) 0%,transparent 55%),
+        radial-gradient(ellipse 50% 45% at 95% 100%,rgba(227,240,255,.65) 0%,transparent 50%),
+        radial-gradient(ellipse 40% 35% at 80% 10%,rgba(237,231,255,.55) 0%,transparent 45%),
+        radial-gradient(ellipse 45% 40% at 15% 85%,rgba(232,248,240,.50) 0%,transparent 45%),var(--bg);
+      pointer-events:none}
+
+    /* TOP NAV */
+    .topnav{position:fixed;top:0;left:0;right:0;z-index:200;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;background:rgba(245,240,255,.88);backdrop-filter:blur(20px);box-shadow:0 2px 20px rgba(124,77,255,.08)}
+    .logo-pill{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.80);border:1.5px solid rgba(124,77,255,.14);border-radius:50px;padding:6px 16px 6px 8px;box-shadow:0 2px 10px rgba(124,77,255,.10);text-decoration:none}
+    .logo-ico{width:28px;height:28px;background:linear-gradient(135deg,var(--v),var(--r));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px}
+    .logo-name{font-family:var(--fd);font-weight:700;font-size:.90rem;color:var(--td)}
+    .tnav-links{display:flex;align-items:center;gap:4px;list-style:none}
+    .tnav-links a{text-decoration:none;color:var(--tm);font-size:.87rem;font-weight:600;padding:6px 14px;border-radius:50px;transition:background .2s,color .2s}
+    .tnav-links a:hover{background:rgba(124,77,255,.08);color:var(--v)}
+    .user-chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.80);border:1.5px solid rgba(124,77,255,.12);border-radius:50px;padding:5px 14px 5px 5px}
+    .uc-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#ede7ff,#fce4ec);display:flex;align-items:center;justify-content:center;font-size:13px;border:2px solid #fff}
+
+    /* LAYOUT */
+    .layout{display:flex;width:100%;min-height:100vh;padding-top:64px;position:relative;z-index:1}
+
+    /* SIDEBAR */
+    .sidebar{width:var(--sw);min-height:calc(100vh - 64px);padding:28px 14px 28px 16px;display:flex;flex-direction:column;gap:4px;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto;flex-shrink:0}
+    .sl{font-size:.68rem;font-weight:700;color:var(--ts);letter-spacing:.10em;text-transform:uppercase;padding:12px 10px 5px}
+    .si{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:var(--rmd);text-decoration:none;color:var(--tm);font-size:.88rem;font-weight:600;transition:background .2s,color .2s,transform .2s;position:relative}
+    .si:hover{background:rgba(255,255,255,.70);color:var(--td);transform:translateX(3px)}
+    .si.active{background:rgba(255,255,255,.90);color:var(--v);box-shadow:var(--sc)}
+    .si.active::before{content:'';position:absolute;left:0;top:22%;bottom:22%;width:3.5px;background:linear-gradient(180deg,var(--v),var(--r));border-radius:0 3px 3px 0}
+    .sico{width:32px;height:32px;border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+    .iv{background:rgba(124,77,255,.12)}.ir{background:rgba(240,98,146,.12)}.it{background:rgba(38,198,218,.12)}.ia{background:rgba(255,179,0,.12)}.ig{background:rgba(67,217,138,.12)}.ib{background:rgba(74,144,226,.12)}
+    .sbadge{margin-left:auto;font-size:.66rem;font-weight:700;padding:2px 7px;border-radius:50px}
+    .bnew{background:rgba(67,217,138,.15);color:#1a9e5c}.bhot{background:rgba(240,98,146,.12);color:var(--r)}
+    .sdiv{height:1px;background:rgba(124,77,255,.08);margin:7px 10px}
+    .sidebar-user{margin-top:auto;padding-top:14px;border-top:1px solid rgba(124,77,255,.08)}
+    .ucard{display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,.70);border-radius:var(--rmd);border:1px solid rgba(124,77,255,.10)}
+    .uav{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#ede7ff,#fce4ec);display:flex;align-items:center;justify-content:center;font-size:16px;border:2px solid rgba(255,255,255,.9)}
+    .uname{font-size:.83rem;font-weight:700;color:var(--td)}.urole{font-size:.70rem;color:var(--ts)}
+    .udot{width:8px;height:8px;border-radius:50%;background:var(--g);margin-left:auto;flex-shrink:0}
+
+    /* MAIN */
+    .main{flex:1;padding:32px 36px 56px 28px;min-width:0}
+    .pg-greet{font-size:.83rem;color:var(--ts);font-weight:500;margin-bottom:5px}
+    .pg-title{font-family:var(--fd);font-size:clamp(1.5rem,3vw,2.2rem);font-weight:800;color:var(--td);line-height:1.15;margin-bottom:8px}
+    .pg-title .hl{background:linear-gradient(135deg,var(--v),var(--r));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .pg-sub{font-size:.92rem;color:var(--tm);max-width:580px;line-height:1.7;margin-bottom:28px}
+
+    /* HERO BANNER */
+    .pp-banner{background:linear-gradient(145deg,rgba(255,255,255,.90),rgba(237,231,255,.60));border:1.5px solid rgba(255,255,255,.95);border-radius:var(--rxl);padding:28px 32px;box-shadow:0 4px 24px rgba(124,77,255,.10);backdrop-filter:blur(16px);display:flex;align-items:center;gap:24px;margin-bottom:22px;position:relative;overflow:hidden;animation:fadeUp .6s .1s ease both}
+    .pp-banner::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(124,77,255,.10),transparent 70%);pointer-events:none}
+    .pp-shield{width:64px;height:72px;background:linear-gradient(150deg,var(--v),var(--r));border-radius:50% 50% 45% 45%/55% 55% 45% 45%;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 6px 20px rgba(124,77,255,.26);flex-shrink:0}
+    .pp-banner-text h2{font-family:var(--fd);font-size:1.15rem;font-weight:800;color:var(--td);margin-bottom:5px}
+    .pp-banner-text p{font-size:.85rem;color:var(--tm);line-height:1.65}
+    .pp-meta{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
+    .pp-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(67,217,138,.12);border:1px solid rgba(67,217,138,.25);border-radius:50px;padding:4px 12px;font-size:.72rem;font-weight:700;color:#1a9e5c}
+    .pp-date{font-size:.74rem;color:var(--ts);font-weight:600}
+
+    /* TOC + CONTENT GRID */
+    .pp-grid{display:grid;grid-template-columns:220px 1fr;gap:22px;align-items:start;animation:fadeUp .6s .2s ease both}
+
+    /* TABLE OF CONTENTS */
+    .toc-card{background:rgba(255,255,255,.80);border:1.5px solid rgba(255,255,255,.95);border-radius:var(--rxl);padding:20px;box-shadow:var(--sc);backdrop-filter:blur(12px);position:sticky;top:84px}
+    .toc-title{font-family:var(--fd);font-size:.88rem;font-weight:700;color:var(--td);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(124,77,255,.08)}
+    .toc-link{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:var(--rsm);text-decoration:none;color:var(--tm);font-size:.80rem;font-weight:600;transition:background .2s,color .2s;margin-bottom:2px}
+    .toc-link:hover{background:rgba(124,77,255,.07);color:var(--v)}
+    .toc-num{width:20px;height:20px;border-radius:50%;background:rgba(124,77,255,.10);display:flex;align-items:center;justify-content:center;font-size:.66rem;font-weight:700;color:var(--v);flex-shrink:0}
+
+    /* POLICY CONTENT */
+    .pp-content{display:flex;flex-direction:column;gap:18px}
+
+    .pp-section{background:rgba(255,255,255,.78);border:1.5px solid rgba(255,255,255,.95);border-radius:var(--rxl);padding:26px 28px;box-shadow:var(--sc);backdrop-filter:blur(12px);transition:box-shadow .25s}
+    .pp-section:hover{box-shadow:var(--sh)}
+
+    .sec-header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+    .sec-ico{width:38px;height:38px;border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+    .sec-num{font-family:var(--fd);font-size:.72rem;font-weight:700;color:var(--ts);margin-bottom:2px}
+    .sec-title{font-family:var(--fd);font-size:1.05rem;font-weight:800;color:var(--td)}
+
+    .pp-section p{font-size:.87rem;color:var(--tm);line-height:1.80;margin-bottom:10px}
+    .pp-section p:last-child{margin-bottom:0}
+
+    .pp-list{list-style:none;margin:10px 0;display:flex;flex-direction:column;gap:7px}
+    .pp-list li{display:flex;align-items:flex-start;gap:9px;font-size:.85rem;color:var(--tm);line-height:1.65}
+    .pp-list li::before{content:'';width:7px;height:7px;border-radius:50%;background:linear-gradient(135deg,var(--v),var(--r));margin-top:6px;flex-shrink:0}
+
+    .pp-highlight{background:linear-gradient(135deg,rgba(124,77,255,.06),rgba(240,98,146,.04));border:1.5px dashed rgba(124,77,255,.20);border-radius:var(--rmd);padding:13px 16px;margin:12px 0;font-size:.84rem;color:var(--td);font-weight:600;line-height:1.65}
+
+    .pp-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.82rem}
+    .pp-table th{background:rgba(124,77,255,.07);color:var(--td);font-weight:700;padding:9px 12px;text-align:left;font-size:.78rem;letter-spacing:.03em}
+    .pp-table td{padding:9px 12px;color:var(--tm);border-bottom:1px solid rgba(124,77,255,.06);font-weight:500;vertical-align:top}
+    .pp-table tr:last-child td{border-bottom:none}
+
+    /* BOTTOM CONTACT STRIP */
+    .pp-footer-strip{background:linear-gradient(135deg,rgba(124,77,255,.08),rgba(240,98,146,.06));border:1.5px solid rgba(124,77,255,.14);border-radius:var(--rxl);padding:22px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:6px;animation:fadeUp .6s .3s ease both;flex-wrap:wrap}
+    .pp-footer-strip h3{font-family:var(--fd);font-size:1rem;font-weight:800;color:var(--td);margin-bottom:4px}
+    .pp-footer-strip p{font-size:.83rem;color:var(--tm)}
+    .pp-cta{display:inline-flex;align-items:center;gap:6px;padding:11px 22px;border-radius:50px;background:linear-gradient(135deg,var(--v),var(--r));color:#fff;font-family:var(--fb);font-size:.87rem;font-weight:700;text-decoration:none;box-shadow:0 4px 16px rgba(124,77,255,.25);white-space:nowrap}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(124,77,255,.20);border-radius:4px}
+
+    @media(max-width:1080px){.pp-grid{grid-template-columns:1fr}.toc-card{position:static}}
+    @media(max-width:820px){.sidebar{display:none}.main{padding:22px 18px 44px}.tnav-links{display:none}.pp-banner{flex-direction:column;align-items:flex-start}.pp-meta{align-items:flex-start;margin-left:0}}
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <nav class="topnav">
+    <a href="#" class="logo-pill">
+      <div class="logo-ico">🛡️</div>
+      <span class="logo-name">InsureAI</span>
+    </a>
+    <ul class="tnav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/predict">Predict</a></li>
+      <li><a href="/contact">Contact</a></li>
+      <li><a href="/about">About</a></li>
+    </ul>
+    <div class="user-chip">
+      <div class="uc-av">👤</div>
+    </div>
+  </nav>
+
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <span class="sl">Main Menu</span>
+      <a class="si" href="/"><div class="sico iv">🏠</div>Home</a>
+      <a class="si" href="/policies"><div class="sico ir">🛡️</div>My Policies<span class="sbadge bnew">New</span></a>
+      <a class="si" href="/predict"><div class="sico it">📊</div>Predictions</a>
+      <a class="si" href="/insights"><div class="sico ia">💡</div>AI Insights<span class="sbadge bhot">Hot</span></a>
+      <a class="si" href="/analytics"><div class="sico ig">📈</div>Analytics</a>
+      <div class="sdiv"></div>
+      <span class="sl">Company</span>
+      <a class="si" href="/about"><div class="sico ib">ℹ️</div>About Us</a>  
+      <a class="si" href="/contact"><div class="sico iv">📞</div>Contact</a>
+      <a class="si active" href="/privacy"><div class="sico ir">📄</div>Privacy Policy</a>    
+      <div class="sdiv"></div>
+      <span class="sl">Account</span>
+      <a class="si" href="/settings"><div class="sico iv">⚙️</div>Settings</a>
+      <div class="sidebar-user">
+        <div class="ucard">
+          <div class="uav">👤</div>
+          <div><div class="uname"></div><div class="urole">Free Plan</div></div>
+          <div class="udot"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+      <div style="animation:fadeUp .6s ease both">
+        <p class="pg-greet">📄 Legal & Compliance</p>
+        <h1 class="pg-title">Privacy <span class="hl">Policy</span></h1>
+        <p class="pg-sub">We believe in full transparency. Here's exactly how InsureAI collects, uses, and protects your personal data.</p>
+      </div>
+
+      <!-- BANNER -->
+      <div class="pp-banner">
+        <div class="pp-shield">🔒</div>
+        <div class="pp-banner-text">
+          <h2>Your Privacy is Our Priority</h2>
+          <p>InsureAI is committed to safeguarding your personal and health-related information. This policy explains your rights and our responsibilities clearly and simply.</p>
+        </div>
+        <div class="pp-meta">
+          <div class="pp-badge">✅ GDPR &amp; IT Act Compliant</div>
+          <div class="pp-date">Last Updated: March 1, 2025</div>
+          <div class="pp-date">Effective: March 1, 2025</div>
+        </div>
+      </div>
+
+      <!-- TOC + CONTENT GRID -->
+      <div class="pp-grid">
+
+        <!-- Table of Contents -->
+        <div class="toc-card">
+          <div class="toc-title">📑 Contents</div>
+          <a href="#s1" class="toc-link"><div class="toc-num">1</div>Information We Collect</a>
+          <a href="#s2" class="toc-link"><div class="toc-num">2</div>How We Use Your Data</a>
+          <a href="#s3" class="toc-link"><div class="toc-num">3</div>Data Sharing</a>
+          <a href="#s4" class="toc-link"><div class="toc-num">4</div>Data Security</a>
+          <a href="#s5" class="toc-link"><div class="toc-num">5</div>Cookies &amp; Tracking</a>
+          <a href="#s6" class="toc-link"><div class="toc-num">6</div>Your Rights</a>
+          <a href="#s7" class="toc-link"><div class="toc-num">7</div>Data Retention</a>
+          <a href="#s8" class="toc-link"><div class="toc-num">8</div>Children's Privacy</a>
+          <a href="#s9" class="toc-link"><div class="toc-num">9</div>Policy Changes</a>
+          <a href="#s10" class="toc-link"><div class="toc-num">10</div>Contact Us</a>
+        </div>
+
+        <!-- Policy Sections -->
+        <div class="pp-content">
+
+          <!-- Section 1 -->
+          <div class="pp-section" id="s1">
+            <div class="sec-header">
+              <div class="sec-ico iv">📋</div>
+              <div>
+                <div class="sec-num">Section 01</div>
+                <div class="sec-title">Information We Collect</div>
+              </div>
+            </div>
+            <p>When you use InsureAI, we collect certain information to provide accurate premium predictions and a personalised experience. This includes information you provide directly and data collected automatically.</p>
+            <p><strong>Personal Information you provide:</strong></p>
+            <ul class="pp-list">
+              <li>Full name, email address, and phone number during registration</li>
+              <li>Age, gender, and date of birth for premium calculation</li>
+              <li>BMI, smoking status, and number of dependents</li>
+              <li>Geographic region for regional risk assessment</li>
+              <li>Payment details (processed securely via third-party gateways)</li>
+            </ul>
+            <p><strong>Automatically collected data:</strong></p>
+            <ul class="pp-list">
+              <li>Device type, browser, and operating system</li>
+              <li>IP address and approximate location</li>
+              <li>Pages visited, time spent, and interaction patterns</li>
+              <li>Referral source and session identifiers</li>
+            </ul>
+            <div class="pp-highlight">
+              💡 We only collect information that is strictly necessary for delivering our services. You may choose not to provide optional fields, though this may affect prediction accuracy.
+            </div>
+          </div>
+
+          <!-- Section 2 -->
+          <div class="pp-section" id="s2">
+            <div class="sec-header">
+              <div class="sec-ico it">⚙️</div>
+              <div>
+                <div class="sec-num">Section 02</div>
+                <div class="sec-title">How We Use Your Data</div>
+              </div>
+            </div>
+            <p>Your data helps us provide, improve, and personalise the InsureAI platform. We use it for the following purposes:</p>
+            <table class="pp-table">
+              <tr>
+                <th>Purpose</th>
+                <th>Data Used</th>
+                <th>Legal Basis</th>
+              </tr>
+              <tr>
+                <td>Insurance premium prediction</td>
+                <td>Age, BMI, smoker status, region</td>
+                <td>Contract performance</td>
+              </tr>
+              <tr>
+                <td>Account creation &amp; management</td>
+                <td>Name, email, phone</td>
+                <td>Contract performance</td>
+              </tr>
+              <tr>
+                <td>Service improvements &amp; AI model training</td>
+                <td>Anonymised usage data</td>
+                <td>Legitimate interest</td>
+              </tr>
+              <tr>
+                <td>Marketing &amp; personalised offers</td>
+                <td>Email, preferences</td>
+                <td>Consent</td>
+              </tr>
+              <tr>
+                <td>Legal compliance &amp; fraud prevention</td>
+                <td>All collected data</td>
+                <td>Legal obligation</td>
+              </tr>
+            </table>
+            <p>We do <strong>not</strong> use your data to make automated decisions that produce legal or similarly significant effects without human oversight.</p>
+          </div>
+
+          <!-- Section 3 -->
+          <div class="pp-section" id="s3">
+            <div class="sec-header">
+              <div class="sec-ico ir">🤝</div>
+              <div>
+                <div class="sec-num">Section 03</div>
+                <div class="sec-title">Data Sharing &amp; Third Parties</div>
+              </div>
+            </div>
+            <p>InsureAI does <strong>never sell your personal data</strong> to any third party. We only share your data in the following limited circumstances:</p>
+            <ul class="pp-list">
+              <li><strong>Insurance Partners:</strong> With your explicit consent, anonymised risk profiles may be shared with licensed insurers to generate real plan quotes.</li>
+              <li><strong>Service Providers:</strong> Trusted vendors who assist in hosting, payments, and analytics — all bound by strict data processing agreements.</li>
+              <li><strong>Legal Requirements:</strong> When required by law, court order, or government regulation under the IT Act 2000 or applicable Indian law.</li>
+              <li><strong>Business Transfers:</strong> In the event of a merger or acquisition, your data will be transferred subject to the same privacy protections.</li>
+            </ul>
+            <div class="pp-highlight">
+              🔒 All third-party service providers are contractually obligated to process your data only for the specified purpose and under strict confidentiality obligations.
+            </div>
+          </div>
+
+          <!-- Section 4 -->
+          <div class="pp-section" id="s4">
+            <div class="sec-header">
+              <div class="sec-ico ig">🔐</div>
+              <div>
+                <div class="sec-num">Section 04</div>
+                <div class="sec-title">Data Security</div>
+              </div>
+            </div>
+            <p>We implement industry-standard technical and organisational measures to protect your data from unauthorised access, loss, or disclosure.</p>
+            <ul class="pp-list">
+              <li>All data transmitted is encrypted using TLS 1.3 (256-bit encryption)</li>
+              <li>Sensitive fields such as health data are stored with AES-256 encryption at rest</li>
+              <li>Access to personal data is restricted to authorised personnel on a need-to-know basis</li>
+              <li>Regular security audits and penetration testing are conducted quarterly</li>
+              <li>Two-factor authentication is available and recommended for all accounts</li>
+              <li>Incident response procedures are in place to notify users within 72 hours of any breach</li>
+            </ul>
+            <p>While we take every precaution, no system is 100% immune. We encourage you to use a strong, unique password and enable 2FA on your account.</p>
+          </div>
+
+          <!-- Section 5 -->
+          <div class="pp-section" id="s5">
+            <div class="sec-header">
+              <div class="sec-ico ia">🍪</div>
+              <div>
+                <div class="sec-num">Section 05</div>
+                <div class="sec-title">Cookies &amp; Tracking</div>
+              </div>
+            </div>
+            <p>We use cookies and similar tracking technologies to enhance your experience and analyse platform usage. Cookies we use include:</p>
+            <table class="pp-table">
+              <tr>
+                <th>Cookie Type</th>
+                <th>Purpose</th>
+                <th>Duration</th>
+              </tr>
+              <tr>
+                <td>Essential Cookies</td>
+                <td>Login session, security tokens</td>
+                <td>Session</td>
+              </tr>
+              <tr>
+                <td>Preference Cookies</td>
+                <td>Language, theme, region settings</td>
+                <td>1 year</td>
+              </tr>
+              <tr>
+                <td>Analytics Cookies</td>
+                <td>Page views, usage behaviour (anonymised)</td>
+                <td>90 days</td>
+              </tr>
+              <tr>
+                <td>Marketing Cookies</td>
+                <td>Personalised offers (with consent only)</td>
+                <td>30 days</td>
+              </tr>
+            </table>
+            <p>You can manage or disable cookies at any time through your browser settings. Note that disabling essential cookies may affect platform functionality.</p>
+          </div>
+
+          <!-- Section 6 -->
+          <div class="pp-section" id="s6">
+            <div class="sec-header">
+              <div class="sec-ico ib">⚖️</div>
+              <div>
+                <div class="sec-num">Section 06</div>
+                <div class="sec-title">Your Rights</div>
+              </div>
+            </div>
+            <p>Under applicable data protection law, including India's Digital Personal Data Protection Act 2023, you have the following rights:</p>
+            <ul class="pp-list">
+              <li><strong>Right to Access:</strong> Request a copy of all personal data we hold about you</li>
+              <li><strong>Right to Correction:</strong> Request correction of inaccurate or incomplete data</li>
+              <li><strong>Right to Erasure:</strong> Request deletion of your account and associated data</li>
+              <li><strong>Right to Portability:</strong> Receive your data in a structured, machine-readable format</li>
+              <li><strong>Right to Withdraw Consent:</strong> Withdraw marketing consent at any time without affecting prior processing</li>
+              <li><strong>Right to Grievance Redressal:</strong> Lodge a complaint with our Data Protection Officer or the relevant authority</li>
+            </ul>
+            <div class="pp-highlight">
+              📩 To exercise any of the above rights, email us at <strong>privacy@insureai.in</strong> with the subject line "Data Rights Request". We will respond within 30 days.
+            </div>
+          </div>
+
+          <!-- Section 7 -->
+          <div class="pp-section" id="s7">
+            <div class="sec-header">
+              <div class="sec-ico iv">🗂️</div>
+              <div>
+                <div class="sec-num">Section 07</div>
+                <div class="sec-title">Data Retention</div>
+              </div>
+            </div>
+            <p>We retain your personal data only for as long as is necessary to fulfil the purposes for which it was collected, or as required by law.</p>
+            <ul class="pp-list">
+              <li>Active account data is retained for the duration of your account</li>
+              <li>After account deletion, personal data is purged within 30 days</li>
+              <li>Anonymised usage data may be retained indefinitely for model improvement</li>
+              <li>Financial transaction records are retained for 7 years as per Indian tax law</li>
+              <li>Backup copies are securely deleted within 90 days of the primary deletion</li>
+            </ul>
+          </div>
+
+          <!-- Section 8 -->
+          <div class="pp-section" id="s8">
+            <div class="sec-header">
+              <div class="sec-ico ir">👶</div>
+              <div>
+                <div class="sec-num">Section 08</div>
+                <div class="sec-title">Children's Privacy</div>
+              </div>
+            </div>
+            <p>InsureAI is intended for users who are 18 years of age or older. We do not knowingly collect personal data from individuals under 18.</p>
+            <p>If you are a parent or guardian and believe your child has provided us with personal information, please contact us immediately at <strong>privacy@insureai.in</strong>. We will promptly delete such information from our records.</p>
+          </div>
+
+          <!-- Section 9 -->
+          <div class="pp-section" id="s9">
+            <div class="sec-header">
+              <div class="sec-ico ia">🔄</div>
+              <div>
+                <div class="sec-num">Section 09</div>
+                <div class="sec-title">Changes to This Policy</div>
+              </div>
+            </div>
+            <p>We may update this Privacy Policy from time to time to reflect changes in law, technology, or our business practices. When we make material changes, we will:</p>
+            <ul class="pp-list">
+              <li>Update the "Last Updated" date at the top of this page</li>
+              <li>Notify registered users via email at least 14 days before changes take effect</li>
+              <li>Display a prominent notice on the platform dashboard</li>
+            </ul>
+            <p>Continued use of InsureAI after the effective date of any changes constitutes your acceptance of the updated policy.</p>
+          </div>
+
+          <!-- Section 10 -->
+          <div class="pp-section" id="s10">
+            <div class="sec-header">
+              <div class="sec-ico it">📞</div>
+              <div>
+                <div class="sec-num">Section 10</div>
+                <div class="sec-title">Contact &amp; Grievance Officer</div>
+              </div>
+            </div>
+            <p>If you have any questions, concerns, or requests regarding this Privacy Policy or the handling of your data, you may contact our Data Protection Officer:</p>
+            <ul class="pp-list">
+              <li><strong>Name:</strong>Shivanshu, Data Protection Officer</li>
+              <li><strong>Email:</strong>shivanshu26022007@gmail.com</li>
+              <li><strong>Phone:</strong> +91 9927905379 (Mon–Fri, 10am–6pm IST)</li>
+              <li><strong>Address:</strong>📍 UP,India</li>
+            </ul>
+            <p>You also have the right to lodge a complaint with the Data Protection Board of India if you believe your rights have been violated.</p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- FOOTER STRIP -->
+      <div class="pp-footer-strip">
+        <div>
+          <h3>Still have questions about your data?</h3>
+          <p>Our support team is available Mon–Sat, 9am–7pm to address any privacy concerns.</p>
+        </div>
+        <a href="#" class="pp-cta">📞 Contact Support</a>
+      </div>
+
+    </main>
+  </div>
+
+</body>
+</html>

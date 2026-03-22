@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>InsureAI – Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --v:#7c4dff;--r:#f06292;--t:#26c6da;--g:#43d98a;--a:#ffb300;--b:#4a90e2;
+      --td:#2d2250;--tm:#6b5b95;--ts:#a89bc4;--bg:#f5f0ff;
+      --sw:260px;--rxl:24px;--rlg:18px;--rmd:12px;--rsm:8px;
+      --sc:0 2px 16px rgba(124,77,255,.08);--sh:0 8px 32px rgba(124,77,255,.18);
+      --fd:'Playfair Display',serif;--fb:'Nunito',sans-serif;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:var(--fb);background:var(--bg);color:var(--td);min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
+    body::before{content:'';position:fixed;inset:0;z-index:0;
+      background:
+        radial-gradient(ellipse 70% 55% at 5% 0%,rgba(252,228,236,.70) 0%,transparent 55%),
+        radial-gradient(ellipse 50% 45% at 95% 100%,rgba(227,240,255,.65) 0%,transparent 50%),
+        radial-gradient(ellipse 40% 35% at 80% 10%,rgba(237,231,255,.55) 0%,transparent 45%),
+        radial-gradient(ellipse 45% 40% at 15% 85%,rgba(232,248,240,.50) 0%,transparent 45%),var(--bg);
+      pointer-events:none}
+
+    /* TOP NAV */
+    .topnav{position:fixed;top:0;left:0;right:0;z-index:200;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;background:rgba(245,240,255,.88);backdrop-filter:blur(20px);box-shadow:0 2px 20px rgba(124,77,255,.08)}
+    .logo-pill{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.80);border:1.5px solid rgba(124,77,255,.14);border-radius:50px;padding:6px 16px 6px 8px;box-shadow:0 2px 10px rgba(124,77,255,.10);text-decoration:none}
+    .logo-ico{width:28px;height:28px;background:linear-gradient(135deg,var(--v),var(--r));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px}
+    .logo-name{font-family:var(--fd);font-weight:700;font-size:.90rem;color:var(--td)}
+    .tnav-links{display:flex;align-items:center;gap:4px;list-style:none}
+    .tnav-links a{text-decoration:none;color:var(--tm);font-size:.87rem;font-weight:600;padding:6px 14px;border-radius:50px;transition:background .2s,color .2s}
+    .tnav-links a:hover{background:rgba(124,77,255,.08);color:var(--v)}
+    .user-chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.80);border:1.5px solid rgba(124,77,255,.12);border-radius:50px;padding:5px 14px 5px 5px}
+    .uc-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#ede7ff,#fce4ec);display:flex;align-items:center;justify-content:center;font-size:13px;border:2px solid #fff}
+    .uc-name{font-size:.83rem;font-weight:700;color:var(--td)}
+
+    /* LAYOUT */
+    .layout{display:flex;width:100%;min-height:100vh;padding-top:64px;position:relative;z-index:1}
+
+    /* SIDEBAR */
+    .sidebar{width:var(--sw);min-height:calc(100vh - 64px);padding:28px 14px 28px 16px;display:flex;flex-direction:column;gap:4px;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto;flex-shrink:0}
+    .sl{font-size:.68rem;font-weight:700;color:var(--ts);letter-spacing:.10em;text-transform:uppercase;padding:12px 10px 5px}
+    .si{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:var(--rmd);text-decoration:none;color:var(--tm);font-size:.88rem;font-weight:600;transition:background .2s,color .2s,transform .2s;position:relative}
+    .si:hover{background:rgba(255,255,255,.70);color:var(--td);transform:translateX(3px)}
+    .si.active{background:rgba(255,255,255,.90);color:var(--v);box-shadow:var(--sc)}
+    .si.active::before{content:'';position:absolute;left:0;top:22%;bottom:22%;width:3.5px;background:linear-gradient(180deg,var(--v),var(--r));border-radius:0 3px 3px 0}
+    .sico{width:32px;height:32px;border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+    .iv{background:rgba(124,77,255,.12)}.ir{background:rgba(240,98,146,.12)}.it{background:rgba(38,198,218,.12)}.ia{background:rgba(255,179,0,.12)}.ig{background:rgba(67,217,138,.12)}.ib{background:rgba(74,144,226,.12)}
+    .sbadge{margin-left:auto;font-size:.66rem;font-weight:700;padding:2px 7px;border-radius:50px}
+    .bnew{background:rgba(67,217,138,.15);color:#1a9e5c}.bhot{background:rgba(240,98,146,.12);color:var(--r)}
+    .sdiv{height:1px;background:rgba(124,77,255,.08);margin:7px 10px}
+    .sidebar-user{margin-top:auto;padding-top:14px;border-top:1px solid rgba(124,77,255,.08)}
+    .ucard{display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,.70);border-radius:var(--rmd);border:1px solid rgba(124,77,255,.10)}
+    .uav{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#ede7ff,#fce4ec);display:flex;align-items:center;justify-content:center;font-size:16px;border:2px solid rgba(255,255,255,.9)}
+    .uname{font-size:.83rem;font-weight:700;color:var(--td)}.urole{font-size:.70rem;color:var(--ts)}
+    .udot{width:8px;height:8px;border-radius:50%;background:var(--g);margin-left:auto;flex-shrink:0}
+
+    /* MAIN */
+    .main{flex:1;padding:32px 36px 56px 28px;min-width:0}
+    .pg-greet{font-size:.83rem;color:var(--ts);font-weight:500;margin-bottom:5px}
+    .pg-title{font-family:var(--fd);font-size:clamp(1.5rem,3vw,2.2rem);font-weight:800;color:var(--td);line-height:1.15;margin-bottom:8px}
+    .pg-title .hl{background:linear-gradient(135deg,var(--v),var(--r));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .pg-sub{font-size:.92rem;color:var(--tm);max-width:520px;line-height:1.7;margin-bottom:28px}
+
+    /* STATS */
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px;animation:fadeUp .6s .1s ease both}
+    .sc{background:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.9);border-radius:var(--rlg);padding:18px;box-shadow:var(--sc);backdrop-filter:blur(12px);transition:transform .25s,box-shadow .25s;position:relative;overflow:hidden}
+    .sc::before{content:'';position:absolute;top:-28px;right:-28px;width:80px;height:80px;border-radius:50%;opacity:.28}
+    .sc:hover{transform:translateY(-4px);box-shadow:var(--sh)}
+    .sc1::before{background:rgba(124,77,255,.25)}.sc2::before{background:rgba(240,98,146,.25)}.sc3::before{background:rgba(38,198,218,.25)}.sc4::before{background:rgba(67,217,138,.25)}
+    .sc-ico{width:36px;height:36px;border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:9px}
+    .sci1{background:rgba(124,77,255,.12)}.sci2{background:rgba(240,98,146,.12)}.sci3{background:rgba(38,198,218,.12)}.sci4{background:rgba(67,217,138,.12)}
+    .sc-val{font-family:var(--fd);font-size:1.50rem;font-weight:800;color:var(--td);margin-bottom:1px}
+    .sc-lbl{font-size:.75rem;color:var(--ts);font-weight:600}
+    .sc-chg{font-size:.72rem;font-weight:700;margin-top:5px;color:#1a9e5c}
+
+    /* MAIN GRID */
+    .dgrid{display:grid;grid-template-columns:1.4fr 1fr;gap:20px;animation:fadeUp .6s .2s ease both}
+
+    /* HERO CARD */
+    .hcard{background:linear-gradient(145deg,rgba(255,255,255,.90),rgba(237,231,255,.60));border:1.5px solid rgba(255,255,255,.95);border-radius:var(--rxl);padding:30px;box-shadow:0 4px 24px rgba(124,77,255,.10);backdrop-filter:blur(16px);position:relative;overflow:hidden}
+    .hcard::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(124,77,255,.12),transparent 70%);pointer-events:none}
+    .htag{display:inline-flex;align-items:center;gap:6px;background:rgba(124,77,255,.08);border:1px solid rgba(124,77,255,.15);border-radius:50px;padding:5px 13px;font-size:.72rem;font-weight:700;color:var(--v);letter-spacing:.07em;text-transform:uppercase;margin-bottom:14px}
+    .ldot{width:6px;height:6px;border-radius:50%;background:var(--g);animation:blink 1.8s ease-in-out infinite}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+    .hh{font-family:var(--fd);font-size:clamp(1.2rem,2.2vw,1.75rem);font-weight:800;line-height:1.2;color:var(--td);margin-bottom:10px}
+    .hh .gr{background:linear-gradient(135deg,var(--v),var(--r));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .hdesc{font-size:.90rem;color:var(--tm);line-height:1.75;margin-bottom:20px}
+    .hbtns{display:flex;gap:10px;flex-wrap:wrap}
+    .bf{display:inline-flex;align-items:center;gap:6px;padding:11px 22px;border-radius:50px;background:linear-gradient(135deg,var(--v),var(--r));color:#fff;font-family:var(--fb);font-size:.88rem;font-weight:700;text-decoration:none;box-shadow:0 4px 16px rgba(124,77,255,.25);transition:transform .2s,box-shadow .2s}
+    .bf:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(124,77,255,.35)}
+    .bo{display:inline-flex;align-items:center;gap:6px;padding:11px 22px;border-radius:50px;background:rgba(255,255,255,.80);color:var(--v);font-family:var(--fb);font-size:.88rem;font-weight:700;text-decoration:none;border:1.5px solid rgba(124,77,255,.20);transition:all .2s}
+    .bo:hover{background:rgba(124,77,255,.06);border-color:rgba(124,77,255,.40);transform:translateY(-2px)}
+    .hillus{margin-top:22px;display:flex;align-items:flex-end;gap:12px}
+    .shield{width:66px;height:76px;background:linear-gradient(150deg,var(--v),var(--r));border-radius:50% 50% 45% 45%/55% 55% 45% 45%;display:flex;align-items:center;justify-content:center;font-size:27px;box-shadow:0 6px 20px rgba(124,77,255,.26);flex-shrink:0;animation:sfloat 5s ease-in-out infinite}
+    @keyframes sfloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-8px) rotate(2deg)}}
+    .mmets{display:flex;gap:8px;flex:1;flex-wrap:wrap}
+    .mm{background:rgba(255,255,255,.80);border:1px solid rgba(255,255,255,.95);border-radius:var(--rmd);padding:9px 12px;flex:1;min-width:82px}
+    .mmv{font-family:var(--fd);font-size:1.05rem;font-weight:800;color:var(--td)}
+    .mml{font-size:.70rem;color:var(--ts);font-weight:600}
+
+    /* RIGHT COL */
+    .rcol{display:flex;flex-direction:column;gap:18px}
+
+    /* RISK CARD */
+    .rcard{background:linear-gradient(145deg,rgba(255,255,255,.88),rgba(252,228,236,.40));border:1.5px solid rgba(255,255,255,.95);border-radius:var(--rxl);padding:22px;box-shadow:var(--sc);backdrop-filter:blur(12px)}
+    .ctitle{font-family:var(--fd);font-size:.95rem;font-weight:700;color:var(--td);margin-bottom:14px;display:flex;align-items:center;gap:7px}
+    .ri{margin-bottom:12px}.ri:last-child{margin-bottom:0}
+    .rrow{display:flex;justify-content:space-between;font-size:.81rem;font-weight:600;color:var(--tm);margin-bottom:5px}
+    .rv{font-weight:700;color:var(--td)}
+    .rbg{height:7px;background:rgba(200,190,230,.25);border-radius:50px;overflow:hidden}
+    .rf{height:100%;border-radius:50px}
+    .fv{background:linear-gradient(90deg,#c4b5fd,var(--v));width:42%}
+    .fr{background:linear-gradient(90deg,#fbcfe8,var(--r));width:55%}
+    .ft{background:linear-gradient(90deg,#a5f3fc,var(--t));width:12%}
+    .fa{background:linear-gradient(90deg,#fde68a,var(--a));width:50%}
+    .fg2{background:linear-gradient(90deg,#a7f3d0,var(--g));width:65%}
+
+    /* RESULT CARD */
+    .result-card{background:linear-gradient(145deg,rgba(255,255,255,.88),rgba(232,248,240,.40));border:1.5px solid rgba(255,255,255,.95);border-radius:var(--rxl);padding:22px;box-shadow:var(--sc);backdrop-filter:blur(12px)}
+    .res-box{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,rgba(124,77,255,.07),rgba(240,98,146,.05));border:1.5px dashed rgba(124,77,255,.20);border-radius:var(--rmd);padding:14px 16px;margin-bottom:16px}
+    .res-amt{font-family:var(--fd);font-size:1.35rem;font-weight:800;color:var(--v)}
+    .res-sub{font-size:.72rem;color:var(--ts);font-weight:600}
+    .res-row{display:flex;justify-content:space-between;font-size:.82rem;font-weight:600;color:var(--tm);padding:6px 0;border-bottom:1px solid rgba(124,77,255,.06)}
+    .res-row:last-child{border-bottom:none}
+
+    /* FEATURE CARDS */
+    .brow{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:20px;animation:fadeUp .6s .3s ease both}
+    .fcrd{background:rgba(255,255,255,.75);border:1.5px solid rgba(255,255,255,.95);border-radius:var(--rlg);padding:20px;box-shadow:var(--sc);backdrop-filter:blur(12px);transition:transform .25s,box-shadow .25s}
+    .fcrd:hover{transform:translateY(-4px);box-shadow:var(--sh)}
+    .femo{font-size:26px;margin-bottom:8px;display:block}
+    .ftitle{font-family:var(--fd);font-size:.92rem;font-weight:700;color:var(--td);margin-bottom:5px}
+    .fdesc{font-size:.80rem;color:var(--tm);line-height:1.65}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(124,77,255,.20);border-radius:4px}
+
+    @media(max-width:1080px){.stats-row{grid-template-columns:repeat(2,1fr)}.dgrid{grid-template-columns:1fr}}
+    @media(max-width:820px){.sidebar{display:none}.main{padding:22px 18px 44px}.brow{grid-template-columns:1fr}.tnav-links{display:none}}
+    @media(max-width:500px){.stats-row{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <nav class="topnav">
+    <a href="#" class="logo-pill">
+      <div class="logo-ico">🛡️</div>
+      <span class="logo-name">InsureAI</span>
+    </a>
+    <ul class="tnav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/predict">Predict</a></li>
+      <li><a href="/contact">Contact</a></li>
+      <li><a href="/about">About</a></li>
+    </ul>
+    <div class="user-chip">
+      <div class="uc-av">👤</div>
+      <!-- <span class="uc-name">Rahul Sharma</span> -->
+    </div>
+  </nav>
+
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <span class="sl">Main Menu</span>
+      <a class="si active" href="/"><div class="sico iv">🏠</div>Home</a><!--si acive ye isko active ya ek effect generate karta h-->
+      <a class="si" href="/policies"><div class="sico ir">🛡️</div>My Policies<span class="sbadge bnew">New</span></a>
+      <a class="si" href="/predict"><div class="sico it">📊</div>Predictions</a>
+      <a class="si" href="/insights"><div class="sico ia">💡</div>AI Insights<span class="sbadge bhot">Hot</span></a>
+      <a class="si" href="/analytics"><div class="sico ig">📈</div>Analytics</a>
+      <div class="sdiv"></div><!--ye hr tag ki jagh use kiya h-->
+      <span class="sl">Company</span>
+      <a class="si" href="/about"><div class="sico ib">ℹ️</div>About Us</a>
+      <a class="si" href="/contact" ><div class="sico iv">📞</div>Contact</a>
+      <a class="si" href="/privacy"><div class="sico ir">📄</div>Privacy Policy</a>
+      <div class="sdiv"></div>
+      <span class="sl">Account</span>
+      <a class="si" href="/settings"><div class="sico iv">⚙️</div>Settings</a>
+      <div class="sidebar-user">
+        <div class="ucard">
+          <div class="uav">👤</div>
+          <div><div class="uname"></div><div class="urole">Free Plan</div></div>
+          <div class="udot"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+      <div style="animation:fadeUp .6s ease both">
+        <p class="pg-greet">👋 Welcome back, !</p>
+        <h1 class="pg-title">Your Insurance<br><span class="hl">Premium Predictor</span></h1>
+        <p class="pg-sub">Harness the power of AI to get accurate insurance premium estimates — tailored to your health, age, and lifestyle in seconds.</p>
+      </div>
+
+      <!-- STATS -->
+      <div class="stats-row">
+        <div class="sc sc1"><div class="sc-ico sci1">🧠</div><div class="sc-val">97%</div><div class="sc-lbl">Model Accuracy</div><div class="sc-chg">↑ 2.3% this month</div></div>
+        <div class="sc sc2"><div class="sc-ico sci2">⚡</div><div class="sc-val">&lt;1s</div><div class="sc-lbl">Prediction Speed</div><div class="sc-chg">↑ Faster than ever</div></div>
+        <div class="sc sc3"><div class="sc-ico sci3">📋</div><div class="sc-val">80K+</div><div class="sc-lbl">Policies Analyzed</div><div class="sc-chg">↑ 4,200 new this week</div></div>
+        <div class="sc sc4"><div class="sc-ico sci4">👥</div><div class="sc-val">12K+</div><div class="sc-lbl">Happy Users</div><div class="sc-chg">↑ Growing fast</div></div>
+      </div>
+
+      <!-- MAIN GRID -->
+      <div class="dgrid">
+
+        <!-- Hero Card -->
+        <div class="hcard">
+          <div class="htag"><span class="ldot"></span>AI-Powered · Live Predictions</div>
+          <h2 class="hh">Predict Your Premium<br><span class="gr">Instantly with AI</span></h2>
+          <p class="hdesc">Our ML model analyzes your age, BMI, smoking habits and region to give highly accurate insurance premium — no agent needed, no waiting.</p>
+          <div class="hbtns">
+            <a href="#" class="bf">🛡️ Predict My Premium</a>
+            <a href="#" class="bo">▶ How It Works</a>
+          </div>
+          <div class="hillus">
+            <div class="shield">🛡️</div>
+            <div class="mmets">
+              <div class="mm"><div class="mmv">₹8,240</div><div class="mml">Avg Premium/mo</div></div>
+              <div class="mm"><div class="mmv">Low</div><div class="mml">Your Risk Level</div></div>
+              <div class="mm"><div class="mmv">3 Plans</div><div class="mml">Recommended</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Col -->
+        <div class="rcol">
+
+          <!-- Risk Analysis Card -->
+          <div class="rcard">
+            <div class="ctitle">📊 Risk Factor Analysis</div>
+            <div class="ri">
+              <div class="rrow"><span>Age Group</span><span class="rv">28 yrs</span></div>
+              <div class="rbg"><div class="rf fv"></div></div>
+            </div>
+            <div class="ri">
+              <div class="rrow"><span>BMI Score</span><span class="rv">Normal</span></div>
+              <div class="rbg"><div class="rf fg2"></div></div>
+            </div>
+            <div class="ri">
+              <div class="rrow"><span>Smoker Risk</span><span class="rv">None</span></div>
+              <div class="rbg"><div class="rf ft"></div></div>
+            </div>
+            <div class="ri">
+              <div class="rrow"><span>Dependents</span><span class="rv">2</span></div>
+              <div class="rbg"><div class="rf fa"></div></div>
+            </div>
+            <div class="ri">
+              <div class="rrow"><span>Region Factor</span><span class="rv">North</span></div>
+              <div class="rbg"><div class="rf fr"></div></div>
+            </div>
+          </div>
+
+          <!-- Premium Result Card -->
+          <div class="result-card">
+            <div class="ctitle">💰 Premium Estimate</div>
+            <div class="res-box">
+              <div style="font-size:26px">💰</div>
+              <div>
+                <div class="res-amt">₹ 8,240</div>
+                <div class="res-sub">Estimated monthly premium</div>
+              </div>
+            </div>
+            <div class="res-row"><span>Risk Level</span><span style="color:#1a9e5c;font-weight:700">✔ Low</span></div>
+            <div class="res-row"><span>Recommended Plans</span><span style="color:var(--v);font-weight:700">3 Plans</span></div>
+            <div class="res-row"><span>Model Confidence</span><span style="color:var(--td);font-weight:700">97.4%</span></div>
+            <div class="res-row"><span>Region</span><span style="color:var(--td);font-weight:700">North India</span></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- FEATURE CARDS -->
+      <div class="brow">
+        <div class="fcrd"><span class="femo">🧬</span><div class="ftitle">Health Profile Analysis</div><p class="fdesc">Our AI reads your BMI, age, and lifestyle habits to build a complete health risk profile instantly.</p></div>
+        <div class="fcrd"><span class="femo">📉</span><div class="ftitle">Smart Cost Reduction</div><p class="fdesc">Get personalized tips to lower your premium — from quitting smoking to choosing the right plan tier.</p></div>
+        <div class="fcrd"><span class="femo">🔒</span><div class="ftitle">100% Secure & Private</div><p class="fdesc">Your data stays yours. End-to-end encryption ensures your info is never shared or sold.</p></div>
+      </div>
+
+    </main>
+  </div>
+
+</body>
+</html>

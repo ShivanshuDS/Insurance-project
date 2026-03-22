@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>InsureAI – Analytics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --v:#7c4dff;--r:#f06292;--t:#26c6da;--g:#43d98a;--a:#ffb300;--b:#4a90e2;
+      --td:#2d2250;--tm:#6b5b95;--ts:#a89bc4;--bg:#f5f0ff;
+      --sw:260px;--rxl:24px;--rlg:18px;--rmd:12px;--rsm:8px;
+      --sc:0 2px 16px rgba(124,77,255,.08);--sh:0 8px 32px rgba(124,77,255,.18);
+      --fd:'Playfair Display',serif;--fb:'Nunito',sans-serif;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:var(--fb);background:var(--bg);color:var(--td);min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
+    body::before{content:'';position:fixed;inset:0;z-index:0;
+      background:
+        radial-gradient(ellipse 70% 55% at 5% 0%,rgba(252,228,236,.70) 0%,transparent 55%),
+        radial-gradient(ellipse 50% 45% at 95% 100%,rgba(227,240,255,.65) 0%,transparent 50%),
+        radial-gradient(ellipse 40% 35% at 80% 10%,rgba(237,231,255,.55) 0%,transparent 45%),
+        radial-gradient(ellipse 45% 40% at 15% 85%,rgba(232,248,240,.50) 0%,transparent 45%),var(--bg);
+      pointer-events:none}
+
+    /* NAV */
+    .topnav{position:fixed;top:0;left:0;right:0;z-index:200;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;background:rgba(245,240,255,.88);backdrop-filter:blur(20px);box-shadow:0 2px 20px rgba(124,77,255,.08)}
+    .logo-pill{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.80);border:1.5px solid rgba(124,77,255,.14);border-radius:50px;padding:6px 16px 6px 8px;box-shadow:0 2px 10px rgba(124,77,255,.10);text-decoration:none}
+    .logo-ico{width:28px;height:28px;background:linear-gradient(135deg,var(--v),var(--r));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px}
+    .logo-name{font-family:var(--fd);font-weight:700;font-size:.90rem;color:var(--td)}
+    .tnav-links{display:flex;align-items:center;gap:4px;list-style:none}
+    .tnav-links a{text-decoration:none;color:var(--tm);font-size:.87rem;font-weight:600;padding:6px 14px;border-radius:50px;transition:background .2s,color .2s}
+    .tnav-links a:hover{background:rgba(124,77,255,.08);color:var(--v)}
+    .user-chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.80);border:1.5px solid rgba(124,77,255,.12);border-radius:50px;padding:5px 14px 5px 5px}
+    .uc-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#ede7ff,#fce4ec);display:flex;align-items:center;justify-content:center;font-size:13px;border:2px solid #fff}
+
+    /* LAYOUT */
+    .layout{display:flex;width:100%;min-height:100vh;padding-top:64px;position:relative;z-index:1}
+
+    /* SIDEBAR */
+    .sidebar{width:var(--sw);min-height:calc(100vh - 64px);padding:28px 14px 28px 16px;display:flex;flex-direction:column;gap:4px;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto;flex-shrink:0}
+    .sl{font-size:.68rem;font-weight:700;color:var(--ts);letter-spacing:.10em;text-transform:uppercase;padding:12px 10px 5px}
+    .si{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:var(--rmd);text-decoration:none;color:var(--tm);font-size:.88rem;font-weight:600;transition:background .2s,color .2s,transform .2s;position:relative;cursor:pointer}
+    .si:hover{background:rgba(255,255,255,.70);color:var(--td);transform:translateX(3px)}
+    .si.active{background:rgba(255,255,255,.90);color:var(--v);box-shadow:var(--sc)}
+    .si.active::before{content:'';position:absolute;left:0;top:22%;bottom:22%;width:3.5px;background:linear-gradient(180deg,var(--v),var(--r));border-radius:0 3px 3px 0}
+    .sico{width:32px;height:32px;border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+    .iv{background:rgba(124,77,255,.12)}.ir{background:rgba(240,98,146,.12)}.it{background:rgba(38,198,218,.12)}.ia{background:rgba(255,179,0,.12)}.ig{background:rgba(67,217,138,.12)}.ib{background:rgba(74,144,226,.12)}
+    .sbadge{margin-left:auto;font-size:.66rem;font-weight:700;padding:2px 7px;border-radius:50px}
+    .bnew{background:rgba(67,217,138,.15);color:#1a9e5c}.bhot{background:rgba(240,98,146,.12);color:var(--r)}
+    .sdiv{height:1px;background:rgba(124,77,255,.08);margin:7px 10px}
+    .sidebar-user{margin-top:auto;padding-top:14px;border-top:1px solid rgba(124,77,255,.08)}
+    .ucard{display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,.70);border-radius:var(--rmd);border:1px solid rgba(124,77,255,.10)}
+    .uav{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#ede7ff,#fce4ec);display:flex;align-items:center;justify-content:center;font-size:16px;border:2px solid rgba(255,255,255,.9)}
+    .uname{font-size:.83rem;font-weight:700;color:var(--td)}.urole{font-size:.70rem;color:var(--ts)}
+    .udot{width:8px;height:8px;border-radius:50%;background:var(--g);margin-left:auto;flex-shrink:0}
+
+    /* MAIN */
+    .main{flex:1;padding:32px 36px 56px 28px;min-width:0}
+    .pg-greet{font-size:.83rem;color:var(--ts);font-weight:500;margin-bottom:5px}
+    .pg-title{font-family:var(--fd);font-size:clamp(1.5rem,3vw,2.2rem);font-weight:800;color:var(--td);line-height:1.15;margin-bottom:8px}
+    .pg-title .hl{background:linear-gradient(135deg,var(--v),var(--r));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .pg-sub{font-size:.92rem;color:var(--tm);max-width:540px;line-height:1.7;margin-bottom:22px}
+
+    /* DATE RANGE TABS */
+    .range-bar{display:flex;align-items:center;gap:8px;margin-bottom:22px;flex-wrap:wrap;animation:fadeUp .5s .05s ease both}
+    .range-lbl{font-size:.78rem;font-weight:700;color:var(--ts);margin-right:4px}
+    .rtab{padding:6px 16px;border-radius:50px;font-size:.80rem;font-weight:700;cursor:pointer;border:1.5px solid rgba(124,77,255,.12);background:rgba(255,255,255,.70);color:var(--tm);transition:all .2s}
+    .rtab:hover{background:rgba(124,77,255,.07);color:var(--v)}
+    .rtab.active{background:linear-gradient(135deg,var(--v),var(--r));color:#fff;border-color:transparent;box-shadow:0 4px 14px rgba(124,77,255,.22)}
+    .export-btn{margin-left:auto;display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:50px;background:rgba(255,255,255,.80);border:1.5px solid rgba(124,77,255,.18);color:var(--v);font-family:var(--fb);font-size:.82rem;font-weight:700;cursor:pointer;transition:all .2s}
+    .export-btn:hover{background:rgba(124,77,255,.07);border-color:rgba(124,77,255,.35)}
+
+    /* STATS ROW */
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;animation:fadeUp .5s .1s ease both}
+    .sc{background:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.9);border-radius:var(--rlg);padding:18px;box-shadow:var(--sc);backdrop-filter:blur(12px);transition:transform .25s,box-shadow .25s;position:relative;overflow:hidden}
+    .sc::before{content:'';position:absolute;top:-28px;right:-28px;width:80px;height:80px;border-radius:50%;opacity:.28}
+    .sc:hover{transform:translateY(-4px);box-shadow:var(--sh)}
+    .sc1::before{background:rgba(124,77,255,.25)}.sc2::before{background:rgba(240,98,146,.25)}.sc3::before{background:rgba(38,198,218,.25)}.sc4::before{background:rgba(67,217,138,.25)}
+    .sc-ico{width:36px;height:36px;border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:9px}
+    .sci1{background:rgba(124,77,255,.12)}.sci2{background:rgba(240,98,146,.12)}.sci3{background:rgba(38,198,218,.12)}.sci4{background:rgba(67,217,138,.12)}
+    .sc-val{font-family:var(--fd);font-size:1.50rem;font-weight:800;color:var(--td);margin-bottom:1px}
+    .sc-lbl{font-size:.75rem;color:var(--ts);font-weight:600}
+    .sc-chg{font-size:.72rem;font-weight:700;margin-top:5px}
+    .up{color:#1a9e5c}.dn{color:#c0294e}
+
+    /* MAIN CHART AREA */
+    .chart-main{background:rgba(255,255,255,.82);border:1.5px solid rgba(255,255,255,.95);border-radius:var(--rxl);padding:26px;box-shadow:var(--sc);backdrop-filter:blur(14px);margin-bottom:20px;animation:fadeUp .5s .15s ease both}
+    .chart-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+    .chart-title{font-family:var(--fd);font-size:1rem;font-weight:800;color:var(--td)}
+    .chart-legend{display:flex;gap:14px;flex-wrap:wrap}
+    .cl-item{display:flex;align-items:center;gap:5px;font-size:.74rem;font-weight:700;color:var(--tm)}
+    .cl-dot{width:10px;height:10px;border-radius:3px}
+    .chart-tabs{display:flex;gap:6px}
+    .ctab{padding:5px 13px;border-radius:50px;font-size:.76rem;font-weight:700;cursor:pointer;border:1.5px solid rgba(124,77,255,.12);background:transparent;color:var(--tm);transition:all .2s;font-family:var(--fb)}
+    .ctab.active{background:rgba(124,77,255,.10);color:var(--v);border-color:rgba(124,77,255,.22)}
+    .canvas-wrap{position:relative;height:220px;width:100%}
+    canvas{position:absolute;top:0;left:0;width:100%!important;height:100%!important}
+
+    /* TWO-COL ROW */
+    .two-col{display:grid;grid-template-columns:1.1fr 1fr;gap:20px;margin-bottom:20px;animation:fadeUp .5s .2s ease both}
+
+    /* CARD BASE */
+    .crd{background:rgba(255,255,255,.82);border:1.5px solid rgba(255,255,255,.95);border-radius:var(--rxl);padding:24px;box-shadow:var(--sc);backdrop-filter:blur(14px)}
+    .crd-title{font-family:var(--fd);font-size:.95rem;font-weight:800;color:var(--td);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+
+    /* HORIZONTAL BAR CHART */
+    .hbar-row{display:flex;align-items:center;gap:10px;margin-bottom:11px}
+    .hbar-row:last-child{margin-bottom:0}
+    .hbar-lbl{font-size:.76rem;font-weight:700;color:var(--tm);width:80px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .hbar-bg{flex:1;height:10px;background:rgba(200,190,230,.22);border-radius:50px;overflow:hidden}
+    .hbar-fill{height:100%;border-radius:50px;transition:width 1s ease}
+    .hbar-val{font-size:.74rem;font-weight:800;color:var(--td);width:54px;text-align:right;flex-shrink:0}
+
+    /* CATEGORY TABLE */
+    .cat-table{width:100%;border-collapse:collapse}
+    .cat-table th{font-size:.68rem;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.08em;padding:0 0 10px;text-align:left;border-bottom:1px solid rgba(124,77,255,.08)}
+    .cat-table th:last-child{text-align:right}
+    .cat-table td{padding:10px 0;font-size:.82rem;border-bottom:1px solid rgba(124,77,255,.05);vertical-align:middle}
+    .cat-table tr:last-child td{border-bottom:none}
+    .cat-ico{width:28px;height:28px;border-radius:var(--rsm);display:inline-flex;align-items:center;justify-content:center;font-size:13px;margin-right:8px;vertical-align:middle}
+    .cat-name{font-weight:700;color:var(--td)}
+    .cat-bar-cell{width:80px}
+    .cat-mini-bg{height:5px;background:rgba(200,190,230,.22);border-radius:50px;overflow:hidden}
+    .cat-mini-fill{height:100%;border-radius:50px}
+    .cat-amt{font-weight:800;color:var(--td);text-align:right}
+    .cat-chg{font-size:.70rem;font-weight:700}
+
+    /* THREE-COL ROW */
+    .three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;animation:fadeUp .5s .25s ease both}
+
+    /* RADIAL / GAUGE */
+    .gauge-wrap{display:flex;flex-direction:column;align-items:center;gap:8px}
+    .gauge-ring{position:relative;width:100px;height:100px}
+    .gauge-ring svg{transform:rotate(-90deg)}
+    .grb{fill:none;stroke:rgba(124,77,255,.10);stroke-width:10}
+    .grf{fill:none;stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset 1.4s ease}
+    .gauge-num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--fd);font-size:1.35rem;font-weight:800;color:var(--td)}
+    .gauge-lbl{font-size:.76rem;font-weight:700;color:var(--tm);text-align:center}
+    .gauge-sub{font-size:.68rem;color:var(--ts);text-align:center;line-height:1.4}
+
+    /* HEAT MAP */
+    .heat-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:4px}
+    .heat-cell{aspect-ratio:1;border-radius:4px;transition:transform .15s}
+    .heat-cell:hover{transform:scale(1.3)}
+    .heat-day{font-size:.58rem;color:var(--ts);font-weight:700;text-align:center;padding-bottom:2px}
+    .heat-legend{display:flex;align-items:center;gap:6px;margin-top:10px;justify-content:flex-end}
+    .heat-legend span{font-size:.65rem;color:var(--ts)}
+    .hl-box{width:10px;height:10px;border-radius:2px}
+
+    /* ACTIVITY LOG */
+    .act-item{display:flex;gap:11px;padding:9px 0;border-bottom:1px solid rgba(124,77,255,.05)}
+    .act-item:last-child{border-bottom:none;padding-bottom:0}
+    .act-dot-wrap{display:flex;flex-direction:column;align-items:center;gap:0}
+    .act-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:4px}
+    .act-line{width:1px;flex:1;background:rgba(124,77,255,.10);margin-top:3px}
+    .act-body{flex:1}
+    .act-title{font-size:.82rem;font-weight:700;color:var(--td);margin-bottom:2px}
+    .act-sub{font-size:.72rem;color:var(--ts)}
+    .act-time{font-size:.65rem;color:var(--ts);font-weight:600;white-space:nowrap;margin-top:3px}
+
+    /* TOOLTIP */
+    .tooltip{position:fixed;z-index:999;background:rgba(45,34,80,.92);color:#fff;padding:8px 12px;border-radius:var(--rsm);font-size:.76rem;font-weight:600;pointer-events:none;display:none;line-height:1.5;max-width:160px;text-align:center}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(124,77,255,.20);border-radius:4px}
+
+    @media(max-width:1100px){.two-col{grid-template-columns:1fr}.three-col{grid-template-columns:1fr 1fr}}
+    @media(max-width:820px){.sidebar{display:none}.main{padding:22px 18px 44px}.stats-row{grid-template-columns:repeat(2,1fr)}.tnav-links{display:none}.three-col{grid-template-columns:1fr}}
+    @media(max-width:500px){.stats-row{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+
+  <div class="tooltip" id="tooltip"></div>
+
+  <!-- NAV -->
+  <nav class="topnav">
+    <a href="#" class="logo-pill">
+      <div class="logo-ico">🛡️</div>
+      <span class="logo-name">InsureAI</span>
+    </a>
+    <ul class="tnav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/predict">Predict</a></li>
+      <li><a href="/contact">Contact</a></li>
+      <li><a href="/about">About</a></li>
+    </ul>
+    <div class="user-chip"><div class="uc-av">👤</div></div>
+  </nav>
+
+  <div class="layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <span class="sl">Main Menu</span>
+      <a href="/" class="si"><div class="sico iv">🏠</div>Home</a>
+      <a href="/policies" class="si"><div class="sico ir">🛡️</div>My Policies<span class="sbadge bnew">New</span></a>
+      <a href="/predict" class="si"><div class="sico it">📊</div>Predictions</a>
+      <a href="/insights" class="si"><div class="sico ia">💡</div>AI Insights<span class="sbadge bhot">Hot</span></a>
+      <a href="/analytics" class="si active"><div class="sico ig">📈</div>Analytics</a>
+      <div class="sdiv"></div>
+      <span class="sl">Company</span>
+      <a href="/about" class="si"><div class="sico ib">ℹ️</div>About Us</a>
+      <a href="/contact" class="si"><div class="sico iv">📞</div>Contact</a>
+      <a href="/privacy" class="si"><div class="sico ir">📄</div>Privacy Policy</a>
+      <div class="sdiv"></div>
+      <span class="sl">Account</span>
+      <a href="/settings" class="si"><div class="sico iv">⚙️</div>Settings</a>    
+      <div class="sidebar-user">
+        <div class="ucard">
+          <div class="uav">👤</div>
+          <div><div class="uname"></div><div class="urole">Free Plan</div></div>
+          <div class="udot"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+      <!-- HEADER -->
+      <div style="animation:fadeUp .5s ease both">
+        <p class="pg-greet">📊 Data Overview</p>
+        <h1 class="pg-title">Analytics <span class="hl">Dashboard</span></h1>
+        <p class="pg-sub">A complete breakdown of your insurance spending, premium trends, risk scores, and policy performance over time.</p>
+      </div>
+
+      <!-- DATE RANGE -->
+      <div class="range-bar">
+        <span class="range-lbl">Period:</span>
+        <button class="rtab" onclick="setRange('7d',this)">7 Days</button>
+        <button class="rtab" onclick="setRange('1m',this)">1 Month</button>
+        <button class="rtab active" onclick="setRange('6m',this)">6 Months</button>
+        <button class="rtab" onclick="setRange('1y',this)">1 Year</button>
+        <button class="rtab" onclick="setRange('all',this)">All Time</button>
+        <button class="export-btn" onclick="exportCSV()">📥 Export CSV</button>
+      </div>
+
+      <!-- STATS -->
+      <div class="stats-row">
+        <div class="sc sc1">
+          <div class="sc-ico sci1">💸</div>
+          <div class="sc-val" id="s-spend">₹28,920</div>
+          <div class="sc-lbl">Total Spent (6M)</div>
+          <div class="sc-chg up">↑ 6.4% vs last period</div>
+        </div>
+        <div class="sc sc2">
+          <div class="sc-ico sci2">📋</div>
+          <div class="sc-val" id="s-policies">5</div>
+          <div class="sc-lbl">Active Policies</div>
+          <div class="sc-chg up">↑ 1 new added</div>
+        </div>
+        <div class="sc sc3">
+          <div class="sc-ico sci3">🎯</div>
+          <div class="sc-val" id="s-claims">2</div>
+          <div class="sc-lbl">Claims Filed</div>
+          <div class="sc-chg dn">↓ Both settled</div>
+        </div>
+        <div class="sc sc4">
+          <div class="sc-ico sci4">🧠</div>
+          <div class="sc-val" id="s-score">78</div>
+          <div class="sc-lbl">Insurance Score</div>
+          <div class="sc-chg up">↑ +8 pts this period</div>
+        </div>
+      </div>
+
+      <!-- MAIN LINE CHART -->
+      <div class="chart-main">
+        <div class="chart-hdr">
+          <div>
+            <div class="chart-title">📈 Premium Spend Over Time</div>
+          </div>
+          <div class="chart-tabs">
+            <button class="ctab active" onclick="switchChart('spend',this)">Spend</button>
+            <button class="ctab" onclick="switchChart('score',this)">Risk Score</button>
+            <button class="ctab" onclick="switchChart('claims',this)">Claims</button>
+          </div>
+          <div class="chart-legend" id="chartLegend">
+            <div class="cl-item"><div class="cl-dot" style="background:linear-gradient(135deg,#7c4dff,#f06292)"></div>Premium</div>
+            <div class="cl-item"><div class="cl-dot" style="background:rgba(67,217,138,.6)"></div>Savings</div>
+          </div>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="mainChart"></canvas>
+        </div>
+      </div>
+
+      <!-- TWO COL -->
+      <div class="two-col">
+
+        <!-- HORIZONTAL BAR — SPEND BY CATEGORY -->
+        <div class="crd">
+          <div class="crd-title">🗂️ Spend by Policy Type</div>
+          <div id="hbars"></div>
+        </div>
+
+        <!-- CATEGORY TABLE -->
+        <div class="crd">
+          <div class="crd-title">📋 Policy Performance</div>
+          <table class="cat-table">
+            <thead>
+              <tr>
+                <th>Policy</th>
+                <th style="text-align:center">Coverage</th>
+                <th style="text-align:right">Premium</th>
+                <th style="text-align:right">Change</th>
+              </tr>
+            </thead>
+            <tbody id="catTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- THREE COL -->
+      <div class="three-col">
+
+        <!-- GAUGE — CLAIM RATIO -->
+        <div class="crd" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px">
+          <div class="crd-title" style="margin-bottom:0;text-align:center">⚖️ Claim-to-Premium Ratio</div>
+          <div class="gauge-wrap">
+            <div class="gauge-ring">
+              <svg viewBox="0 0 100 100" width="100" height="100">
+                <defs>
+                  <linearGradient id="gg1" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#7c4dff"/><stop offset="100%" style="stop-color:#f06292"/>
+                  </linearGradient>
+                </defs>
+                <circle class="grb" cx="50" cy="50" r="44"/>
+                <circle class="grf" id="g1fill" cx="50" cy="50" r="44" stroke="url(#gg1)"
+                  style="stroke-dasharray:276.5;stroke-dashoffset:276.5"/>
+              </svg>
+              <div class="gauge-num">18%</div>
+            </div>
+            <div class="gauge-lbl">Claim Ratio</div>
+            <div class="gauge-sub">₹5,200 claimed vs<br>₹28,920 paid</div>
+          </div>
+        </div>
+
+        <!-- ACTIVITY / PAYMENT LOG -->
+        <div class="crd">
+          <div class="crd-title">🕐 Recent Activity</div>
+          <div class="act-item">
+            <div class="act-dot-wrap"><div class="act-dot" style="background:var(--g)"></div><div class="act-line"></div></div>
+            <div class="act-body"><div class="act-title">Premium Auto-Paid</div><div class="act-sub">Star Health · ₹1,200</div></div>
+            <div class="act-time">Today</div>
+          </div>
+          <div class="act-item">
+            <div class="act-dot-wrap"><div class="act-dot" style="background:var(--v)"></div><div class="act-line"></div></div>
+            <div class="act-body"><div class="act-title">AI Insight Generated</div><div class="act-sub">Save ₹2,880 tip unlocked</div></div>
+            <div class="act-time">2 hrs ago</div>
+          </div>
+          <div class="act-item">
+            <div class="act-dot-wrap"><div class="act-dot" style="background:var(--a)"></div><div class="act-line"></div></div>
+            <div class="act-body"><div class="act-title">Vehicle Policy Expiry Alert</div><div class="act-sub">Bajaj Allianz · 28 days left</div></div>
+            <div class="act-time">5 hrs ago</div>
+          </div>
+          <div class="act-item">
+            <div class="act-dot-wrap"><div class="act-dot" style="background:var(--t)"></div><div class="act-line"></div></div>
+            <div class="act-body"><div class="act-title">Claim Settled</div><div class="act-sub">LIC Jeevan Anand · ₹3,200</div></div>
+            <div class="act-time">Feb 28</div>
+          </div>
+          <div class="act-item">
+            <div class="act-dot-wrap"><div class="act-dot" style="background:var(--r)"></div></div>
+            <div class="act-body"><div class="act-title">Home Policy Expired</div><div class="act-sub">HDFC ERGO · Action needed</div></div>
+            <div class="act-time">Jan 20</div>
+          </div>
+        </div>
+
+        <!-- MONTHLY PAYMENT HEATMAP -->
+        <div class="crd">
+          <div class="crd-title">🗓️ Payment Heatmap</div>
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:4px">
+            <div class="heat-day">S</div><div class="heat-day">M</div><div class="heat-day">T</div>
+            <div class="heat-day">W</div><div class="heat-day">T</div><div class="heat-day">F</div><div class="heat-day">S</div>
+          </div>
+          <div class="heat-grid" id="heatGrid"></div>
+          <div class="heat-legend">
+            <span>Less</span>
+            <div class="hl-box" style="background:rgba(124,77,255,.08)"></div>
+            <div class="hl-box" style="background:rgba(124,77,255,.22)"></div>
+            <div class="hl-box" style="background:rgba(124,77,255,.45)"></div>
+            <div class="hl-box" style="background:rgba(124,77,255,.70)"></div>
+            <div class="hl-box" style="background:#7c4dff"></div>
+            <span>More</span>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+  // ── DATA SETS ────────────────────────────────────────────────
+  const months = ['Oct','Nov','Dec','Jan','Feb','Mar'];
+  const datasets = {
+    spend: {
+      label: 'Premium',
+      vals: [3600,4100,3900,4500,4200,4820],
+      vals2: [320,480,290,610,540,780],
+      label2: 'Savings',
+      legend: [
+        {color:'linear-gradient(135deg,#7c4dff,#f06292)',label:'Premium'},
+        {color:'rgba(67,217,138,.6)',label:'Savings'}
+      ]
+    },
+    score: {
+      label: 'Risk Score',
+      vals: [48,55,52,60,68,78],
+      vals2: null,
+      legend: [{color:'linear-gradient(135deg,#7c4dff,#f06292)',label:'Risk Score'}]
+    },
+    claims: {
+      label: 'Claims (₹)',
+      vals: [0,0,2000,0,3200,0],
+      vals2: null,
+      legend: [{color:'rgba(240,98,146,.7)',label:'Claims Filed'}]
+    }
+  };
+  let currentDS = 'spend';
+
+  // ── CANVAS CHART ─────────────────────────────────────────────
+  const canvas = document.getElementById('mainChart');
+  const ctx = canvas.getContext('2d');
+  let animFrame;
+
+  function hexToRgb(h){const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16);return`${r},${g},${b}`}
+
+  function drawChart(ds){
+    const W=canvas.offsetWidth, H=canvas.offsetHeight;
+    canvas.width=W; canvas.height=H;
+    ctx.clearRect(0,0,W,H);
+    const pad={t:20,r:20,b:30,l:44};
+    const cW=W-pad.l-pad.r, cH=H-pad.t-pad.b;
+    const all=[...ds.vals,...(ds.vals2||[])];
+    const maxV=Math.max(...all)*1.15, minV=0;
+    const steps=5;
+    // grid + y labels
+    for(let i=0;i<=steps;i++){
+      const y=pad.t+cH-(i/steps)*cH;
+      const v=Math.round((i/steps)*(maxV-minV)+minV);
+      ctx.strokeStyle='rgba(124,77,255,.07)';ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(pad.l+cW,y);ctx.stroke();
+      ctx.fillStyle='rgba(107,91,149,.55)';ctx.font=`600 10px Nunito,sans-serif`;ctx.textAlign='right';
+      ctx.fillText(v>=1000?`${(v/1000).toFixed(1)}K`:v,pad.l-6,y+3.5);
+    }
+    // x labels
+    months.forEach((m,i)=>{
+      const x=pad.l+(i/(months.length-1))*cW;
+      ctx.fillStyle='rgba(107,91,149,.55)';ctx.textAlign='center';ctx.font=`700 10px Nunito,sans-serif`;
+      ctx.fillText(m,x,H-6);
+    });
+    function drawLine(vals,colorFn,fillAlpha){
+      const pts=vals.map((v,i)=>({x:pad.l+(i/(months.length-1))*cW,y:pad.t+cH-((v-minV)/(maxV-minV))*cH}));
+      // fill
+      const grad=ctx.createLinearGradient(0,pad.t,0,pad.t+cH);
+      grad.addColorStop(0,`rgba(124,77,255,${fillAlpha})`);
+      grad.addColorStop(1,`rgba(124,77,255,0)`);
+      ctx.beginPath();ctx.moveTo(pts[0].x,pts[0].y);
+      pts.slice(1).forEach(p=>ctx.lineTo(p.x,p.y));
+      ctx.lineTo(pts[pts.length-1].x,pad.t+cH);ctx.lineTo(pts[0].x,pad.t+cH);ctx.closePath();
+      if(typeof colorFn==='string' && colorFn.startsWith('rgba')){
+        const areaGrad=ctx.createLinearGradient(0,pad.t,0,pad.t+cH);
+        areaGrad.addColorStop(0,colorFn.replace(/[\d.]+\)$/,`${fillAlpha})`));
+        areaGrad.addColorStop(1,colorFn.replace(/[\d.]+\)$/,'0)'));
+        ctx.fillStyle=areaGrad;
+      } else { ctx.fillStyle=grad; }
+      ctx.fill();
+      // line
+      const lineGrad=ctx.createLinearGradient(pad.l,0,pad.l+cW,0);
+      lineGrad.addColorStop(0,'#7c4dff');lineGrad.addColorStop(1,'#f06292');
+      ctx.beginPath();ctx.moveTo(pts[0].x,pts[0].y);
+      pts.slice(1).forEach(p=>ctx.lineTo(p.x,p.y));
+      ctx.strokeStyle=typeof colorFn==='string' && colorFn.startsWith('rgba')?colorFn:lineGrad;
+      ctx.lineWidth=2.5;ctx.lineJoin='round';ctx.stroke();
+      // dots
+      pts.forEach(p=>{
+        ctx.beginPath();ctx.arc(p.x,p.y,4.5,0,Math.PI*2);
+        ctx.fillStyle='#fff';ctx.fill();
+        ctx.strokeStyle=typeof colorFn==='string' && colorFn.startsWith('rgba')?colorFn:'#7c4dff';
+        ctx.lineWidth=2;ctx.stroke();
+      });
+      return pts;
+    }
+    if(ds.vals2) drawLine(ds.vals2,'rgba(67,217,138,.7)',.10);
+    const pts=drawLine(ds.vals,null,.18);
+    // hover
+    canvas._pts=pts;canvas._ds=ds;
+  }
+
+  function switchChart(key,btn){
+    document.querySelectorAll('.ctab').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    currentDS=key;
+    const ds=datasets[key];
+    // update legend
+    const leg=document.getElementById('chartLegend');
+    leg.innerHTML=ds.legend.map(l=>`<div class="cl-item"><div class="cl-dot" style="background:${l.color}"></div>${l.label}</div>`).join('');
+    drawChart(ds);
+  }
+
+  // canvas hover tooltip
+  canvas.addEventListener('mousemove',e=>{
+    if(!canvas._pts) return;
+    const rect=canvas.getBoundingClientRect();
+    const mx=e.clientX-rect.left;
+    const tt=document.getElementById('tooltip');
+    let found=false;
+    canvas._pts.forEach((p,i)=>{
+      if(Math.abs(mx-p.x)<18){
+        tt.style.display='block';
+        tt.style.left=e.clientX+12+'px';
+        tt.style.top=e.clientY-28+'px';
+        const v=canvas._ds.vals[i];
+        tt.innerHTML=`<strong>${months[i]}</strong><br>${v>=1000?'₹'+(v/1000).toFixed(2)+'K':v}`;
+        found=true;
+      }
+    });
+    if(!found) tt.style.display='none';
+  });
+  canvas.addEventListener('mouseleave',()=>document.getElementById('tooltip').style.display='none');
+
+  // ── HORIZONTAL BARS ──────────────────────────────────────────
+  const hbarData=[
+    {label:'Health',val:7200,max:12000,color:'linear-gradient(90deg,#c4b5fd,#7c4dff)'},
+    {label:'Life',val:14400,max:14400,color:'linear-gradient(90deg,#fbcfe8,#f06292)'},
+    {label:'Vehicle',val:4080,max:12000,color:'linear-gradient(90deg,#a5f3fc,#26c6da)'},
+    {label:'Home',val:1170,max:12000,color:'linear-gradient(90deg,#fde68a,#ffb300)'},
+    {label:'Travel',val:900,max:12000,color:'linear-gradient(90deg,#a7f3d0,#43d98a)'},
+  ];
+  const hbEl=document.getElementById('hbars');
+  const totalSpend=hbarData.reduce((s,d)=>s+d.val,0);
+  hbarData.forEach(d=>{
+    const pct=Math.round(d.val/d.max*100);
+    hbEl.innerHTML+=`<div class="hbar-row">
+      <span class="hbar-lbl">${d.label}</span>
+      <div class="hbar-bg"><div class="hbar-fill" style="width:${pct}%;background:${d.color}"></div></div>
+      <span class="hbar-val">₹${(d.val/1000).toFixed(1)}K <span style="font-size:.64rem;color:var(--ts)">(${Math.round(d.val/totalSpend*100)}%)</span></span>
+    </div>`;
+  });
+
+  // ── CATEGORY TABLE ────────────────────────────────────────────
+  const catData=[
+    {ico:'🏥',icoBg:'rgba(240,98,146,.12)',name:'Star Health',cover:'₹5L',prem:'₹1,200',chg:'+2.1%',chgC:'var(--r)',bar:82,bc:'linear-gradient(90deg,#fbcfe8,#f06292)'},
+    {ico:'💜',icoBg:'rgba(124,77,255,.12)',name:'LIC Jeevan',cover:'₹25L',prem:'₹2,400',chg:'−0.5%',chgC:'#1a9e5c',bar:96,bc:'linear-gradient(90deg,#c4b5fd,#7c4dff)'},
+    {ico:'🚗',icoBg:'rgba(38,198,218,.12)',name:'Bajaj Allianz',cover:'₹8.5L',prem:'₹680',chg:'+1.2%',chgC:'var(--r)',bar:10,bc:'linear-gradient(90deg,#a5f3fc,#26c6da)'},
+    {ico:'🏠',icoBg:'rgba(255,179,0,.12)',name:'HDFC ERGO',cover:'₹35L',prem:'₹390',chg:'N/A',chgC:'var(--ts)',bar:0,bc:'linear-gradient(90deg,#fde68a,#ffb300)'},
+    {ico:'✈️',icoBg:'rgba(67,217,138,.12)',name:'ICICI Travel',cover:'$50K',prem:'₹150',chg:'+0.0%',chgC:'var(--ts)',bar:55,bc:'linear-gradient(90deg,#a7f3d0,#43d98a)'},
+  ];
+  const tbody=document.getElementById('catTableBody');
+  catData.forEach(d=>{
+    tbody.innerHTML+=`<tr>
+      <td><span class="cat-ico" style="background:${d.icoBg}">${d.ico}</span><span class="cat-name">${d.name}</span></td>
+      <td style="text-align:center;font-size:.80rem;color:var(--tm);font-weight:700">${d.cover}</td>
+      <td class="cat-amt">${d.prem}</td>
+      <td style="text-align:right"><span class="cat-chg" style="color:${d.chgC}">${d.chg}</span></td>
+    </tr>`;
+  });
+
+  // ── GAUGE ANIMATION ───────────────────────────────────────────
+  setTimeout(()=>{
+    const circ=2*Math.PI*44; // 276.46
+    const pct=0.18;
+    document.getElementById('g1fill').style.strokeDashoffset=circ*(1-pct);
+  },500);
+
+  // ── HEATMAP ───────────────────────────────────────────────────
+  const grid=document.getElementById('heatGrid');
+  const intensities=[0,1,0,2,0,3,0,0,2,1,4,0,2,1,0,3,0,1,2,0,4,1,0,2,3,0,1,4,0,2,0,1,3,2,0,4,1,0,2,1,3,0,4,2,1,0,3,1,2];
+  const colors=['rgba(124,77,255,.07)','rgba(124,77,255,.22)','rgba(124,77,255,.40)','rgba(124,77,255,.62)','#7c4dff'];
+  const amounts=[0,680,1200,2400,4820];
+  intensities.forEach((v,i)=>{
+    const cell=document.createElement('div');
+    cell.className='heat-cell';
+    cell.style.background=colors[v];
+    if(v>0){
+      cell.addEventListener('mouseenter',e=>{
+        const tt=document.getElementById('tooltip');
+        tt.style.display='block';tt.style.left=e.clientX+12+'px';tt.style.top=e.clientY-28+'px';
+        tt.innerHTML=`Day ${i+1}<br>₹${amounts[v].toLocaleString('en-IN')}`;
+      });
+      cell.addEventListener('mouseleave',()=>document.getElementById('tooltip').style.display='none');
+    }
+    grid.appendChild(cell);
+  });
+
+  // ── RANGE SWITCH ──────────────────────────────────────────────
+  const rangeData={
+    '7d': {spend:'₹4,820',policies:'5',claims:'0',score:'78',vals:[820,680,1200,390,900,2400,4820]},
+    '1m': {spend:'₹9,020',policies:'5',claims:'0',score:'78',vals:[3600,4200,4100,3900,4500,4820]},
+    '6m': {spend:'₹28,920',policies:'5',claims:'2',score:'78',vals:[3600,4100,3900,4500,4200,4820]},
+    '1y': {spend:'₹56,640',policies:'5',claims:'3',score:'70',vals:[4200,4100,3800,3600,4100,3900,4500,4200,4820,4100,3900,4600]},
+    'all': {spend:'₹1,12,980',policies:'5',claims:'5',score:'65',vals:[2800,3200,3600,4100,3900,4500,4200,4820]},
+  };
+  function setRange(key,btn){
+    document.querySelectorAll('.rtab').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const d=rangeData[key];
+    document.getElementById('s-spend').textContent=d.spend;
+    document.getElementById('s-claims').textContent=d.claims;
+    document.getElementById('s-score').textContent=d.score;
+    datasets.spend.vals=d.vals.slice(-6);
+    drawChart(datasets[currentDS]);
+  }
+
+  // ── EXPORT CSV ────────────────────────────────────────────────
+  function exportCSV(){
+    const rows=[['Month','Premium (₹)','Savings (₹)'],...months.map((m,i)=>[m,datasets.spend.vals[i]||0,datasets.spend.vals2?datasets.spend.vals2[i]||0:0])];
+    const csv=rows.map(r=>r.join(',')).join('\n');
+    const a=document.createElement('a');
+    a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+    a.download='insureai_analytics.csv';a.click();
+  }
+
+  // ── INIT ──────────────────────────────────────────────────────
+  window.addEventListener('load',()=>{ drawChart(datasets[currentDS]); });
+  window.addEventListener('resize',()=>{ drawChart(datasets[currentDS]); });
+  </script>
+</body>
+</html>

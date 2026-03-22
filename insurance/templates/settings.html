@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>InsureAI – Settings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+
+    :root{
+      --v:#7c4dff;--r:#f06292;--t:#26c6da;--g:#43d98a;--a:#ffb300;--b:#4a90e2;
+      --td:#2d2250;--tm:#6b5b95;--ts:#a89bc4;--bg:#f5f0ff;
+      --card:rgba(255,255,255,.80);--card-border:rgba(255,255,255,.95);
+      --nav-bg:rgba(245,240,255,.88);--chip-bg:rgba(255,255,255,.80);
+      --input-bg:rgba(255,255,255,.80);--input-border:rgba(124,77,255,.12);
+      --ucard:rgba(255,255,255,.70);--si-active:rgba(255,255,255,.90);
+      --tog-off:rgba(180,170,210,.38);--divider:rgba(124,77,255,.06);
+      --sw:260px;--rxl:24px;--rlg:18px;--rmd:12px;--rsm:8px;
+      --sc:0 2px 16px rgba(124,77,255,.08);--sh:0 8px 32px rgba(124,77,255,.18);
+      --fd:'Playfair Display',serif;--fb:'Nunito',sans-serif;
+    }
+
+    [data-theme="dark"]{
+      --td:#e8e0ff;--tm:#b8a9d9;--ts:#7a6a9a;--bg:#13102a;
+      --card:rgba(30,22,55,.85);--card-border:rgba(255,255,255,.07);
+      --nav-bg:rgba(19,16,42,.94);--chip-bg:rgba(35,28,62,.88);
+      --input-bg:rgba(35,28,62,.82);--input-border:rgba(124,77,255,.28);
+      --ucard:rgba(35,28,62,.72);--si-active:rgba(42,32,72,.92);
+      --tog-off:rgba(80,65,110,.62);--divider:rgba(255,255,255,.06);
+    }
+    [data-theme="dark"] body::before{
+      background:
+        radial-gradient(ellipse 70% 55% at 5% 0%,rgba(60,20,90,.55) 0%,transparent 55%),
+        radial-gradient(ellipse 50% 45% at 95% 100%,rgba(15,20,55,.50) 0%,transparent 50%),
+        radial-gradient(ellipse 40% 35% at 80% 10%,rgba(45,25,75,.45) 0%,transparent 45%),
+        radial-gradient(ellipse 45% 40% at 15% 85%,rgba(20,38,50,.40) 0%,transparent 45%),#13102a;
+    }
+
+    html{scroll-behavior:smooth}
+    body{font-family:var(--fb);background:var(--bg);color:var(--td);min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;transition:background .35s,color .35s}
+    body::before{content:'';position:fixed;inset:0;z-index:0;
+      background:
+        radial-gradient(ellipse 70% 55% at 5% 0%,rgba(252,228,236,.70) 0%,transparent 55%),
+        radial-gradient(ellipse 50% 45% at 95% 100%,rgba(227,240,255,.65) 0%,transparent 50%),
+        radial-gradient(ellipse 40% 35% at 80% 10%,rgba(237,231,255,.55) 0%,transparent 45%),
+        radial-gradient(ellipse 45% 40% at 15% 85%,rgba(232,248,240,.50) 0%,transparent 45%),var(--bg);
+      pointer-events:none;transition:background .35s}
+
+    /* NAV */
+    .topnav{position:fixed;top:0;left:0;right:0;z-index:200;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;background:var(--nav-bg);backdrop-filter:blur(20px);box-shadow:0 2px 20px rgba(124,77,255,.08);transition:background .35s}
+    .logo-pill{display:flex;align-items:center;gap:8px;background:var(--chip-bg);border:1.5px solid rgba(124,77,255,.14);border-radius:50px;padding:6px 16px 6px 8px;box-shadow:0 2px 10px rgba(124,77,255,.10);text-decoration:none;transition:background .35s}
+    .logo-ico{width:28px;height:28px;background:linear-gradient(135deg,var(--v),var(--r));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px}
+    .logo-name{font-family:var(--fd);font-weight:700;font-size:.90rem;color:var(--td)}
+    .tnav-links{display:flex;align-items:center;gap:4px;list-style:none}
+    .tnav-links a{text-decoration:none;color:var(--tm);font-size:.87rem;font-weight:600;padding:6px 14px;border-radius:50px;transition:background .2s,color .2s}
+    .tnav-links a:hover{background:rgba(124,77,255,.08);color:var(--v)}
+    .user-chip{display:flex;align-items:center;gap:8px;background:var(--chip-bg);border:1.5px solid rgba(124,77,255,.12);border-radius:50px;padding:5px 14px 5px 5px;transition:background .35s}
+    .uc-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#ede7ff,#fce4ec);display:flex;align-items:center;justify-content:center;font-size:13px;border:2px solid #fff}
+
+    /* LAYOUT */
+    .layout{display:flex;width:100%;min-height:100vh;padding-top:64px;position:relative;z-index:1}
+
+    /* SIDEBAR */
+    .sidebar{width:var(--sw);min-height:calc(100vh - 64px);padding:28px 14px 28px 16px;display:flex;flex-direction:column;gap:4px;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto;flex-shrink:0}
+    .sl{font-size:.68rem;font-weight:700;color:var(--ts);letter-spacing:.10em;text-transform:uppercase;padding:12px 10px 5px}
+    .si{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:var(--rmd);text-decoration:none;color:var(--tm);font-size:.88rem;font-weight:600;transition:background .2s,color .2s,transform .2s;position:relative}
+    .si:hover{background:rgba(124,77,255,.07);color:var(--td);transform:translateX(3px)}
+    .si.active{background:var(--si-active);color:var(--v);box-shadow:var(--sc)}
+    .si.active::before{content:'';position:absolute;left:0;top:22%;bottom:22%;width:3.5px;background:linear-gradient(180deg,var(--v),var(--r));border-radius:0 3px 3px 0}
+    .sico{width:32px;height:32px;border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+    .iv{background:rgba(124,77,255,.12)}.ir{background:rgba(240,98,146,.12)}.it{background:rgba(38,198,218,.12)}.ia{background:rgba(255,179,0,.12)}.ig{background:rgba(67,217,138,.12)}.ib{background:rgba(74,144,226,.12)}
+    .sbadge{margin-left:auto;font-size:.66rem;font-weight:700;padding:2px 7px;border-radius:50px}
+    .bnew{background:rgba(67,217,138,.15);color:#1a9e5c}.bhot{background:rgba(240,98,146,.12);color:var(--r)}
+    .sdiv{height:1px;background:rgba(124,77,255,.08);margin:7px 10px}
+    .sidebar-user{margin-top:auto;padding-top:14px;border-top:1px solid rgba(124,77,255,.08)}
+    .ucard{display:flex;align-items:center;gap:10px;padding:10px;background:var(--ucard);border-radius:var(--rmd);border:1px solid rgba(124,77,255,.10);transition:background .35s}
+    .uav{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#ede7ff,#fce4ec);display:flex;align-items:center;justify-content:center;font-size:16px;border:2px solid rgba(255,255,255,.9)}
+    .uname{font-size:.83rem;font-weight:700;color:var(--td)}.urole{font-size:.70rem;color:var(--ts)}
+    .udot{width:8px;height:8px;border-radius:50%;background:var(--g);margin-left:auto;flex-shrink:0}
+
+    /* MAIN */
+    .main{flex:1;padding:32px 36px 56px 28px;min-width:0}
+    .pg-greet{font-size:.83rem;color:var(--ts);font-weight:500;margin-bottom:5px}
+    .pg-title{font-family:var(--fd);font-size:clamp(1.5rem,3vw,2.2rem);font-weight:800;color:var(--td);line-height:1.15;margin-bottom:8px}
+    .pg-title .hl{background:linear-gradient(135deg,var(--v),var(--r));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .pg-sub{font-size:.92rem;color:var(--tm);max-width:520px;line-height:1.7;margin-bottom:24px}
+
+    /* TABS */
+    .tabs-nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px}
+    .tab-btn{display:flex;align-items:center;gap:7px;padding:9px 18px;border-radius:50px;background:var(--card);border:1.5px solid var(--card-border);font-family:var(--fb);font-size:.84rem;font-weight:700;color:var(--tm);cursor:pointer;transition:all .22s;box-shadow:var(--sc)}
+    .tab-btn:hover{color:var(--td);background:var(--si-active)}
+    .tab-btn.active{background:linear-gradient(135deg,var(--v),var(--r));color:#fff;border-color:transparent;box-shadow:0 4px 14px rgba(124,77,255,.28)}
+    .tab-panel{display:none;animation:fadeUp .35s ease both}
+    .tab-panel.active{display:block}
+
+    /* CARD */
+    .scard{background:var(--card);border:1.5px solid var(--card-border);border-radius:var(--rxl);padding:26px 28px;box-shadow:var(--sc);backdrop-filter:blur(12px);margin-bottom:18px;transition:background .35s,border-color .35s}
+    .ctitle{font-family:var(--fd);font-size:.97rem;font-weight:700;color:var(--td);margin-bottom:18px;display:flex;align-items:center;gap:9px;padding-bottom:12px;border-bottom:1px solid var(--divider)}
+    .ctitle-ico{width:32px;height:32px;border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+
+    /* SETTING ROW */
+    .setting-row{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--divider);gap:16px}
+    .setting-row:last-child{border-bottom:none;padding-bottom:0}
+    .setting-row.col{flex-direction:column;align-items:flex-start;gap:14px}
+    .sr-left{display:flex;align-items:center;gap:12px;flex:1;min-width:0}
+    .sr-ico{width:36px;height:36px;border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+    .sr-title{font-size:.86rem;font-weight:700;color:var(--td)}
+    .sr-sub{font-size:.75rem;color:var(--ts);font-weight:500;margin-top:2px}
+
+    /* TOGGLE */
+    .tog{position:relative;width:46px;height:25px;flex-shrink:0;display:inline-block}
+    .tog input{opacity:0;width:0;height:0;position:absolute}
+    .tog-slider{position:absolute;inset:0;background:var(--tog-off);border-radius:50px;cursor:pointer;transition:background .25s}
+    .tog-slider::after{content:'';position:absolute;top:3px;left:3px;width:19px;height:19px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.20);transition:transform .25s}
+    .tog input:checked + .tog-slider{background:linear-gradient(135deg,var(--v),var(--r))}
+    .tog input:checked + .tog-slider::after{transform:translateX(21px)}
+    .tog input:disabled + .tog-slider{opacity:.5;cursor:not-allowed}
+
+    /* ACCENT COLOUR */
+    .accent-grid{display:flex;gap:10px;flex-wrap:wrap}
+    .accent-opt{display:none}
+    .accent-lbl{width:36px;height:36px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:transform .2s,box-shadow .2s;display:block}
+    .accent-lbl:hover{transform:scale(1.15)}
+    .accent-opt:checked + .accent-lbl{border-color:#fff;box-shadow:0 0 0 3px var(--v),0 2px 8px rgba(0,0,0,.18);transform:scale(1.12)}
+
+    /* THEME STYLE */
+    .theme-grid{display:flex;gap:10px;flex-wrap:wrap}
+    .theme-opt{display:none}
+    .theme-lbl{display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;padding:10px 14px;border-radius:var(--rmd);border:2px solid rgba(124,77,255,.12);background:var(--input-bg);transition:all .2s;min-width:78px}
+    .theme-lbl:hover{border-color:rgba(124,77,255,.30)}
+    .theme-opt:checked + .theme-lbl{border-color:var(--v);background:rgba(124,77,255,.08);box-shadow:0 0 0 3px rgba(124,77,255,.10)}
+    .theme-dot{width:32px;height:32px;border-radius:50%}
+    .theme-name{font-size:.74rem;font-weight:700;color:var(--tm)}
+    .theme-opt:checked + .theme-lbl .theme-name{color:var(--v)}
+
+    /* SLIDER */
+    .fslider{width:100%;-webkit-appearance:none;appearance:none;height:6px;border-radius:50px;outline:none;cursor:pointer}
+    .fslider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,var(--v),var(--r));box-shadow:0 2px 6px rgba(124,77,255,.35);border:2px solid #fff;cursor:pointer}
+    .fslider::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,var(--v),var(--r));box-shadow:0 2px 6px rgba(124,77,255,.35);border:2px solid #fff;cursor:pointer}
+    .slider-labels{display:flex;justify-content:space-between;font-size:.72rem;color:var(--ts);font-weight:600;margin-top:6px}
+
+    /* FREQ PILLS */
+    .freq-group{display:flex;gap:8px;flex-wrap:wrap}
+    .freq-opt{display:none}
+    .freq-lbl{padding:7px 16px;border-radius:50px;font-size:.80rem;font-weight:700;color:var(--tm);border:1.5px solid rgba(124,77,255,.15);background:var(--input-bg);cursor:pointer;transition:all .2s}
+    .freq-lbl:hover{border-color:rgba(124,77,255,.35);color:var(--td)}
+    .freq-opt:checked + .freq-lbl{background:linear-gradient(135deg,var(--v),var(--r));color:#fff;border-color:transparent;box-shadow:0 3px 10px rgba(124,77,255,.25)}
+
+    /* FORM */
+    .finput{width:100%;padding:10px 14px;background:var(--input-bg);border:1.5px solid var(--input-border);border-radius:var(--rmd);font-family:var(--fb);font-size:.86rem;color:var(--td);outline:none;transition:border .2s,box-shadow .2s,background .35s,color .35s;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b5b95' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center}
+    .finput:focus{border-color:var(--v);box-shadow:0 0 0 3px rgba(124,77,255,.09)}
+    .input-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+    .fgrp{display:flex;flex-direction:column;gap:5px}
+    .flbl{font-size:.76rem;font-weight:700;color:var(--tm);letter-spacing:.04em}
+
+    /* USAGE */
+    .usage-info{display:flex;justify-content:space-between;font-size:.78rem;font-weight:600;color:var(--tm);margin-bottom:5px}
+    .usage-bg{height:8px;background:rgba(200,190,230,.22);border-radius:50px;overflow:hidden;margin-bottom:14px}
+    .usage-fill{height:100%;border-radius:50px}
+
+    /* SAVE STRIP */
+    .save-strip{background:linear-gradient(135deg,rgba(124,77,255,.07),rgba(240,98,146,.05));border:1.5px solid rgba(124,77,255,.14);border-radius:var(--rxl);padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:4px;flex-wrap:wrap}
+    .save-strip p{font-size:.84rem;color:var(--tm);font-weight:600}
+    .save-strip p strong{color:var(--td)}
+    .btn-row{display:flex;gap:10px}
+    .save-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 22px;border-radius:50px;background:linear-gradient(135deg,var(--v),var(--r));color:#fff;font-family:var(--fb);font-size:.85rem;font-weight:700;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(124,77,255,.22);transition:transform .2s,box-shadow .2s}
+    .save-btn:hover{transform:translateY(-2px);box-shadow:0 7px 20px rgba(124,77,255,.32)}
+    .cancel-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:50px;background:var(--input-bg);color:var(--v);font-family:var(--fb);font-size:.85rem;font-weight:700;border:1.5px solid rgba(124,77,255,.20);cursor:pointer;transition:all .2s;white-space:nowrap}
+    .cancel-btn:hover{background:rgba(124,77,255,.07)}
+
+    /* TOAST */
+    .toast{position:fixed;bottom:28px;right:28px;z-index:9999;background:linear-gradient(135deg,var(--v),var(--r));color:#fff;padding:12px 22px;border-radius:50px;font-family:var(--fb);font-size:.86rem;font-weight:700;box-shadow:0 6px 20px rgba(124,77,255,.35);transform:translateY(70px);opacity:0;transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .3s;pointer-events:none}
+    .toast.show{transform:translateY(0);opacity:1}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(124,77,255,.20);border-radius:4px}
+    @media(max-width:820px){.sidebar{display:none}.main{padding:22px 18px 44px}.tnav-links{display:none}.input-row{grid-template-columns:1fr}}
+    @media(max-width:500px){.tab-btn{padding:8px 12px;font-size:.78rem}}
+  </style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="#" class="logo-pill">
+    <div class="logo-ico">🛡️</div>
+    <span class="logo-name">InsureAI</span>
+  </a>
+  <ul class="tnav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/predict">Predict</a></li>
+    <li><a href="/contact">Contact</a></li>
+    <li><a href="/about">About</a></li>
+  </ul>
+  <div class="user-chip"><div class="uc-av">👤</div></div>
+</nav>
+
+<div class="layout">
+  <aside class="sidebar">
+    <span class="sl">Main Menu</span>
+    <a class="si" href="/"><div class="sico iv">🏠</div>Home</a>
+    <a class="si" href="/policies"><div class="sico ir">🛡️</div>My Policies<span class="sbadge bnew">New</span></a>
+    <a class="si" href="/predict"><div class="sico it">📊</div>Predictions</a>
+    <a class="si" href="/insights"><div class="sico ia">💡</div>AI Insights<span class="sbadge bhot">Hot</span></a>
+    <a class="si" href="/analytics"><div class="sico ig">📈</div>Analytics</a>
+    <div class="sdiv"></div>
+    <span class="sl">Company</span>
+    <a class="si" href="/about"><div class="sico ib">ℹ️</div>About Us</a>
+    <a class="si" href="/contact"><div class="sico iv">📞</div>Contact</a>
+    <a class="si" href="/privacy"><div class="sico ir">📄</div>Privacy Policy</a>
+    <div class="sdiv"></div>
+    <span class="sl">Account</span>
+    <a class="si" href="/profile"><div class="sico ib">👤</div>Profile</a>
+    <a class="si active" href="/settings"><div class="sico iv">⚙️</div>Settings</a>
+    <div class="sidebar-user">
+      <div class="ucard">
+        <div class="uav">👤</div>
+        <div><div class="uname"></div><div class="urole">Free Plan</div></div>
+        <div class="udot"></div>s
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div style="animation:fadeUp .5s ease both">
+      <p class="pg-greet">⚙️ Preferences</p>
+      <h1 class="pg-title">Account <span class="hl">Settings</span></h1>
+      <p class="pg-sub">Customise your InsureAI experience — theme, alerts, privacy, and language all in one place.</p>
+    </div>
+
+    <nav class="tabs-nav">
+      <button class="tab-btn active" data-tab="appearance">🎨 Appearance</button>
+      <button class="tab-btn" data-tab="notifications">🔔 Notifications</button>
+      <button class="tab-btn" data-tab="privacy">🔒 Privacy &amp; Data</button>
+      <button class="tab-btn" data-tab="language">🌐 Language &amp; Region</button>
+    </nav>
+
+    <!-- ═══ APPEARANCE ═══ -->
+    <div id="panel-appearance" class="tab-panel active">
+
+      <div class="scard">
+        <div class="ctitle"><div class="ctitle-ico iv">🌙</div>Display Mode</div>
+        <div class="setting-row">
+          <div class="sr-left"><div class="sr-ico iv">🌙</div><div><div class="sr-title">Dark Mode</div><div class="sr-sub">Switch to a darker interface — easier on the eyes at night</div></div></div>
+          <label class="tog"><input type="checkbox" id="dark-tog"/><span class="tog-slider"></span></label>
+        </div>
+        <div class="setting-row">
+          <div class="sr-left"><div class="sr-ico ib">💫</div><div><div class="sr-title">Animations &amp; Transitions</div><div class="sr-sub">Disable for a snappier, reduced-motion experience</div></div></div>
+          <label class="tog"><input type="checkbox" id="anim-tog" checked/><span class="tog-slider"></span></label>
+        </div>
+        <div class="setting-row">
+          <div class="sr-left"><div class="sr-ico ir">📐</div><div><div class="sr-title">Compact Mode</div><div class="sr-sub">Reduce padding and spacing to fit more on screen</div></div></div>
+          <label class="tog"><input type="checkbox" id="compact-tog"/><span class="tog-slider"></span></label>
+        </div>
+      </div>
+
+      <div class="scard">
+        <div class="ctitle"><div class="ctitle-ico ir">🎨</div>Accent Colour</div>
+        <div class="setting-row col">
+          <div class="sr-left"><div class="sr-ico ir">🖌️</div><div><div class="sr-title">Choose your accent colour</div><div class="sr-sub">Applied to buttons, highlights and active states across the app</div></div></div>
+          <div class="accent-grid">
+            <input type="radio" name="accent" id="acc1" class="accent-opt" checked/>
+            <label for="acc1" class="accent-lbl" style="background:linear-gradient(135deg,#7c4dff,#f06292)" title="Violet Rose (Default)"></label>
+            <input type="radio" name="accent" id="acc2" class="accent-opt"/>
+            <label for="acc2" class="accent-lbl" style="background:linear-gradient(135deg,#26c6da,#43d98a)" title="Teal Mint"></label>
+            <input type="radio" name="accent" id="acc3" class="accent-opt"/>
+            <label for="acc3" class="accent-lbl" style="background:linear-gradient(135deg,#4a90e2,#7c4dff)" title="Ocean Blue"></label>
+            <input type="radio" name="accent" id="acc4" class="accent-opt"/>
+            <label for="acc4" class="accent-lbl" style="background:linear-gradient(135deg,#ffb300,#f06292)" title="Sunset Gold"></label>
+            <input type="radio" name="accent" id="acc5" class="accent-opt"/>
+            <label for="acc5" class="accent-lbl" style="background:linear-gradient(135deg,#43d98a,#26c6da)" title="Emerald"></label>
+            <input type="radio" name="accent" id="acc6" class="accent-opt"/>
+            <label for="acc6" class="accent-lbl" style="background:linear-gradient(135deg,#f06292,#ffb300)" title="Coral Flame"></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="scard">
+        <div class="ctitle"><div class="ctitle-ico ig">🖼️</div>Interface Style</div>
+        <div class="setting-row col">
+          <div class="sr-left"><div class="sr-ico ig">✨</div><div><div class="sr-title">Card &amp; Background Style</div><div class="sr-sub">Controls the overall look of cards and surfaces</div></div></div>
+          <div class="theme-grid">
+            <input type="radio" name="theme-style" id="th1" class="theme-opt" checked/>
+            <label for="th1" class="theme-lbl"><div class="theme-dot" style="background:linear-gradient(135deg,#ede7ff,#fce4ec);border:2px solid rgba(124,77,255,.20)"></div><span class="theme-name">Soft Glass</span></label>
+            <input type="radio" name="theme-style" id="th2" class="theme-opt"/>
+            <label for="th2" class="theme-lbl"><div class="theme-dot" style="background:linear-gradient(135deg,#fff,#f0f0f0);border:2px solid #ddd"></div><span class="theme-name">Clean White</span></label>
+            <input type="radio" name="theme-style" id="th3" class="theme-opt"/>
+            <label for="th3" class="theme-lbl"><div class="theme-dot" style="background:linear-gradient(135deg,#1a1530,#2d1f50);border:2px solid rgba(124,77,255,.30)"></div><span class="theme-name">Deep Dark</span></label>
+            <input type="radio" name="theme-style" id="th4" class="theme-opt"/>
+            <label for="th4" class="theme-lbl"><div class="theme-dot" style="background:linear-gradient(135deg,#e8f5e9,#e3f2fd);border:2px solid rgba(67,217,138,.25)"></div><span class="theme-name">Nature</span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="scard">
+        <div class="ctitle"><div class="ctitle-ico ia">🔤</div>Font Size</div>
+        <div class="setting-row col">
+          <div class="sr-left"><div class="sr-ico ia" style="font-weight:800;font-size:.82rem;color:var(--v)">Aa</div><div><div class="sr-title">Text Size</div><div class="sr-sub">Current size: <strong id="font-lbl">Medium</strong></div></div></div>
+          <div style="width:100%">
+            <input type="range" class="fslider" id="font-slider" min="1" max="5" value="3"/>
+            <div class="slider-labels"><span>XS</span><span>S</span><span>M</span><span>L</span><span>XL</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="save-strip">
+        <p><strong>Appearance</strong> preferences apply immediately across all pages.</p>
+        <div class="btn-row">
+          <button class="save-btn" data-section="Appearance">💾 Save Changes</button>
+          <button class="cancel-btn" id="reset-btn">↺ Reset Defaults</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ NOTIFICATIONS ═══ -->
+    <div id="panel-notifications" class="tab-panel">
+
+      <div class="scard">
+        <div class="ctitle"><div class="ctitle-ico ib">📧</div>Email Notifications</div>
+        <div class="setting-row"><div class="sr-left"><div class="sr-ico ib">📋</div><div><div class="sr-title">Premium Prediction Reports</div><div class="sr-sub">Get a detailed PDF report after each prediction</div></div></div><label class="tog"><input type="checkbox" checked/><span class="tog-slider"></span></label></div>
+        <div class="setting-row"><div class="sr-left"><div class="sr-ico iv">💡</div><div><div class="sr-title">AI Insights &amp; Tips</div><div class="sr-sub">Weekly personalised tips to lower your premium</div></div></div><label class="tog"><input type="checkbox" checked/><span class="tog-slider"></span></label></div>
+        <div class="setting-row"><div class="sr-left"><div class="sr-ico ir">🎉</div><div><div class="sr-title">Offers &amp; Promotions</div><div class="sr-sub">Special deals from partner insurance providers</div></div></div><label class="tog"><input type="checkbox"/><span class="tog-slider"></span></label></div>
+        <div class="setting-row"><div class="sr-left"><div class="sr-ico ig">🔒</div><div><div class="sr-title">Security Alerts</div><div class="sr-sub">Login from new device, password changes</div></div></div><label class="tog"><input type="checkbox" checked/><span class="tog-slider"></span></label></div>
+        <div class="setting-row"><div class="sr-left"><div class="sr-ico ia">📅</div><div><div class="sr-title">Plan Renewal Reminders</div><div class="sr-sub">7 days before your plan renews or expires</div></div></div><label class="tog"><input type="checkbox" checked/><span class="tog-slider"></span></label></div>
+      </div>
+
+      <div class="scard">
+        <div class="ctitle"><div class="ctitle-ico ig">📱</div>SMS / WhatsApp Alerts</div>
+        <div class="setting-row"><div class="sr-left"><div class="sr-ico ig">✅</div><div><div class="sr-title">OTP &amp; Verification SMS</div><div class="sr-sub">Required for account security — cannot be disabled</div></div></div><label class="tog"><input type="checkbox" checked disabled/><span class="tog-slider"></span></label></div>
+        <div class="setting-row"><div class="sr-left"><div class="sr-ico it">💬</div><div><div class="sr-title">WhatsApp Premium Alerts</div><div class="sr-sub">Receive prediction summaries on WhatsApp</div></div></div><label class="tog"><input type="checkbox" checked/><span class="tog-slider"></span></label></div>
+        <div class="setting-row"><div class="sr-left"><div class="sr-ico ir">📣</div><div><div class="sr-title">Promotional SMS</div><div class="sr-sub">Offers and new feature announcements via SMS</div></div></div><label class="tog"><input type="checkbox"/><span class="tog-slider"></span></label></div>
+      </div>
+
+      <div class="scard">
+        <div class="ctitle"><div class="ctitle-ico ia">⏱️</div>Digest Frequency</div>
+        <div class="setting-row col">
+          <div class="sr-left"><div class="sr-ico ia">📆</div><div><div class="sr-title">How often should we send digest emails?</div><div class="sr-sub">Bundles non-urgent notifications into a single email</div></div></div>
+          <div class="freq-group">
+            <input type="radio" name="freq" id="fd" class="freq-opt"/><label for="fd" class="freq-lbl">Daily</label>
+            <input type="radio" name="freq" id="fw" class="freq-opt" checked/><label for="fw" class="freq-lbl">Weekly</label>
+            <input type="radio" name="freq" id="fm" class="freq-opt"/><label for="fm" class="freq-lbl">Monthly</label>
+            <input type="radio" name="freq" id="fn" class="freq-opt"/><label for="fn" class="freq-lbl">Never</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="save-strip">
+        <p><strong>Notification</strong> changes take effect within 15 minutes.</p>
+        <div class="btn-row"><button class="save-btn" data-section="Notifications">💾 Save Changes</button><button class="cancel-btn">↺ Reset</button></div>
+      </div>
+    </div>
+
+    <!-- ═══ PRIVACY ═══ -->
+    <div id="panel-privacy" class="tab-panel">
+
+      <div class="scard">
+        <div class="ctitle"><div class="ctitle-ico iv">🔒</div>Data Sharing Preferences</div>
+        <div class="setting-row"><div class="sr-left"><div class="sr-ico iv">🧠</div><div><div class="sr-title">Share Anonymised Data for AI Improvement</div><div class="sr-sub">Help improve prediction accuracy — no personal info shared</div></div></div><label class="tog"><input type="checkbox" checked/><span class="tog-slider"></span></label></div>
+        <div class="setting-row"><div class="sr-left"><div class="sr-ico ir">🤝</div><div><div class="sr-title">Share Risk Profile with Partner Insurers</div><div class="sr-sub">Enables real plan quotes from licensed providers</div></div></div><label class="tog"><input type="checkbox"/><span class="tog-slider"></span></label></div>
+        <div class="setting-row"><div class="sr-left"><div class="sr-ico ia">📊</div><div><div class="sr-title">Usage Analytics</div><div class="sr-sub">Page views and feature interactions to improve UX</div></div></div><label class="tog"><input type="checkbox" checked/><span class="tog-slider"></span></label></div>
+        <div class="setting-row"><div class="sr-left"><div class="sr-ico it">🍪</div><div><div class="sr-title">Marketing &amp; Personalisation Cookies</div><div class="sr-sub">Used for personalised offers and ads</div></div></div><label class="tog"><input type="checkbox"/><span class="tog-slider"></span></label></div>
+      </div>
+
+      <div class="scard">
+        <div class="ctitle"><div class="ctitle-ico ig">📦</div>Your Data Usage</div>
+        <div class="usage-info"><span>Predictions Storage</span><span>3.2 MB / 10 MB</span></div>
+        <div class="usage-bg"><div class="usage-fill" style="width:32%;background:linear-gradient(90deg,#c4b5fd,#7c4dff)"></div></div>
+        <div class="usage-info"><span>Saved Plans</span><span>0.8 MB / 5 MB</span></div>
+        <div class="usage-bg"><div class="usage-fill" style="width:16%;background:linear-gradient(90deg,#fbcfe8,#f06292)"></div></div>
+        <div class="usage-info"><span>Activity Logs</span><span>1.1 MB / 5 MB</span></div>
+        <div class="usage-bg" style="margin-bottom:0"><div class="usage-fill" style="width:22%;background:linear-gradient(90deg,#a5f3fc,#26c6da)"></div></div>
+      </div>
+
+      <div class="scard">
+        <div class="ctitle"><div class="ctitle-ico ir">⚠️</div>Account Actions</div>
+        <div class="setting-row"><div class="sr-left"><div class="sr-ico ia">📥</div><div><div class="sr-title">Download My Data</div><div class="sr-sub">Export all predictions, plans and profile data as JSON</div></div></div><button class="cancel-btn">⬇ Download</button></div>
+        <div class="setting-row"><div class="sr-left"><div class="sr-ico it">🗑️</div><div><div class="sr-title">Clear Prediction History</div><div class="sr-sub">Removes all saved premium predictions</div></div></div><button class="cancel-btn" style="color:#b07d00;border-color:rgba(255,179,0,.30)">🗑 Clear</button></div>
+        <div class="setting-row"><div class="sr-left"><div class="sr-ico ir">❌</div><div><div class="sr-title">Delete Account</div><div class="sr-sub">Permanently delete your account and all data</div></div></div><button class="cancel-btn" style="color:#f06292;border-color:rgba(240,98,146,.30)">🗑 Delete</button></div>
+      </div>
+
+      <div class="save-strip">
+        <p><strong>Privacy</strong> settings are applied immediately and stored securely.</p>
+        <div class="btn-row"><button class="save-btn" data-section="Privacy">💾 Save Changes</button><button class="cancel-btn">↺ Reset</button></div>
+      </div>
+    </div>
+
+    <!-- ═══ LANGUAGE ═══ -->
+    <div id="panel-language" class="tab-panel">
+
+      <div class="scard">
+        <div class="ctitle"><div class="ctitle-ico ib">🌐</div>Language Preferences</div>
+        <div class="input-row">
+          <div class="fgrp"><label class="flbl">App Language</label>
+            <select class="finput"><option selected>English (India)</option><option>Hindi – हिन्दी</option><option>Tamil – தமிழ்</option><option>Telugu – తెలుగు</option><option>Marathi – मराठी</option><option>Bengali – বাংলা</option><option>Gujarati – ગુજરાતી</option><option>Kannada – ಕನ್ನಡ</option></select>
+          </div>
+          <div class="fgrp"><label class="flbl">Content Language</label>
+            <select class="finput"><option selected>English</option><option>Hindi</option><option>Bilingual (EN + HI)</option></select>
+          </div>
+        </div>
+        <div class="setting-row"><div class="sr-left"><div class="sr-ico ib">🔤</div><div><div class="sr-title">Show AI Insights in Native Language</div><div class="sr-sub">Translate tips and reports to your selected language</div></div></div><label class="tog"><input type="checkbox"/><span class="tog-slider"></span></label></div>
+      </div>
+
+      <div class="scard">
+        <div class="ctitle"><div class="ctitle-ico ig">📍</div>Region &amp; Currency</div>
+        <div class="input-row">
+          <div class="fgrp"><label class="flbl">Country</label><select class="finput"><option selected>India 🇮🇳</option><option>United States 🇺🇸</option><option>United Kingdom 🇬🇧</option><option>UAE 🇦🇪</option></select></div>
+          <div class="fgrp"><label class="flbl">State / UT</label><select class="finput"><option selected>Rajasthan</option><option>Delhi</option><option>Maharashtra</option><option>Karnataka</option><option>Tamil Nadu</option><option>Gujarat</option><option>Uttar Pradesh</option><option>West Bengal</option></select></div>
+          <div class="fgrp"><label class="flbl">Currency</label><select class="finput"><option selected>₹ INR – Indian Rupee</option><option>$ USD – US Dollar</option><option>£ GBP – British Pound</option><option>د.إ AED – UAE Dirham</option></select></div>
+          <div class="fgrp"><label class="flbl">Timezone</label><select class="finput"><option selected>IST – UTC +5:30</option><option>EST – UTC -5:00</option><option>GMT – UTC +0:00</option><option>GST – UTC +4:00</option></select></div>
+        </div>
+      </div>
+
+      <div class="scard">
+        <div class="ctitle"><div class="ctitle-ico ia">🗓️</div>Format Preferences</div>
+        <div class="input-row" style="margin-bottom:14px">
+          <div class="fgrp"><label class="flbl">Date Format</label><select class="finput"><option selected>DD/MM/YYYY</option><option>MM/DD/YYYY</option><option>YYYY-MM-DD</option><option>D MMM YYYY</option></select></div>
+          <div class="fgrp"><label class="flbl">Time Format</label><select class="finput"><option selected>12-hour (AM/PM)</option><option>24-hour</option></select></div>
+        </div>
+        <div class="setting-row"><div class="sr-left"><div class="sr-ico iv">🔢</div><div><div class="sr-title">Use Indian Number Format</div><div class="sr-sub">Show amounts as ₹8,24,000 instead of ₹824,000</div></div></div><label class="tog"><input type="checkbox" checked/><span class="tog-slider"></span></label></div>
+        <div class="setting-row"><div class="sr-left"><div class="sr-ico it">📡</div><div><div class="sr-title">Auto-detect Region from Browser</div><div class="sr-sub">Automatically apply locale settings based on your browser</div></div></div><label class="tog"><input type="checkbox" checked/><span class="tog-slider"></span></label></div>
+      </div>
+
+      <div class="save-strip">
+        <p><strong>Language &amp; Region</strong> changes will reload the page to apply.</p>
+        <div class="btn-row"><button class="save-btn" data-section="Language & Region">💾 Save &amp; Reload</button><button class="cancel-btn">↺ Reset</button></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  /* ── 1. TAB SWITCHING ── */
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  /* ── 2. DARK MODE ── */
+  document.getElementById('dark-tog').addEventListener('change', function () {
+    document.documentElement.setAttribute('data-theme', this.checked ? 'dark' : 'light');
+  });
+
+  /* ── 3. FONT SIZE SLIDER ── */
+  const sizes  = ['XSmall', 'Small', 'Medium', 'Large', 'XLarge'];
+  const fSizes = ['13px', '14px', '16px', '18px', '20px'];
+  const slider = document.getElementById('font-slider');
+  const flbl   = document.getElementById('font-lbl');
+
+  function updateSlider(val) {
+    const idx = val - 1;
+    flbl.textContent = sizes[idx];
+    document.documentElement.style.fontSize = fSizes[idx];
+    const pct = ((idx) / 4) * 100;
+    slider.style.background = `linear-gradient(90deg, var(--v) ${pct}%, rgba(180,170,210,.28) ${pct}%)`;
+  }
+  slider.addEventListener('input', () => updateSlider(slider.value));
+  updateSlider(3); // init
+
+  /* ── 4. TOAST ── */
+  const toast = document.getElementById('toast');
+  let toastT;
+  function showToast(msg) {
+    clearTimeout(toastT);
+    toast.textContent = msg;
+    toast.classList.add('show');
+    toastT = setTimeout(() => toast.classList.remove('show'), 2800);
+  }
+
+  /* ── 5. SAVE BUTTONS ── */
+  document.querySelectorAll('.save-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      showToast('✅ ' + (btn.dataset.section || 'Settings') + ' saved successfully!');
+    });
+  });
+
+  /* ── 6. RESET APPEARANCE ── */
+  document.getElementById('reset-btn').addEventListener('click', () => {
+    document.getElementById('dark-tog').checked   = false;
+    document.getElementById('anim-tog').checked   = true;
+    document.getElementById('compact-tog').checked = false;
+    document.getElementById('acc1').checked  = true;
+    document.getElementById('th1').checked   = true;
+    document.documentElement.setAttribute('data-theme', 'light');
+    slider.value = 3;
+    updateSlider(3);
+    showToast('↺ Appearance reset to defaults');
+  });
+</script>
+</body>
+</html>

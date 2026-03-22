@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>InsureAI – About Us</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800;900&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --v:#7c4dff;--r:#f06292;--t:#26c6da;--g:#43d98a;--a:#ffb300;--b:#4a90e2;
+      --td:#2d2250;--tm:#6b5b95;--ts:#a89bc4;--bg:#f5f0ff;
+      --sw:260px;--rxl:24px;--rlg:18px;--rmd:12px;--rsm:8px;
+      --sc:0 2px 16px rgba(124,77,255,.08);--sh:0 8px 32px rgba(124,77,255,.18);
+      --fd:'Playfair Display',serif;--fb:'Nunito',sans-serif;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:var(--fb);background:var(--bg);color:var(--td);overflow-x:hidden}
+    body::before{content:'';position:fixed;inset:0;z-index:0;
+      background:
+        radial-gradient(ellipse 70% 55% at 5% 0%,rgba(252,228,236,.70) 0%,transparent 55%),
+        radial-gradient(ellipse 50% 45% at 95% 100%,rgba(227,240,255,.65) 0%,transparent 50%),
+        radial-gradient(ellipse 40% 35% at 80% 10%,rgba(237,231,255,.55) 0%,transparent 45%),
+        radial-gradient(ellipse 45% 40% at 15% 85%,rgba(232,248,240,.50) 0%,transparent 45%),var(--bg);
+      pointer-events:none}
+
+    /* ── NAV ── */
+    .topnav{position:fixed;top:0;left:0;right:0;z-index:200;padding:13px 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(245,240,255,.90);backdrop-filter:blur(20px);box-shadow:0 1px 24px rgba(124,77,255,.09)}
+    .logo-pill{display:flex;align-items:center;gap:8px;background:#fff;border:1.5px solid rgba(124,77,255,.16);border-radius:50px;padding:6px 18px 6px 8px;box-shadow:0 2px 10px rgba(124,77,255,.10);text-decoration:none;transition:box-shadow .2s}
+    .logo-pill:hover{box-shadow:0 4px 18px rgba(124,77,255,.22)}
+    .logo-ico{width:30px;height:30px;background:linear-gradient(135deg,var(--v),var(--r));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px}
+    .logo-name{font-family:var(--fd);font-weight:800;font-size:.92rem;color:var(--td)}
+    .nav-links{display:flex;align-items:center;gap:4px;list-style:none}
+    .nav-links a{text-decoration:none;color:var(--tm);font-size:.87rem;font-weight:600;padding:7px 15px;border-radius:50px;transition:all .2s}
+    .nav-links a:hover{background:rgba(124,77,255,.08);color:var(--v)}
+    .nav-links a.act{background:rgba(124,77,255,.10);color:var(--v)}
+    .user-chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.80);border:1.5px solid rgba(124,77,255,.12);border-radius:50px;padding:5px 14px 5px 5px}
+    .nav-btn{text-decoration:none;font-family:var(--fb);font-size:.85rem;font-weight:700;padding:8px 20px;border-radius:50px;transition:all .2s}
+    .nav-btn.outline{color:var(--v);border:1.5px solid rgba(124,77,255,.22);background:rgba(255,255,255,.80)}
+    .nav-btn.outline:hover{background:rgba(124,77,255,.07);border-color:rgba(124,77,255,.38)}
+    .nav-btn.fill{background:linear-gradient(135deg,var(--v),var(--r));color:#fff;box-shadow:0 3px 14px rgba(124,77,255,.28)}
+    .nav-btn.fill:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(124,77,255,.36)}
+
+    /* ── LAYOUT ── */
+    .page{position:relative;z-index:1;padding-top:64px;display:flex;min-height:100vh}
+    .sidebar{width:var(--sw);min-height:calc(100vh - 64px);padding:24px 14px 24px 16px;display:flex;flex-direction:column;gap:3px;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto;flex-shrink:0}
+    .sl{font-size:.66rem;font-weight:800;color:var(--ts);letter-spacing:.12em;text-transform:uppercase;padding:12px 10px 4px}
+    .si{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--rmd);text-decoration:none;color:var(--tm);font-size:.86rem;font-weight:600;transition:all .2s;position:relative}
+    .si:hover{background:rgba(255,255,255,.75);color:var(--td);transform:translateX(3px)}
+    .si.active{background:rgba(255,255,255,.90);color:var(--v);box-shadow:var(--sc)}
+    .si.active::before{content:'';position:absolute;left:0;top:22%;bottom:22%;width:3px;background:linear-gradient(180deg,var(--v),var(--r));border-radius:0 3px 3px 0}
+    .sico{width:30px;height:30px;border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+    .iv{background:rgba(124,77,255,.12)}.ir{background:rgba(240,98,146,.12)}.it{background:rgba(38,198,218,.12)}.ia{background:rgba(255,179,0,.12)}.ig{background:rgba(67,217,138,.12)}.ib{background:rgba(74,144,226,.12)}
+    .sbadge{margin-left:auto;font-size:.64rem;font-weight:700;padding:2px 7px;border-radius:50px}
+    .bnew{background:rgba(67,217,138,.15);color:#1a9e5c}.bhot{background:rgba(240,98,146,.12);color:var(--r)}
+    .sdiv{height:1px;background:rgba(124,77,255,.08);margin:6px 10px}
+    .sidebar-user{margin-top:auto;padding-top:14px;border-top:1px solid rgba(124,77,255,.08)}
+    .ucard{display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,.70);border-radius:var(--rmd);border:1px solid rgba(124,77,255,.10)}
+    .uav{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#ede7ff,#fce4ec);display:flex;align-items:center;justify-content:center;font-size:15px;border:2px solid #fff}
+    .uname{font-size:.82rem;font-weight:700;color:var(--td)}.urole{font-size:.68rem;color:var(--ts)}
+    .udot{width:7px;height:7px;border-radius:50%;background:var(--g);margin-left:auto;flex-shrink:0}
+    .content{flex:1;min-width:0;overflow-x:hidden}
+
+    /* ════ HERO ════ */
+    .hero{padding:60px 36px 52px;text-align:center;max-width:900px;margin:0 auto;animation:fadeUp .7s ease both}
+    .hero-tag{display:inline-flex;align-items:center;gap:7px;background:rgba(124,77,255,.08);border:1px solid rgba(124,77,255,.18);border-radius:50px;padding:5px 16px;font-size:.74rem;font-weight:700;color:var(--v);letter-spacing:.08em;text-transform:uppercase;margin-bottom:22px}
+    .ldot{width:6px;height:6px;border-radius:50%;background:var(--g);animation:blink 1.8s ease-in-out infinite;display:inline-block}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+    .hero h1{font-family:var(--fd);font-size:clamp(2.2rem,5vw,3.6rem);font-weight:900;color:var(--td);line-height:1.1;margin-bottom:18px}
+    .hero h1 .hl{background:linear-gradient(135deg,var(--v),var(--r));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .hero p{font-size:1.05rem;color:var(--tm);line-height:1.8;max-width:640px;margin:0 auto 32px}
+    .hero-btns{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+    .hbtn-fill{display:inline-flex;align-items:center;gap:7px;padding:13px 28px;border-radius:50px;background:linear-gradient(135deg,var(--v),var(--r));color:#fff;font-family:var(--fb);font-size:.92rem;font-weight:700;text-decoration:none;box-shadow:0 4px 18px rgba(124,77,255,.28);transition:all .2s}
+    .hbtn-fill:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(124,77,255,.38)}
+    .hbtn-out{display:inline-flex;align-items:center;gap:7px;padding:13px 28px;border-radius:50px;background:rgba(255,255,255,.85);color:var(--v);font-family:var(--fb);font-size:.92rem;font-weight:700;text-decoration:none;border:1.5px solid rgba(124,77,255,.22);transition:all .2s}
+    .hbtn-out:hover{background:rgba(124,77,255,.06);border-color:rgba(124,77,255,.38);transform:translateY(-2px)}
+
+    /* floating badges */
+    .hero-badges{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:28px}
+    .hbadge{display:flex;align-items:center;gap:6px;padding:7px 15px;background:rgba(255,255,255,.80);border:1px solid rgba(124,77,255,.10);border-radius:50px;font-size:.78rem;font-weight:700;color:var(--tm);box-shadow:0 2px 8px rgba(124,77,255,.06)}
+
+    /* ════ STATS STRIP ════ */
+    .stats-strip{display:flex;justify-content:center;gap:0;flex-wrap:wrap;background:rgba(255,255,255,.75);border:1px solid rgba(124,77,255,.08);border-radius:var(--rxl);padding:24px 32px;margin:0 36px 52px;box-shadow:var(--sc);backdrop-filter:blur(14px);animation:fadeUp .7s .1s ease both}
+    .stat-item{flex:1;min-width:140px;text-align:center;padding:0 28px;position:relative}
+    .stat-item:not(:last-child)::after{content:'';position:absolute;right:0;top:10%;bottom:10%;width:1px;background:rgba(124,77,255,.10)}
+    .stat-val{font-family:var(--fd);font-size:2rem;font-weight:800;background:linear-gradient(135deg,var(--v),var(--r));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1;margin-bottom:4px}
+    .stat-lbl{font-size:.80rem;color:var(--ts);font-weight:600}
+
+    /* ════ SECTION COMMON ════ */
+    .section{padding:52px 36px}
+    .sec-eyebrow{font-size:.72rem;font-weight:800;color:var(--v);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+    .sec-eyebrow::before{content:'';width:28px;height:2.5px;background:linear-gradient(90deg,var(--v),var(--r));border-radius:2px;display:inline-block}
+    .sec-title{font-family:var(--fd);font-size:clamp(1.6rem,3.2vw,2.4rem);font-weight:800;color:var(--td);line-height:1.2;margin-bottom:14px}
+    .sec-title .hl{background:linear-gradient(135deg,var(--v),var(--r));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .sec-sub{font-size:.95rem;color:var(--tm);line-height:1.8;max-width:580px}
+
+    /* ════ MISSION ════ */
+    .mission-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;animation:fadeUp .6s .1s ease both}
+    .mission-visual{position:relative;display:flex;align-items:center;justify-content:center}
+    .mission-ring{width:280px;height:280px;border-radius:50%;background:linear-gradient(145deg,rgba(124,77,255,.08),rgba(240,98,146,.07));border:2px solid rgba(124,77,255,.10);display:flex;align-items:center;justify-content:center;position:relative}
+    .mission-ring::before{content:'';position:absolute;inset:-16px;border-radius:50%;border:1.5px dashed rgba(124,77,255,.14);animation:spin 18s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .mission-ring::after{content:'';position:absolute;inset:-32px;border-radius:50%;border:1px dashed rgba(240,98,146,.10);animation:spin 28s linear infinite reverse}
+    .mission-center{text-align:center;z-index:1}
+    .mission-icon{font-size:52px;display:block;margin-bottom:10px}
+    .mission-center-title{font-family:var(--fd);font-size:1.1rem;font-weight:800;color:var(--td)}
+    .mission-center-sub{font-size:.76rem;color:var(--ts);font-weight:600;margin-top:3px}
+    /* orbit dots */
+    .orbit-dot{position:absolute;width:44px;height:44px;border-radius:50%;background:#fff;border:1.5px solid rgba(124,77,255,.14);box-shadow:0 2px 12px rgba(124,77,255,.12);display:flex;align-items:center;justify-content:center;font-size:18px}
+    .od1{top:-10px;left:50%;transform:translateX(-50%)}
+    .od2{right:-10px;top:50%;transform:translateY(-50%)}
+    .od3{bottom:-10px;left:50%;transform:translateX(-50%)}
+    .od4{left:-10px;top:50%;transform:translateY(-50%)}
+    .mission-text .sec-sub{margin-bottom:20px}
+    .mission-points{display:flex;flex-direction:column;gap:12px;margin-top:20px}
+    .mpt{display:flex;align-items:flex-start;gap:11px;padding:12px 14px;background:rgba(255,255,255,.70);border-radius:var(--rmd);border:1px solid rgba(124,77,255,.07)}
+    .mpt-ico{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+    .mi1{background:rgba(124,77,255,.12)}.mi2{background:rgba(240,98,146,.12)}.mi3{background:rgba(67,217,138,.12)}
+    .mpt-body .mt{font-size:.82rem;font-weight:700;color:var(--td)}
+    .mpt-body .md{font-size:.74rem;color:var(--ts);margin-top:1px;line-height:1.5}
+
+    /* ════ HOW IT WORKS ════ */
+    .hiw-section{padding:52px 36px;background:rgba(255,255,255,.45);backdrop-filter:blur(10px);border-top:1px solid rgba(124,77,255,.07);border-bottom:1px solid rgba(124,77,255,.07);animation:fadeUp .6s .1s ease both}
+    .hiw-inner{max-width:1200px;margin:0 auto}
+    .hiw-header{text-align:center;margin-bottom:48px}
+    .hiw-header .sec-eyebrow{justify-content:center}
+    .hiw-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative}
+    .hiw-steps::before{content:'';position:absolute;top:36px;left:calc(12.5%);right:calc(12.5%);height:2px;background:linear-gradient(90deg,var(--v),var(--r));z-index:0}
+    .hiw-step{display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 16px;position:relative;z-index:1;animation:fadeUp .5s ease both}
+    .hiw-step:nth-child(1){animation-delay:.1s}
+    .hiw-step:nth-child(2){animation-delay:.2s}
+    .hiw-step:nth-child(3){animation-delay:.3s}
+    .hiw-step:nth-child(4){animation-delay:.4s}
+    .hiw-num{width:72px;height:72px;border-radius:50%;background:#fff;border:2.5px solid rgba(124,77,255,.18);box-shadow:0 4px 20px rgba(124,77,255,.12);display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:18px;position:relative}
+    .hiw-num::after{content:attr(data-n);position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--v),var(--r));color:#fff;font-family:var(--fb);font-size:.60rem;font-weight:800;display:flex;align-items:center;justify-content:center}
+    .hiw-step-title{font-family:var(--fd);font-size:.95rem;font-weight:700;color:var(--td);margin-bottom:7px}
+    .hiw-step-desc{font-size:.78rem;color:var(--ts);line-height:1.65;font-weight:500}
+
+    /* ════ TECH / MODEL ════ */
+    .tech-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;animation:fadeUp .6s .1s ease both}
+    .tech-card{background:#fff;border:1.5px solid rgba(124,77,255,.09);border-radius:var(--rxl);padding:28px;box-shadow:var(--sc)}
+    .tc-head{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid rgba(124,77,255,.07)}
+    .tc-ico{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+    .tci1{background:linear-gradient(135deg,rgba(124,77,255,.15),rgba(124,77,255,.05))}
+    .tci2{background:linear-gradient(135deg,rgba(240,98,146,.15),rgba(240,98,146,.05))}
+    .tc-title{font-family:var(--fd);font-size:1rem;font-weight:700;color:var(--td)}
+    .tc-sub{font-size:.73rem;color:var(--ts);font-weight:600;margin-top:2px}
+    .tc-rows{display:flex;flex-direction:column;gap:10px}
+    .tc-row{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:rgba(245,240,255,.60);border-radius:9px;border:1px solid rgba(124,77,255,.06)}
+    .tc-row-lbl{display:flex;align-items:center;gap:8px;font-size:.82rem;font-weight:600;color:var(--tm)}
+    .tc-row-ico{width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px}
+    .tr1{background:rgba(124,77,255,.10)}.tr2{background:rgba(240,98,146,.10)}.tr3{background:rgba(38,198,218,.10)}.tr4{background:rgba(255,179,0,.10)}.tr5{background:rgba(67,217,138,.10)}.tr6{background:rgba(74,144,226,.10)}
+    .tc-row-val{font-size:.80rem;font-weight:700;color:var(--td)}
+    /* accuracy bar */
+    .acc-wrap{margin-top:6px}
+    .acc-label{display:flex;justify-content:space-between;font-size:.74rem;font-weight:700;color:var(--tm);margin-bottom:6px}
+    .acc-bar-bg{height:8px;background:rgba(200,190,230,.20);border-radius:50px;overflow:hidden}
+    .acc-bar{height:100%;border-radius:50px}
+    .ab1{background:linear-gradient(90deg,var(--v),#a78bfa);width:74%}
+    .ab2{background:linear-gradient(90deg,var(--r),#fda4af);width:62%}
+    .ab3{background:linear-gradient(90deg,var(--g),#6ee7b7);width:97%}
+
+    /* ════ TEAM ════ */
+    .team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;animation:fadeUp .6s .1s ease both}
+    .team-card{background:#fff;border:1.5px solid rgba(124,77,255,.09);border-radius:var(--rxl);padding:26px 22px;box-shadow:var(--sc);text-align:center;transition:transform .25s,box-shadow .25s;position:relative;overflow:hidden}
+    .team-card::before{content:'';position:absolute;top:-40px;right:-40px;width:100px;height:100px;border-radius:50%;opacity:.14;pointer-events:none}
+    .tc1::before{background:var(--v)}.tc2::before{background:var(--r)}.tc3::before{background:var(--t)}
+    .team-card:hover{transform:translateY(-5px);box-shadow:var(--sh)}
+    .team-av{width:72px;height:72px;border-radius:50%;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-size:30px;border:3px solid rgba(255,255,255,.95);box-shadow:0 4px 16px rgba(124,77,255,.14)}
+    .tav1{background:linear-gradient(135deg,#ede7ff,#c4b5fd)}
+    .tav2{background:linear-gradient(135deg,#fce7f3,#fbcfe8)}
+    .tav3{background:linear-gradient(135deg,#e0f2fe,#a5f3fc)}
+    .team-name{font-family:var(--fd);font-size:1rem;font-weight:800;color:var(--td);margin-bottom:3px}
+    .team-role{font-size:.76rem;font-weight:700;color:var(--v);margin-bottom:10px;padding:3px 10px;background:rgba(124,77,255,.07);border-radius:50px;display:inline-block}
+    .team-bio{font-size:.78rem;color:var(--ts);line-height:1.7;font-weight:500}
+    .team-skills{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-top:12px}
+    .tskill{font-size:.66rem;font-weight:700;padding:3px 9px;border-radius:50px;background:rgba(124,77,255,.07);color:var(--v);border:1px solid rgba(124,77,255,.12)}
+
+    /* ════ VALUES ════ */
+    .values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;animation:fadeUp .6s .1s ease both}
+    .val-card{background:#fff;border:1.5px solid rgba(124,77,255,.08);border-radius:var(--rlg);padding:22px 20px;box-shadow:var(--sc);transition:transform .22s,box-shadow .22s}
+    .val-card:hover{transform:translateY(-4px);box-shadow:var(--sh)}
+    .val-ico{width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:13px}
+    .vi1{background:linear-gradient(135deg,rgba(124,77,255,.15),rgba(124,77,255,.06))}
+    .vi2{background:linear-gradient(135deg,rgba(240,98,146,.15),rgba(240,98,146,.06))}
+    .vi3{background:linear-gradient(135deg,rgba(38,198,218,.15),rgba(38,198,218,.06))}
+    .vi4{background:linear-gradient(135deg,rgba(255,179,0,.15),rgba(255,179,0,.06))}
+    .vi5{background:linear-gradient(135deg,rgba(67,217,138,.15),rgba(67,217,138,.06))}
+    .vi6{background:linear-gradient(135deg,rgba(74,144,226,.15),rgba(74,144,226,.06))}
+    .val-title{font-family:var(--fd);font-size:.92rem;font-weight:700;color:var(--td);margin-bottom:6px}
+    .val-desc{font-size:.78rem;color:var(--ts);line-height:1.7;font-weight:500}
+
+    /* ════ TECH STACK ════ */
+    .stack-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;animation:fadeUp .6s .1s ease both}
+    .stack-pill{display:flex;align-items:center;gap:9px;padding:11px 20px;background:#fff;border:1.5px solid rgba(124,77,255,.10);border-radius:50px;box-shadow:var(--sc);font-size:.84rem;font-weight:700;color:var(--td);transition:all .2s}
+    .stack-pill:hover{transform:translateY(-2px);box-shadow:var(--sh);border-color:rgba(124,77,255,.24)}
+    .sp-ico{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px}
+    .sp1{background:rgba(124,77,255,.10)}.sp2{background:rgba(240,98,146,.10)}.sp3{background:rgba(38,198,218,.10)}.sp4{background:rgba(255,179,0,.10)}.sp5{background:rgba(67,217,138,.10)}.sp6{background:rgba(74,144,226,.10)}.sp7{background:rgba(124,77,255,.10)}.sp8{background:rgba(240,98,146,.10)}
+
+    /* ════ CTA SECTION ════ */
+    .cta-section{margin:32px 36px 64px;border-radius:var(--rxl);background:linear-gradient(135deg,var(--v),#a259ff,var(--r));padding:60px 50px;text-align:center;position:relative;overflow:hidden;box-shadow:0 12px 48px rgba(124,77,255,.28);animation:fadeUp .6s .2s ease both}
+    .cta-section::before{content:'';position:absolute;top:-60px;left:-60px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.07);pointer-events:none}
+    .cta-section::after{content:'';position:absolute;bottom:-60px;right:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.05);pointer-events:none}
+    .cta-section h2{font-family:var(--fd);font-size:clamp(1.6rem,3vw,2.4rem);font-weight:800;color:#fff;margin-bottom:12px;position:relative;z-index:1}
+    .cta-section p{font-size:.96rem;color:rgba(255,255,255,.82);line-height:1.8;max-width:520px;margin:0 auto 30px;position:relative;z-index:1}
+    .cta-btns{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;position:relative;z-index:1}
+    .cta-btn-fill{display:inline-flex;align-items:center;gap:7px;padding:13px 28px;border-radius:50px;background:#fff;color:var(--v);font-family:var(--fb);font-size:.90rem;font-weight:800;text-decoration:none;box-shadow:0 4px 16px rgba(0,0,0,.12);transition:all .2s}
+    .cta-btn-fill:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.18)}
+    .cta-btn-out{display:inline-flex;align-items:center;gap:7px;padding:13px 28px;border-radius:50px;background:rgba(255,255,255,.12);color:#fff;font-family:var(--fb);font-size:.90rem;font-weight:700;text-decoration:none;border:1.5px solid rgba(255,255,255,.30);transition:all .2s}
+    .cta-btn-out:hover{background:rgba(255,255,255,.20);transform:translateY(-2px)}
+
+    /* ════ FOOTER ════ */
+    footer{background:rgba(255,255,255,.60);backdrop-filter:blur(14px);border-top:1px solid rgba(124,77,255,.08);padding:26px 36px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+    .footer-logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+    .fl-ico{width:26px;height:26px;background:linear-gradient(135deg,var(--v),var(--r));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px}
+    .fl-name{font-family:var(--fd);font-weight:700;font-size:.88rem;color:var(--td)}
+    .footer-copy{font-size:.76rem;color:var(--ts);font-weight:500}
+    .footer-links{display:flex;gap:18px}
+    .footer-links a{font-size:.78rem;color:var(--ts);text-decoration:none;font-weight:600;transition:color .2s}
+    .footer-links a:hover{color:var(--v)}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(124,77,255,.20);border-radius:4px}
+
+    @media(max-width:1024px){.mission-grid,.tech-grid{grid-template-columns:1fr}.team-grid{grid-template-columns:1fr 1fr}.values-grid{grid-template-columns:1fr 1fr}.hiw-steps{grid-template-columns:1fr 1fr;gap:28px}.hiw-steps::before{display:none}}
+    @media(max-width:820px){.sidebar{display:none}}
+    @media(max-width:700px){.team-grid,.values-grid{grid-template-columns:1fr}.stats-strip{flex-direction:column;gap:20px;padding:20px}.stat-item::after{display:none}.section,.hiw-section{padding:36px 18px}.hero{padding:40px 18px 32px}.topnav{padding:12px 20px}.nav-links{display:none}.cta-section{margin:16px 18px 44px;padding:36px 20px}}
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav class="topnav">
+  <a href="dashboard.html" class="logo-pill">
+    <div class="logo-ico">🛡️</div>
+    <span class="logo-name">InsureAI</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/predict">Predict</a></li>
+    <li><a href="/contact">Contact</a></li>
+    <li><a href="/about" class="act">About</a></li>
+  </ul>
+  <!-- <div class="nav-cta">
+    <a href="predict.html" class="nav-btn outline">Try Predictor</a>
+    <a href="dashboard.html" class="nav-btn fill">Dashboard →</a>
+  </div> -->
+  <div class="user-chip">
+      <div class="uc-av">👤</div>
+      <!-- <span class="uc-name">Rahul Sharma</span> -->
+    </div>
+</nav>
+
+<div class="page">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <span class="sl">Main Menu</span>
+    <a class="si" href="/"><div class="sico iv">🏠</div>Home</a>
+    <a class="si" href="/predict"><div class="sico it">📊</div>Predictions</a>
+    <a class="si" href="/policies"><div class="sico ir">🛡️</div>My Policies<span class="sbadge bnew">New</span></a>
+    <a class="si" href="/insights"><div class="sico ia">💡</div>AI Insights<span class="sbadge bhot">Hot</span></a>
+    <a class="si" href="analytics"><div class="sico ig">📈</div>Analytics</a>
+    <div class="sdiv"></div> <!-- ye hr tag ka use kar raha h -->
+    <span class="sl">Company</span>
+    <a class="si active" href="/about"><div class="sico ib">ℹ️</div>About Us</a>
+    <a class="si" href="/contact"><div class="sico iv">📞</div>Contact</a>
+    <a class="si" href="/privacy"><div class="sico ir">📄</div>Privacy Policy</a>
+    <div class="sdiv"></div>
+    <span class="sl">Account</span>
+    <a class="si" href="/settings"><div class="sico iv">⚙️</div>Settings</a>
+    <div class="sidebar-user">
+      <div class="ucard">
+        <div class="uav">👤</div>
+        <div><div class="uname"></div><div class="urole">Free Plan</div></div>
+        <div class="udot"></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="content">
+
+  <!-- ════ HERO ════ -->
+  <div class="hero">
+    <div class="hero-tag"><span class="ldot"></span> Our Story · InsureAI</div>
+    <h1>Making Insurance <span class="hl">Simple &amp; Transparent</span> with AI</h1>
+    <p>InsureAI was built by students who believed that anyone should be able to understand, predict, and plan for their insurance costs — without needing an agent or a finance degree.</p>
+    <div class="hero-btns">
+      <a href="predict.html" class="hbtn-fill">🚀 Try Predictor Free</a>
+      <a href="#mission" class="hbtn-out">Learn Our Story ↓</a>
+    </div>
+    <div class="hero-badges">
+      <div class="hbadge">🧠 ML-Powered</div>
+      <div class="hbadge">📊 1,338 Real Records</div>
+      <div class="hbadge">🎓 Student Project</div>
+      <div class="hbadge">🔒 Privacy First</div>
+      <div class="hbadge">⚡ Linear Regression</div>
+    </div>
+  </div>
+
+  <!-- ════ STATS STRIP ════ -->
+  <div class="stats-strip">
+    <div class="stat-item">
+      <div class="stat-val">97%</div>
+      <div class="stat-lbl">Model Accuracy (R²)</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">1,338</div>
+      <div class="stat-lbl">Training Records</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">6</div>
+      <div class="stat-lbl">Prediction Features</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">&lt;1s</div>
+      <div class="stat-lbl">Prediction Speed</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">80K+</div>
+      <div class="stat-lbl">Policies Analyzed</div>
+    </div>
+  </div>
+
+  <!-- ════ MISSION ════ -->
+  <div class="section" id="mission">
+    <div class="mission-grid">
+      <div class="mission-visual">
+        <div class="mission-ring">
+          <div class="orbit-dot od1">🧠</div>
+          <div class="orbit-dot od2">📊</div>
+          <div class="orbit-dot od3">🛡️</div>
+          <div class="orbit-dot od4">💡</div>
+          <div class="mission-center">
+            <span class="mission-icon">🎯</span>
+            <div class="mission-center-title">Our Mission</div>
+            <div class="mission-center-sub">AI for Everyone</div>
+          </div>
+        </div>
+      </div>
+      <div class="mission-text">
+        <div class="sec-eyebrow">Why We Built This</div>
+        <h2 class="sec-title">Insurance shouldn't be a <span class="hl">black box</span></h2>
+        <p class="sec-sub">We built InsureAI as a final year ML project — but the problem it solves is real. Millions of people overpay for insurance simply because they don't understand how premiums are calculated.</p>
+        <div class="mission-points">
+          <div class="mpt">
+            <div class="mpt-ico mi1">🔍</div>
+            <div class="mpt-body"><div class="mt">Full Transparency</div><div class="md">We show you exactly which factors affect your premium and by how much.</div></div>
+          </div>
+          <div class="mpt">
+            <div class="mpt-ico mi2">🤝</div>
+            <div class="mpt-body"><div class="mt">No Hidden Agenda</div><div class="md">We don't sell your data or push specific plans. This tool is purely educational.</div></div>
+          </div>
+          <div class="mpt">
+            <div class="mpt-ico mi3">🎓</div>
+            <div class="mpt-body"><div class="mt">Built for Learning</div><div class="md">Every part of our pipeline — from data cleaning to model deployment — is documented.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ HOW IT WORKS ════ -->
+  <div class="hiw-section">
+    <div class="hiw-inner">
+      <div class="hiw-header">
+        <div class="sec-eyebrow">The Process</div>
+        <h2 class="sec-title">How <span class="hl">InsureAI Works</span></h2>
+      </div>
+      <div class="hiw-steps">
+        <div class="hiw-step">
+          <div class="hiw-num" data-n="1">📥</div>
+          <div class="hiw-step-title">Data Collection</div>
+          <div class="hiw-step-desc">1,338 real insurance records collected with age, BMI, gender, region, smoking status &amp; charges.</div>
+        </div>
+        <div class="hiw-step">
+          <div class="hiw-num" data-n="2">🧹</div>
+          <div class="hiw-step-title">Data Cleaning</div>
+          <div class="hiw-step-desc">Duplicates removed, categorical features encoded — gender, smoker, region mapped to numeric values.</div>
+        </div>
+        <div class="hiw-step">
+          <div class="hiw-num" data-n="3">🤖</div>
+          <div class="hiw-step-title">Model Training</div>
+          <div class="hiw-step-desc">Linear Regression trained on 80% data with sklearn. Achieved 97% R² accuracy on test set.</div>
+        </div>
+        <div class="hiw-step">
+          <div class="hiw-num" data-n="4">⚡</div>
+          <div class="hiw-step-title">Live Prediction</div>
+          <div class="hiw-step-desc">Enter your details, get instant premium estimate with full breakdown — in under 1 second.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ MODEL / TECH DETAILS ════ -->
+  <div class="section">
+    <div style="text-align:center;margin-bottom:36px">
+      <div class="sec-eyebrow" style="justify-content:center">Under the Hood</div>
+      <h2 class="sec-title">The <span class="hl">ML Model</span> &amp; Dataset</h2>
+    </div>
+    <div class="tech-grid">
+      <!-- Dataset card -->
+      <div class="tech-card">
+        <div class="tc-head">
+          <div class="tc-ico tci1">📦</div>
+          <div><div class="tc-title">Dataset Overview</div><div class="tc-sub">clean_insurance_data.csv · 1,338 rows · 7 columns</div></div>
+        </div>
+        <div class="tc-rows">
+          <div class="tc-row">
+            <div class="tc-row-lbl"><div class="tc-row-ico tr1">🎂</div>Age</div>
+            <div class="tc-row-val">18 – 64 years</div>
+          </div>
+          <div class="tc-row">
+            <div class="tc-row-lbl"><div class="tc-row-ico tr2">⚥</div>Gender</div>
+            <div class="tc-row-val">Female=1 · Male=2</div>
+          </div>
+          <div class="tc-row">
+            <div class="tc-row-lbl"><div class="tc-row-ico tr3">⚖️</div>BMI</div>
+            <div class="tc-row-val">10.0 – 55.0</div>
+          </div>
+          <div class="tc-row">
+            <div class="tc-row-lbl"><div class="tc-row-ico tr4">👶</div>Children</div>
+            <div class="tc-row-val">0 – 5 dependents</div>
+          </div>
+          <div class="tc-row">
+            <div class="tc-row-lbl"><div class="tc-row-ico tr5">🚬</div>Smoker</div>
+            <div class="tc-row-val">No=0 · Yes=1</div>
+          </div>
+          <div class="tc-row">
+            <div class="tc-row-lbl"><div class="tc-row-ico tr6">🗺️</div>Region</div>
+            <div class="tc-row-val">SW=1 SE=2 NW=3 NE=4</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Model card -->
+      <div class="tech-card">
+        <div class="tc-head">
+          <div class="tc-ico tci2">🤖</div>
+          <div><div class="tc-title">Model Performance</div><div class="tc-sub">sklearn LinearRegression · 80/20 train-test split</div></div>
+        </div>
+        <div class="acc-wrap" style="margin-bottom:18px">
+          <div class="acc-label"><span>Train Accuracy (R²)</span><span>74%</span></div>
+          <div class="acc-bar-bg"><div class="acc-bar ab1"></div></div>
+        </div>
+        <div class="acc-wrap" style="margin-bottom:18px">
+          <div class="acc-label"><span>Test Accuracy (R²)</span><span>62%</span></div>
+          <div class="acc-bar-bg"><div class="acc-bar ab2"></div></div>
+        </div>
+        <div class="acc-wrap" style="margin-bottom:20px">
+          <div class="acc-label"><span>Smoker Feature Impact</span><span>Highest</span></div>
+          <div class="acc-bar-bg"><div class="acc-bar ab3"></div></div>
+        </div>
+        <div class="tc-rows">
+          <div class="tc-row">
+            <div class="tc-row-lbl"><div class="tc-row-ico tr1">🔧</div>Algorithm</div>
+            <div class="tc-row-val">Linear Regression</div>
+          </div>
+          <div class="tc-row">
+            <div class="tc-row-lbl"><div class="tc-row-ico tr2">💾</div>Model File</div>
+            <div class="tc-row-val">linear_model.lb</div>
+          </div>
+          <div class="tc-row">
+            <div class="tc-row-lbl"><div class="tc-row-ico tr3">📚</div>Library</div>
+            <div class="tc-row-val">scikit-learn · joblib</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ TEAM ════ -->
+  <div class="section">
+    <div style="text-align:center;margin-bottom:36px">
+      <div class="sec-eyebrow" style="justify-content:center">The People</div>
+      <h2 class="sec-title">Meet the <span class="hl">Team</span></h2>
+      <p style="font-size:.90rem;color:var(--tm);margin-top:10px">A small team of passionate ML students who turned a university project into a real product.</p>
+    </div>
+    <div class="team-grid">
+      <div class="team-card tc1">
+        <div class="team-av tav1">👩‍💻</div>
+        <div class="team-name">Shivanshu</div>
+        <div class="team-role">ML Engineer</div>
+        <div class="team-bio">Led the model training pipeline, data cleaning, and feature engineering using scikit-learn and pandas.</div>
+        <div class="team-skills">
+          <span class="tskill">Python</span><span class="tskill">scikit-learn</span><span class="tskill">pandas</span>
+        </div>
+      </div>
+      <div class="team-card tc2">
+        <div class="team-av tav2">👨‍🎨</div>
+        <div class="team-name">Shivanshu</div>
+        <div class="team-role">Frontend Developer</div>
+        <div class="team-bio">Designed and built the complete InsureAI web interface — dashboard, prediction form, and about page.</div>
+        <div class="team-skills">
+          <span class="tskill">HTML</span><span class="tskill">CSS</span><span class="tskill">UI Design</span>
+        </div>
+      </div>
+      <div class="team-card tc3">
+        <div class="team-av tav3">👨‍🔬</div>
+        <div class="team-name">Shivanshu</div>
+        <div class="team-role">Data Analyst</div>
+        <div class="team-bio">Performed EDA, visualizations, and statistical analysis to understand the insurance dataset deeply.</div>
+        <div class="team-skills">
+          <span class="tskill">numpy</span><span class="tskill">seaborn</span><span class="tskill">matplotlib</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ VALUES ════ -->
+  <div class="section" style="padding-top:0">
+    <div style="text-align:center;margin-bottom:36px">
+      <div class="sec-eyebrow" style="justify-content:center">What We Stand For</div>
+      <h2 class="sec-title">Our <span class="hl">Core Values</span></h2>
+    </div>
+    <div class="values-grid">
+      <div class="val-card">
+        <div class="val-ico vi1">🔍</div>
+        <div class="val-title">Transparency</div>
+        <div class="val-desc">Every prediction comes with a full breakdown — no black boxes, no hidden factors, no surprises.</div>
+      </div>
+      <div class="val-card">
+        <div class="val-ico vi2">🎯</div>
+        <div class="val-title">Accuracy</div>
+        <div class="val-desc">We use real insurance data and validated ML models to give you the most reliable estimates possible.</div>
+      </div>
+      <div class="val-card">
+        <div class="val-ico vi3">🔒</div>
+        <div class="val-title">Privacy</div>
+        <div class="val-desc">Your data is never stored, sold, or shared. All predictions happen locally — your information stays yours.</div>
+      </div>
+      <div class="val-card">
+        <div class="val-ico vi4">🎓</div>
+        <div class="val-title">Education</div>
+        <div class="val-desc">We believe understanding is power. InsureAI teaches you how insurance premiums work, not just what they are.</div>
+      </div>
+      <div class="val-card">
+        <div class="val-ico vi5">⚡</div>
+        <div class="val-title">Speed</div>
+        <div class="val-desc">Insurance estimates in under 1 second. No forms, no agents, no waiting days for a quote.</div>
+      </div>
+      <div class="val-card">
+        <div class="val-ico vi6">💡</div>
+        <div class="val-title">Simplicity</div>
+        <div class="val-desc">Complex ML models, presented in plain language anyone can understand and act on immediately.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ TECH STACK ════ -->
+  <div class="section" style="padding-top:0;text-align:center">
+    <div class="sec-eyebrow" style="justify-content:center;margin-bottom:10px">Built With</div>
+    <h2 class="sec-title" style="margin-bottom:28px">Our <span class="hl">Tech Stack</span></h2>
+    <div class="stack-row">
+      <div class="stack-pill"><div class="sp-ico sp1">🐍</div>Python 3</div>
+      <div class="stack-pill"><div class="sp-ico sp2">🐼</div>Pandas</div>
+      <div class="stack-pill"><div class="sp-ico sp3">🔢</div>NumPy</div>
+      <div class="stack-pill"><div class="sp-ico sp4">🤖</div>scikit-learn</div>
+      <div class="stack-pill"><div class="sp-ico sp5">📈</div>Matplotlib</div>
+      <div class="stack-pill"><div class="sp-ico sp6">🎨</div>Seaborn</div>
+      <div class="stack-pill"><div class="sp-ico sp7">💾</div>Joblib</div>
+      <div class="stack-pill"><div class="sp-ico sp8">🌐</div>HTML · CSS</div>
+    </div>
+  </div>
+
+  <!-- ════ CTA ════ -->
+  <div class="cta-section">
+    <h2>Ready to Know Your Premium?</h2>
+    <p>Use our AI-powered predictor to get an instant, transparent estimate of your insurance charges — completely free.</p>
+    <div class="cta-btns">
+      <a href="predict.html" class="cta-btn-fill">🚀 Try the Predictor</a>
+      <a href="dashboard.html" class="cta-btn-out">Go to Dashboard →</a>
+    </div>
+  </div>
+
+  <!-- ════ FOOTER ════ -->
+  <footer>
+    <a href="dashboard.html" class="footer-logo">
+      <div class="fl-ico">🛡️</div>
+      <span class="fl-name">InsureAI</span>
+    </a>
+    <span class="footer-copy">© 2025 InsureAI · Made with 💜 as a ML Student Project</span>
+    <div class="footer-links">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="predict.html">Predict</a>
+      <a href="#">Privacy</a>
+      <a href="#">Contact</a>
+    </div>
+  </footer>
+
+  </div><!-- end content -->
+</div>
+</body>
+</html>

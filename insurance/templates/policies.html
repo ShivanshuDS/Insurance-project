@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>InsureAI – My Policies</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --v:#7c4dff;--r:#f06292;--t:#26c6da;--g:#43d98a;--a:#ffb300;--b:#4a90e2;
+      --td:#2d2250;--tm:#6b5b95;--ts:#a89bc4;--bg:#f5f0ff;
+      --sw:260px;--rxl:24px;--rlg:18px;--rmd:12px;--rsm:8px;
+      --sc:0 2px 16px rgba(124,77,255,.08);--sh:0 8px 32px rgba(124,77,255,.18);
+      --fd:'Playfair Display',serif;--fb:'Nunito',sans-serif;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:var(--fb);background:var(--bg);color:var(--td);min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
+    body::before{content:'';position:fixed;inset:0;z-index:0;
+      background:
+        radial-gradient(ellipse 70% 55% at 5% 0%,rgba(252,228,236,.70) 0%,transparent 55%),
+        radial-gradient(ellipse 50% 45% at 95% 100%,rgba(227,240,255,.65) 0%,transparent 50%),
+        radial-gradient(ellipse 40% 35% at 80% 10%,rgba(237,231,255,.55) 0%,transparent 45%),
+        radial-gradient(ellipse 45% 40% at 15% 85%,rgba(232,248,240,.50) 0%,transparent 45%),var(--bg);
+      pointer-events:none}
+
+    /* TOP NAV */
+    .topnav{position:fixed;top:0;left:0;right:0;z-index:200;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;background:rgba(245,240,255,.88);backdrop-filter:blur(20px);box-shadow:0 2px 20px rgba(124,77,255,.08)}
+    .logo-pill{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.80);border:1.5px solid rgba(124,77,255,.14);border-radius:50px;padding:6px 16px 6px 8px;box-shadow:0 2px 10px rgba(124,77,255,.10);text-decoration:none}
+    .logo-ico{width:28px;height:28px;background:linear-gradient(135deg,var(--v),var(--r));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px}
+    .logo-name{font-family:var(--fd);font-weight:700;font-size:.90rem;color:var(--td)}
+    .tnav-links{display:flex;align-items:center;gap:4px;list-style:none}
+    .tnav-links a{text-decoration:none;color:var(--tm);font-size:.87rem;font-weight:600;padding:6px 14px;border-radius:50px;transition:background .2s,color .2s}
+    .tnav-links a:hover{background:rgba(124,77,255,.08);color:var(--v)}
+    .user-chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.80);border:1.5px solid rgba(124,77,255,.12);border-radius:50px;padding:5px 14px 5px 5px}
+    .uc-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#ede7ff,#fce4ec);display:flex;align-items:center;justify-content:center;font-size:13px;border:2px solid #fff}
+    .uc-name{font-size:.83rem;font-weight:700;color:var(--td)}
+
+    /* LAYOUT */
+    .layout{display:flex;width:100%;min-height:100vh;padding-top:64px;position:relative;z-index:1}
+
+    /* SIDEBAR */
+    .sidebar{width:var(--sw);min-height:calc(100vh - 64px);padding:28px 14px 28px 16px;display:flex;flex-direction:column;gap:4px;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto;flex-shrink:0}
+    .sl{font-size:.68rem;font-weight:700;color:var(--ts);letter-spacing:.10em;text-transform:uppercase;padding:12px 10px 5px}
+    .si{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:var(--rmd);text-decoration:none;color:var(--tm);font-size:.88rem;font-weight:600;transition:background .2s,color .2s,transform .2s;position:relative}
+    .si:hover{background:rgba(255,255,255,.70);color:var(--td);transform:translateX(3px)}
+    .si.active{background:rgba(255,255,255,.90);color:var(--v);box-shadow:var(--sc)}
+    .si.active::before{content:'';position:absolute;left:0;top:22%;bottom:22%;width:3.5px;background:linear-gradient(180deg,var(--v),var(--r));border-radius:0 3px 3px 0}
+    .sico{width:32px;height:32px;border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+    .iv{background:rgba(124,77,255,.12)}.ir{background:rgba(240,98,146,.12)}.it{background:rgba(38,198,218,.12)}.ia{background:rgba(255,179,0,.12)}.ig{background:rgba(67,217,138,.12)}.ib{background:rgba(74,144,226,.12)}
+    .sbadge{margin-left:auto;font-size:.66rem;font-weight:700;padding:2px 7px;border-radius:50px}
+    .bnew{background:rgba(67,217,138,.15);color:#1a9e5c}.bhot{background:rgba(240,98,146,.12);color:var(--r)}
+    .sdiv{height:1px;background:rgba(124,77,255,.08);margin:7px 10px}
+    .sidebar-user{margin-top:auto;padding-top:14px;border-top:1px solid rgba(124,77,255,.08)}
+    .ucard{display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,.70);border-radius:var(--rmd);border:1px solid rgba(124,77,255,.10)}
+    .uav{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#ede7ff,#fce4ec);display:flex;align-items:center;justify-content:center;font-size:16px;border:2px solid rgba(255,255,255,.9)}
+    .uname{font-size:.83rem;font-weight:700;color:var(--td)}.urole{font-size:.70rem;color:var(--ts)}
+    .udot{width:8px;height:8px;border-radius:50%;background:var(--g);margin-left:auto;flex-shrink:0}
+
+    /* MAIN */
+    .main{flex:1;padding:32px 36px 56px 28px;min-width:0}
+    .pg-greet{font-size:.83rem;color:var(--ts);font-weight:500;margin-bottom:5px}
+    .pg-title{font-family:var(--fd);font-size:clamp(1.5rem,3vw,2.2rem);font-weight:800;color:var(--td);line-height:1.15;margin-bottom:8px}
+    .pg-title .hl{background:linear-gradient(135deg,var(--v),var(--r));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .pg-sub{font-size:.92rem;color:var(--tm);max-width:520px;line-height:1.7;margin-bottom:28px}
+
+    /* STATS ROW */
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px;animation:fadeUp .6s .1s ease both}
+    .sc{background:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.9);border-radius:var(--rlg);padding:18px;box-shadow:var(--sc);backdrop-filter:blur(12px);transition:transform .25s,box-shadow .25s;position:relative;overflow:hidden}
+    .sc::before{content:'';position:absolute;top:-28px;right:-28px;width:80px;height:80px;border-radius:50%;opacity:.28}
+    .sc:hover{transform:translateY(-4px);box-shadow:var(--sh)}
+    .sc1::before{background:rgba(124,77,255,.25)}.sc2::before{background:rgba(240,98,146,.25)}.sc3::before{background:rgba(38,198,218,.25)}.sc4::before{background:rgba(67,217,138,.25)}
+    .sc-ico{width:36px;height:36px;border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:9px}
+    .sci1{background:rgba(124,77,255,.12)}.sci2{background:rgba(240,98,146,.12)}.sci3{background:rgba(38,198,218,.12)}.sci4{background:rgba(67,217,138,.12)}
+    .sc-val{font-family:var(--fd);font-size:1.50rem;font-weight:800;color:var(--td);margin-bottom:1px}
+    .sc-lbl{font-size:.75rem;color:var(--ts);font-weight:600}
+    .sc-chg{font-size:.72rem;font-weight:700;margin-top:5px;color:#1a9e5c}
+    .sc-chg.warn{color:#e65100}
+
+    /* FILTER BAR */
+    .filter-bar{display:flex;align-items:center;gap:10px;margin-bottom:22px;flex-wrap:wrap;animation:fadeUp .6s .15s ease both}
+    .fbar-title{font-family:var(--fd);font-size:1.05rem;font-weight:700;color:var(--td);margin-right:6px}
+    .ftab{padding:7px 18px;border-radius:50px;font-size:.82rem;font-weight:700;cursor:pointer;border:1.5px solid transparent;transition:all .2s;background:rgba(255,255,255,.70);color:var(--tm);border-color:rgba(124,77,255,.10)}
+    .ftab:hover{background:rgba(124,77,255,.07);color:var(--v);border-color:rgba(124,77,255,.22)}
+    .ftab.active{background:linear-gradient(135deg,var(--v),var(--r));color:#fff;border-color:transparent;box-shadow:0 4px 14px rgba(124,77,255,.25)}
+    .add-btn{margin-left:auto;display:inline-flex;align-items:center;gap:7px;padding:9px 20px;border-radius:50px;background:linear-gradient(135deg,var(--v),var(--r));color:#fff;font-family:var(--fb);font-size:.85rem;font-weight:700;text-decoration:none;box-shadow:0 4px 16px rgba(124,77,255,.25);transition:transform .2s,box-shadow .2s;cursor:pointer;border:none}
+    .add-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(124,77,255,.35)}
+
+    /* POLICY CARDS GRID */
+    .policy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;animation:fadeUp .6s .2s ease both}
+
+    /* POLICY CARD */
+    .pcard{background:rgba(255,255,255,.82);border:1.5px solid rgba(255,255,255,.95);border-radius:var(--rxl);padding:24px;box-shadow:var(--sc);backdrop-filter:blur(14px);transition:transform .25s,box-shadow .25s;position:relative;overflow:hidden}
+    .pcard:hover{transform:translateY(-5px);box-shadow:var(--sh)}
+    .pcard::after{content:'';position:absolute;top:-40px;right:-40px;width:110px;height:110px;border-radius:50%;opacity:.18;pointer-events:none}
+    .pcard.health::after{background:rgba(240,98,146,.5)}
+    .pcard.life::after{background:rgba(124,77,255,.5)}
+    .pcard.vehicle::after{background:rgba(38,198,218,.5)}
+    .pcard.home::after{background:rgba(255,179,0,.5)}
+    .pcard.travel::after{background:rgba(67,217,138,.5)}
+
+    .p-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+    .p-ico-wrap{width:44px;height:44px;border-radius:var(--rmd);display:flex;align-items:center;justify-content:center;font-size:20px}
+    .p-ico-health{background:rgba(240,98,146,.12)}.p-ico-life{background:rgba(124,77,255,.12)}.p-ico-vehicle{background:rgba(38,198,218,.12)}.p-ico-home{background:rgba(255,179,0,.12)}.p-ico-travel{background:rgba(67,217,138,.12)}
+    
+    .p-status{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:50px;font-size:.68rem;font-weight:700}
+    .s-active{background:rgba(67,217,138,.12);color:#1a9e5c}
+    .s-expiring{background:rgba(255,179,0,.12);color:#b97a00}
+    .s-expired{background:rgba(240,98,146,.12);color:#c0294e}
+    .s-dot{width:6px;height:6px;border-radius:50%}
+    .sd-active{background:#43d98a;animation:blink 1.8s ease-in-out infinite}
+    .sd-expiring{background:#ffb300}
+    .sd-expired{background:#f06292}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+    .p-type{font-size:.70rem;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+    .p-name{font-family:var(--fd);font-size:1.02rem;font-weight:800;color:var(--td);margin-bottom:2px;line-height:1.2}
+    .p-provider{font-size:.75rem;color:var(--tm);font-weight:600;margin-bottom:14px}
+
+    .p-divider{height:1px;background:rgba(124,77,255,.07);margin-bottom:14px}
+
+    .p-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+    .pinfo{background:rgba(124,77,255,.03);border:1px solid rgba(124,77,255,.07);border-radius:var(--rsm);padding:8px 10px}
+    .pinfo-lbl{font-size:.67rem;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px}
+    .pinfo-val{font-family:var(--fd);font-size:.92rem;font-weight:800;color:var(--td)}
+
+    .p-progress-wrap{margin-bottom:16px}
+    .p-prog-top{display:flex;justify-content:space-between;font-size:.72rem;font-weight:600;color:var(--tm);margin-bottom:5px}
+    .p-prog-lbl{color:var(--ts)}
+    .prog-bg{height:6px;background:rgba(200,190,230,.25);border-radius:50px;overflow:hidden}
+    .prog-bar{height:100%;border-radius:50px;transition:width .8s ease}
+    .prog-green{background:linear-gradient(90deg,#a7f3d0,#43d98a)}
+    .prog-amber{background:linear-gradient(90deg,#fde68a,#ffb300)}
+    .prog-red{background:linear-gradient(90deg,#fbcfe8,#f06292)}
+
+    .p-actions{display:flex;gap:8px}
+    .pa-view{flex:1;padding:9px 0;text-align:center;border-radius:50px;background:linear-gradient(135deg,var(--v),var(--r));color:#fff;font-size:.80rem;font-weight:700;cursor:pointer;border:none;font-family:var(--fb);box-shadow:0 3px 12px rgba(124,77,255,.20);transition:all .2s;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px}
+    .pa-view:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(124,77,255,.30)}
+    .pa-more{width:36px;height:36px;border-radius:50%;background:rgba(124,77,255,.07);border:1.5px solid rgba(124,77,255,.12);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;transition:all .2s;color:var(--v);flex-shrink:0}
+    .pa-more:hover{background:rgba(124,77,255,.14);border-color:rgba(124,77,255,.25)}
+
+    /* EMPTY STATE */
+    .empty-state{grid-column:1/-1;text-align:center;padding:60px 20px;background:rgba(255,255,255,.65);border:1.5px dashed rgba(124,77,255,.20);border-radius:var(--rxl);display:none}
+    .es-ico{font-size:48px;margin-bottom:14px}
+    .es-title{font-family:var(--fd);font-size:1.3rem;font-weight:800;color:var(--td);margin-bottom:8px}
+    .es-sub{font-size:.88rem;color:var(--tm);max-width:320px;margin:0 auto 20px;line-height:1.65}
+
+    /* MODAL OVERLAY */
+    .modal-overlay{position:fixed;inset:0;z-index:500;background:rgba(45,34,80,.45);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:20px}
+    .modal-overlay.open{display:flex}
+    .modal{background:rgba(250,247,255,.97);border:1.5px solid rgba(255,255,255,.95);border-radius:var(--rxl);padding:32px;max-width:460px;width:100%;box-shadow:0 20px 60px rgba(124,77,255,.20);animation:fadeUp .35s ease both;max-height:90vh;overflow-y:auto}
+    .modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+    .modal-title{font-family:var(--fd);font-size:1.2rem;font-weight:800;color:var(--td)}
+    .modal-close{width:32px;height:32px;border-radius:50%;background:rgba(124,77,255,.08);border:none;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--tm);transition:all .2s}
+    .modal-close:hover{background:rgba(240,98,146,.12);color:var(--r)}
+
+    .form-row{margin-bottom:16px}
+    .form-row label{display:block;font-size:.78rem;font-weight:700;color:var(--tm);margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em}
+    .form-row input,.form-row select{width:100%;padding:10px 14px;border-radius:var(--rmd);border:1.5px solid rgba(124,77,255,.15);background:rgba(255,255,255,.80);font-family:var(--fb);font-size:.88rem;color:var(--td);outline:none;transition:border .2s,box-shadow .2s}
+    .form-row input:focus,.form-row select:focus{border-color:rgba(124,77,255,.45);box-shadow:0 0 0 3px rgba(124,77,255,.08)}
+    .form-2col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .modal-submit{width:100%;padding:12px;border-radius:50px;background:linear-gradient(135deg,var(--v),var(--r));color:#fff;font-family:var(--fb);font-size:.92rem;font-weight:700;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(124,77,255,.25);transition:all .2s;margin-top:6px}
+    .modal-submit:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(124,77,255,.35)}
+
+    /* DETAIL MODAL */
+    .detail-section{margin-bottom:18px}
+    .detail-section-title{font-size:.72rem;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.09em;margin-bottom:10px}
+    .detail-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(124,77,255,.06);font-size:.85rem}
+    .detail-row:last-child{border-bottom:none}
+    .detail-row span:first-child{color:var(--tm);font-weight:600}
+    .detail-row span:last-child{color:var(--td);font-weight:700}
+    .d-highlight{background:linear-gradient(135deg,rgba(124,77,255,.06),rgba(240,98,146,.04));border:1px solid rgba(124,77,255,.10);border-radius:var(--rmd);padding:14px 16px;margin-bottom:14px}
+    .d-amt{font-family:var(--fd);font-size:1.6rem;font-weight:800;color:var(--v)}
+    .d-amt-lbl{font-size:.72rem;color:var(--ts);font-weight:600}
+    .d-actions{display:flex;gap:10px;margin-top:18px}
+    .d-btn-renew{flex:1;padding:11px;border-radius:50px;background:linear-gradient(135deg,var(--v),var(--r));color:#fff;font-family:var(--fb);font-size:.88rem;font-weight:700;border:none;cursor:pointer;transition:all .2s}
+    .d-btn-renew:hover{transform:translateY(-2px)}
+    .d-btn-dl{flex:1;padding:11px;border-radius:50px;background:rgba(255,255,255,.80);color:var(--v);font-family:var(--fb);font-size:.88rem;font-weight:700;border:1.5px solid rgba(124,77,255,.20);cursor:pointer;transition:all .2s}
+    .d-btn-dl:hover{background:rgba(124,77,255,.06)}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(124,77,255,.20);border-radius:4px}
+
+    @media(max-width:1080px){.stats-row{grid-template-columns:repeat(2,1fr)}.policy-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:820px){.sidebar{display:none}.main{padding:22px 18px 44px}.policy-grid{grid-template-columns:1fr}.tnav-links{display:none}}
+    @media(max-width:500px){.stats-row{grid-template-columns:1fr 1fr}.filter-bar{gap:6px}.ftab{padding:6px 13px;font-size:.78rem}}
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <nav class="topnav">
+    <a href="#" class="logo-pill">
+      <div class="logo-ico">🛡️</div>
+      <span class="logo-name">InsureAI</span>
+    </a>
+    <ul class="tnav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/predict">Predict</a></li>
+      <li><a href="/contact">Contact</a></li>
+      <li><a href="/about">About</a></li>
+    </ul>
+    <div class="user-chip">
+      <div class="uc-av">👤</div>
+    </div>
+  </nav>
+
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <span class="sl">Main Menu</span>
+      <a href="/" class="si"><div class="sico iv">🏠</div>Home</a>
+      <a href="/policies" class="si active"><div class="sico ir">🛡️</div>My Policies<span class="sbadge bnew">New</span></a>
+      <a href="/predict" class="si"><div class="sico it">📊</div>Predictions</a>
+      <a href="/insights" class="si"><div class="sico ia">💡</div>AI Insights<span class="sbadge bhot">Hot</span></a>
+      <a href="/analytics" class="si"><div class="sico ig">📈</div>Analytics</a>
+      <div class="sdiv"></div>
+      <span class="sl">Company</span>
+      <a href="/about" class="si"><div class="sico ib">ℹ️</div>About Us</a>
+      <a href="/contact" class="si"><div class="sico iv">📞</div>Contact</a>
+      <a href="/privacy" class="si"><div class="sico ir">📄</div>Privacy Policy</a>
+      <div class="sdiv"></div>
+      <span class="sl">Account</span>
+      <a href="/settings" class="si"><div class="sico iv">⚙️</div>Settings</a>
+      <div class="sidebar-user">
+        <div class="ucard">
+          <div class="uav">👤</div>
+          <div><div class="uname"></div><div class="urole">Free Plan</div></div>
+          <div class="udot"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+      <div style="animation:fadeUp .6s ease both">
+        <p class="pg-greet">🛡️ Policy Management</p>
+        <h1 class="pg-title">My <span class="hl">Policies</span></h1>
+        <p class="pg-sub">Manage all your insurance policies in one place — track renewals, coverage details, and get AI-powered insights to optimize your protection.</p>
+      </div>
+
+      <!-- STATS -->
+      <div class="stats-row">
+        <div class="sc sc1"><div class="sc-ico sci1">📋</div><div class="sc-val" id="stat-total">5</div><div class="sc-lbl">Total Policies</div><div class="sc-chg">All categories</div></div>
+        <div class="sc sc2"><div class="sc-ico sci2">✅</div><div class="sc-val" id="stat-active">3</div><div class="sc-lbl">Active Policies</div><div class="sc-chg">Fully protected</div></div>
+        <div class="sc sc3"><div class="sc-ico sci3">⚠️</div><div class="sc-val" id="stat-expiring">1</div><div class="sc-lbl">Expiring Soon</div><div class="sc-chg warn">Renew now</div></div>
+        <div class="sc sc4"><div class="sc-ico sci4">💸</div><div class="sc-val" id="stat-premium">₹4,820</div><div class="sc-lbl">Monthly Spend</div><div class="sc-chg">Total premiums</div></div>
+      </div>
+
+      <!-- FILTER BAR -->
+      <div class="filter-bar">
+        <span class="fbar-title">Filter:</span>
+        <button class="ftab active" onclick="filterPolicies('all',this)">All</button>
+        <button class="ftab" onclick="filterPolicies('active',this)">Active</button>
+        <button class="ftab" onclick="filterPolicies('expiring',this)">Expiring</button>
+        <button class="ftab" onclick="filterPolicies('expired',this)">Expired</button>
+        <button class="add-btn" onclick="openAddModal()">＋ Add Policy</button>
+      </div>
+
+      <!-- POLICY GRID -->
+      <div class="policy-grid" id="policyGrid">
+        <!-- Cards injected by JS -->
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ADD POLICY MODAL -->
+  <div class="modal-overlay" id="addModal">
+    <div class="modal">
+      <div class="modal-head">
+        <div class="modal-title">➕ Add New Policy</div>
+        <button class="modal-close" onclick="closeModal('addModal')">✕</button>
+      </div>
+      <div class="form-row">
+        <label>Policy Type</label>
+        <select id="inp-type">
+          <option value="health">🏥 Health Insurance</option>
+          <option value="life">💜 Life Insurance</option>
+          <option value="vehicle">🚗 Vehicle Insurance</option>
+          <option value="home">🏠 Home Insurance</option>
+          <option value="travel">✈️ Travel Insurance</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Policy Name</label>
+        <input type="text" id="inp-name" placeholder="e.g. Star Health Gold Plan"/>
+      </div>
+      <div class="form-row">
+        <label>Insurance Provider</label>
+        <input type="text" id="inp-provider" placeholder="e.g. Star Health Insurance"/>
+      </div>
+      <div class="form-2col">
+        <div class="form-row">
+          <label>Sum Insured</label>
+          <input type="text" id="inp-cover" placeholder="e.g. ₹5,00,000"/>
+        </div>
+        <div class="form-row">
+          <label>Monthly Premium</label>
+          <input type="text" id="inp-premium" placeholder="e.g. ₹1,200"/>
+        </div>
+      </div>
+      <div class="form-2col">
+        <div class="form-row">
+          <label>Start Date</label>
+          <input type="date" id="inp-start"/>
+        </div>
+        <div class="form-row">
+          <label>End Date</label>
+          <input type="date" id="inp-end"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <label>Policy Number</label>
+        <input type="text" id="inp-polno" placeholder="e.g. POL-2024-00123"/>
+      </div>
+      <button class="modal-submit" onclick="addPolicy()">🛡️ Save Policy</button>
+    </div>
+  </div>
+
+  <!-- DETAIL MODAL -->
+  <div class="modal-overlay" id="detailModal">
+    <div class="modal">
+      <div class="modal-head">
+        <div class="modal-title" id="dm-title">Policy Details</div>
+        <button class="modal-close" onclick="closeModal('detailModal')">✕</button>
+      </div>
+      <div id="dm-body"></div>
+    </div>
+  </div>
+
+  <script>
+    // ── Sample data ──────────────────────────────────────────────
+    let policies = [
+      {id:1, type:'health', name:'Star Health Gold Plan', provider:'Star Health Insurance',
+       cover:'₹5,00,000', premium:'₹1,200', start:'2024-03-01', end:'2025-03-01',
+       polno:'POL-SH-20240301', status:'active', progress:78},
+      {id:2, type:'life', name:'LIC Jeevan Anand', provider:'Life Insurance Corporation',
+       cover:'₹25,00,000', premium:'₹2,400', start:'2023-07-15', end:'2043-07-15',
+       polno:'POL-LIC-20230715', status:'active', progress:92},
+      {id:3, type:'vehicle', name:'Bajaj Allianz Comprehensive', provider:'Bajaj Allianz General',
+       cover:'₹8,50,000', premium:'₹680', start:'2024-11-10', end:'2025-11-10',
+       polno:'POL-BA-20241110', status:'expiring', progress:12},
+      {id:4, type:'home', name:'HDFC ERGO Home Shield', provider:'HDFC ERGO Insurance',
+       cover:'₹35,00,000', premium:'₹390', start:'2024-01-20', end:'2025-01-20',
+       polno:'POL-HE-20240120', status:'expired', progress:0},
+      {id:5, type:'travel', name:'ICICI Lombard Travel Guard', provider:'ICICI Lombard',
+       cover:'$50,000', premium:'₹150', start:'2025-01-05', end:'2025-06-05',
+       polno:'POL-IL-20250105', status:'active', progress:55},
+    ];
+
+    const typeEmoji = {health:'🏥', life:'💜', vehicle:'🚗', home:'🏠', travel:'✈️'};
+    const typeLabel = {health:'Health Insurance', life:'Life Insurance', vehicle:'Vehicle Insurance', home:'Home Insurance', travel:'Travel Insurance'};
+
+    let currentFilter = 'all';
+
+    function daysLeft(endDate){
+      const d = new Date(endDate) - new Date();
+      return Math.max(0, Math.floor(d/(1000*60*60*24)));
+    }
+
+    function renderPolicies(){
+      const grid = document.getElementById('policyGrid');
+      const filtered = currentFilter === 'all' ? policies : policies.filter(p => p.status === currentFilter);
+      grid.innerHTML = '';
+
+      if(filtered.length === 0){
+        grid.innerHTML = `<div class="empty-state" style="display:block">
+          <div class="es-ico">📭</div>
+          <div class="es-title">No policies found</div>
+          <p class="es-sub">No policies in this category yet. Add a new policy to get started.</p>
+          <button class="add-btn" style="margin:0 auto;display:inline-flex" onclick="openAddModal()">＋ Add Policy</button>
+        </div>`;
+        return;
+      }
+
+      filtered.forEach(p => {
+        const dl = daysLeft(p.end);
+        const statusLabel = p.status === 'active' ? 'Active' : p.status === 'expiring' ? 'Expiring Soon' : 'Expired';
+        const statusClass = p.status === 'active' ? 's-active' : p.status === 'expiring' ? 's-expiring' : 's-expired';
+        const dotClass = p.status === 'active' ? 'sd-active' : p.status === 'expiring' ? 'sd-expiring' : 'sd-expired';
+        const progClass = p.status === 'active' ? 'prog-green' : p.status === 'expiring' ? 'prog-amber' : 'prog-red';
+        const progDays = p.status === 'expired' ? '0 days left' : p.status === 'expiring' ? `${dl} days left` : `${dl} days left`;
+
+        const card = document.createElement('div');
+        card.className = `pcard ${p.type}`;
+        card.innerHTML = `
+          <div class="p-top">
+            <div class="p-ico-wrap p-ico-${p.type}">${typeEmoji[p.type]}</div>
+            <div class="p-status ${statusClass}"><span class="s-dot ${dotClass}"></span>${statusLabel}</div>
+          </div>
+          <div class="p-type">${typeLabel[p.type]}</div>
+          <div class="p-name">${p.name}</div>
+          <div class="p-provider">${p.provider}</div>
+          <div class="p-divider"></div>
+          <div class="p-info-grid">
+            <div class="pinfo"><div class="pinfo-lbl">Sum Insured</div><div class="pinfo-val" style="font-size:.82rem">${p.cover}</div></div>
+            <div class="pinfo"><div class="pinfo-lbl">Monthly</div><div class="pinfo-val" style="font-size:.82rem">${p.premium}</div></div>
+            <div class="pinfo"><div class="pinfo-lbl">Start Date</div><div class="pinfo-val" style="font-size:.76rem">${formatDate(p.start)}</div></div>
+            <div class="pinfo"><div class="pinfo-lbl">End Date</div><div class="pinfo-val" style="font-size:.76rem">${formatDate(p.end)}</div></div>
+          </div>
+          <div class="p-progress-wrap">
+            <div class="p-prog-top"><span class="p-prog-lbl">Coverage Period</span><span>${progDays}</span></div>
+            <div class="prog-bg"><div class="prog-bar ${progClass}" style="width:${p.progress}%"></div></div>
+          </div>
+          <div class="p-actions">
+            <button class="pa-view" onclick="openDetail(${p.id})">📄 View Details</button>
+            <button class="pa-more" onclick="deletePolicy(${p.id})" title="Delete">🗑️</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      updateStats();
+    }
+
+    function formatDate(d){ const dt = new Date(d); return dt.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}); }
+
+    function updateStats(){
+      document.getElementById('stat-total').textContent = policies.length;
+      document.getElementById('stat-active').textContent = policies.filter(p=>p.status==='active').length;
+      document.getElementById('stat-expiring').textContent = policies.filter(p=>p.status==='expiring').length;
+      const total = policies.reduce((s,p)=>{
+        const n = parseInt(p.premium.replace(/[^\d]/g,'')) || 0;
+        return s + n;
+      },0);
+      document.getElementById('stat-premium').textContent = '₹' + total.toLocaleString('en-IN');
+    }
+
+    function filterPolicies(f, btn){
+      currentFilter = f;
+      document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));
+      btn.classList.add('active');
+      renderPolicies();
+    }
+
+    function openAddModal(){
+      document.getElementById('addModal').classList.add('open');
+    }
+
+    function closeModal(id){
+      document.getElementById(id).classList.remove('open');
+    }
+
+    function addPolicy(){
+      const type = document.getElementById('inp-type').value;
+      const name = document.getElementById('inp-name').value.trim();
+      const provider = document.getElementById('inp-provider').value.trim();
+      const cover = document.getElementById('inp-cover').value.trim();
+      const premium = document.getElementById('inp-premium').value.trim();
+      const start = document.getElementById('inp-start').value;
+      const end = document.getElementById('inp-end').value;
+      const polno = document.getElementById('inp-polno').value.trim();
+
+      if(!name || !provider || !cover || !premium || !start || !end){
+        alert('Please fill all required fields.'); return;
+      }
+
+      const dl = daysLeft(end);
+      const status = dl <= 0 ? 'expired' : dl <= 30 ? 'expiring' : 'active';
+      const total = new Date(end) - new Date(start);
+      const elapsed = new Date() - new Date(start);
+      const progress = Math.min(100, Math.max(0, Math.floor((elapsed/total)*100)));
+
+      policies.push({id: Date.now(), type, name, provider, cover, premium, start, end, polno: polno||'N/A', status, progress});
+      closeModal('addModal');
+      renderPolicies();
+
+      // reset
+      ['inp-name','inp-provider','inp-cover','inp-premium','inp-start','inp-end','inp-polno'].forEach(id=>document.getElementById(id).value='');
+    }
+
+    function deletePolicy(id){
+      if(confirm('Delete this policy?')){
+        policies = policies.filter(p=>p.id!==id);
+        renderPolicies();
+      }
+    }
+
+    function openDetail(id){
+      const p = policies.find(x=>x.id===id);
+      if(!p) return;
+      const dl = daysLeft(p.end);
+      const statusLabel = p.status === 'active' ? '✅ Active' : p.status === 'expiring' ? '⚠️ Expiring Soon' : '❌ Expired';
+
+      document.getElementById('dm-title').textContent = typeEmoji[p.type] + ' ' + p.name;
+      document.getElementById('dm-body').innerHTML = `
+        <div class="d-highlight">
+          <div class="d-amt-lbl">Sum Insured</div>
+          <div class="d-amt">${p.cover}</div>
+        </div>
+        <div class="detail-section">
+          <div class="detail-section-title">Policy Information</div>
+          <div class="detail-row"><span>Policy Number</span><span>${p.polno}</span></div>
+          <div class="detail-row"><span>Type</span><span>${typeLabel[p.type]}</span></div>
+          <div class="detail-row"><span>Provider</span><span>${p.provider}</span></div>
+          <div class="detail-row"><span>Status</span><span>${statusLabel}</span></div>
+        </div>
+        <div class="detail-section">
+          <div class="detail-section-title">Dates & Premium</div>
+          <div class="detail-row"><span>Start Date</span><span>${formatDate(p.start)}</span></div>
+          <div class="detail-row"><span>End Date</span><span>${formatDate(p.end)}</span></div>
+          <div class="detail-row"><span>Days Remaining</span><span>${dl > 0 ? dl + ' days' : 'Expired'}</span></div>
+          <div class="detail-row"><span>Monthly Premium</span><span>${p.premium}</span></div>
+        </div>
+        <div class="d-actions">
+          <button class="d-btn-renew" onclick="closeModal('detailModal')">🔄 Renew Policy</button>
+          <button class="d-btn-dl" onclick="closeModal('detailModal')">📥 Download PDF</button>
+        </div>
+      `;
+      document.getElementById('detailModal').classList.add('open');
+    }
+
+    // close modal on overlay click
+    document.querySelectorAll('.modal-overlay').forEach(o=>{
+      o.addEventListener('click', e=>{ if(e.target===o) o.classList.remove('open'); });
+    });
+
+    // Init
+    renderPolicies();
+  </script>
+
+</body>
+</html>

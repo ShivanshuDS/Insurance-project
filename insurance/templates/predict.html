@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>InsureAI – Premium Predictor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --v:   #7c4dff;
+      --r:   #f06292;
+      --t:   #26c6da;
+      --g:   #43d98a;
+      --a:   #ffb300;
+      --b:   #4a90e2;
+      --td:  #2d2250;
+      --tm:  #6b5b95;
+      --ts:  #a89bc4;
+      --bg:  #f5f0ff;
+      --sw:  260px;
+      --rxl: 24px;
+      --rlg: 18px;
+      --rmd: 12px;
+      --rsm: 8px;
+      --sc:  0 2px 16px rgba(124,77,255,.08);
+      --sh:  0 8px 32px rgba(124,77,255,.18);
+      --fd:  'Playfair Display', serif;
+      --fb:  'Nunito', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--fb);
+      background: var(--bg);
+      color: var(--td);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 70% 55% at 5%  0%,  rgba(252,228,236,.70) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 45% at 95% 100%, rgba(227,240,255,.65) 0%, transparent 50%),
+        radial-gradient(ellipse 40% 35% at 80% 10%,  rgba(237,231,255,.55) 0%, transparent 45%),
+        radial-gradient(ellipse 45% 40% at 15% 85%,  rgba(232,248,240,.50) 0%, transparent 45%),
+        var(--bg);
+      pointer-events: none;
+    }
+
+    /* ── TOP NAV ── */
+    .topnav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      padding: 14px 28px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(245,240,255,.88);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 2px 20px rgba(124,77,255,.08);
+    }
+    .logo-pill {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,.80);
+      border: 1.5px solid rgba(124,77,255,.14);
+      border-radius: 50px;
+      padding: 6px 16px 6px 8px;
+      box-shadow: 0 2px 10px rgba(124,77,255,.10);
+      text-decoration: none;
+    }
+    .logo-ico {
+      width: 28px; height: 28px;
+      background: linear-gradient(135deg, var(--v), var(--r));
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+    }
+    .logo-name { font-family: var(--fd); font-weight: 700; font-size: .90rem; color: var(--td); }
+
+    .tnav-links { display: flex; align-items: center; gap: 4px; list-style: none; }
+    .tnav-links a {
+      text-decoration: none; color: var(--tm);
+      font-size: .87rem; font-weight: 600;
+      padding: 6px 14px; border-radius: 50px;
+      transition: background .2s, color .2s;
+    }
+    .tnav-links a:hover     { background: rgba(124,77,255,.08); color: var(--v); }
+    .tnav-links a.nav-active { background: rgba(124,77,255,.12); color: var(--v); }
+
+    .user-chip {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,.80);
+      border: 1.5px solid rgba(124,77,255,.12);
+      border-radius: 50px;
+      padding: 5px 14px 5px 5px;
+    }
+    .uc-av {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: linear-gradient(135deg, #ede7ff, #fce4ec);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; border: 2px solid #fff;
+    }
+
+    /* ── LAYOUT ── */
+    .layout {
+      display: flex; width: 100%; min-height: 100vh;
+      padding-top: 64px; position: relative; z-index: 1;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sw); min-height: calc(100vh - 64px);
+      padding: 28px 14px 28px 16px;
+      display: flex; flex-direction: column; gap: 4px;
+      position: sticky; top: 64px; height: calc(100vh - 64px);
+      overflow-y: auto; flex-shrink: 0;
+    }
+    .sl {
+      font-size: .68rem; font-weight: 700; color: var(--ts);
+      letter-spacing: .10em; text-transform: uppercase;
+      padding: 12px 10px 5px;
+    }
+    .si {
+      display: flex; align-items: center; gap: 11px;
+      padding: 10px 12px; border-radius: var(--rmd);
+      text-decoration: none; color: var(--tm);
+      font-size: .88rem; font-weight: 600;
+      transition: background .2s, color .2s, transform .2s;
+      position: relative; cursor: pointer;
+    }
+    .si:hover { background: rgba(255,255,255,.70); color: var(--td); transform: translateX(3px); }
+    .si.active { background: rgba(255,255,255,.90); color: var(--v); box-shadow: var(--sc); }
+    .si.active::before {
+      content: ''; position: absolute; left: 0; top: 22%; bottom: 22%;
+      width: 3.5px;
+      background: linear-gradient(180deg, var(--v), var(--r));
+      border-radius: 0 3px 3px 0;
+    }
+    .sico {
+      width: 32px; height: 32px; border-radius: var(--rsm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; flex-shrink: 0;
+    }
+    .iv{background:rgba(124,77,255,.12)} .ir{background:rgba(240,98,146,.12)}
+    .it{background:rgba(38,198,218,.12)}  .ia{background:rgba(255,179,0,.12)}
+    .ig{background:rgba(67,217,138,.12)}  .ib{background:rgba(74,144,226,.12)}
+
+    .sbadge {
+      margin-left: auto; font-size: .66rem; font-weight: 700;
+      padding: 2px 7px; border-radius: 50px;
+    }
+    .bnew { background: rgba(67,217,138,.15); color: #1a9e5c; }
+    .bhot { background: rgba(240,98,146,.12); color: var(--r); }
+
+    .sdiv { height: 1px; background: rgba(124,77,255,.08); margin: 7px 10px; }
+
+    .sidebar-user {
+      margin-top: auto; padding-top: 14px;
+      border-top: 1px solid rgba(124,77,255,.08);
+    }
+    .ucard {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px;
+      background: rgba(255,255,255,.70);
+      border-radius: var(--rmd);
+      border: 1px solid rgba(124,77,255,.10);
+    }
+    .uav {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: linear-gradient(135deg, #ede7ff, #fce4ec);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; border: 2px solid rgba(255,255,255,.9);
+    }
+    .uname { font-size: .83rem; font-weight: 700; color: var(--td); }
+    .urole { font-size: .70rem; color: var(--ts); }
+    .udot  { width: 8px; height: 8px; border-radius: 50%; background: var(--g); margin-left: auto; flex-shrink: 0; }
+
+    /* ── MAIN ── */
+    .main { flex: 1; padding: 36px 40px 60px 32px; min-width: 0; }
+
+    /* Page Header */
+    .pg-greet  { font-size: .83rem; color: var(--ts); font-weight: 500; margin-bottom: 5px; }
+    .pg-title  {
+      font-family: var(--fd);
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 800; color: var(--td); line-height: 1.15;
+      margin-bottom: 8px;
+    }
+    .pg-title .hl {
+      background: linear-gradient(135deg, var(--v), var(--r));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .pg-sub {
+      font-size: .92rem; color: var(--tm);
+      max-width: 540px; line-height: 1.7; margin-bottom: 30px;
+    }
+
+    /* ── FORM CARD ── */
+    .form-card {
+      background: rgba(255,255,255,.80);
+      border: 1.5px solid rgba(255,255,255,.95);
+      border-radius: var(--rxl);
+      padding: 34px 38px;
+      box-shadow: var(--sc);
+      backdrop-filter: blur(16px);
+      animation: fadeUp .6s .15s ease both;
+      position: relative; overflow: hidden;
+    }
+    .form-card::before {
+      content: ''; position: absolute; top: -60px; right: -60px;
+      width: 200px; height: 200px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(124,77,255,.07), transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Section Label — same style as predict.html */
+    .section-label {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 20px; margin-top: 8px;
+    }
+    .section-label-icon {
+      width: 32px; height: 32px;
+      background: rgba(124,77,255,.10);
+      border: 1px solid rgba(124,77,255,.18);
+      border-radius: var(--rsm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px;
+    }
+    .section-label-text {
+      font-family: var(--fd);
+      font-weight: 700; font-size: .82rem;
+      letter-spacing: .06em; text-transform: uppercase;
+      color: var(--tm);
+    }
+    .section-divider {
+      height: 1px;
+      background: rgba(124,77,255,.08);
+      margin: 26px 0;
+    }
+
+    /* Form Grid — 2-col like predict.html */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px 26px;
+    }
+    .form-group { display: flex; flex-direction: column; gap: 7px; }
+    .form-group.full { grid-column: 1 / -1; }
+
+    label {
+      font-size: .79rem; font-weight: 700;
+      color: var(--tm); letter-spacing: .04em;
+    }
+
+    /* Select & Input */
+    select, input[type="number"], input[type="text"] {
+      background: rgba(255,255,255,.75);
+      border: 1.5px solid rgba(124,77,255,.15);
+      color: var(--td);
+      padding: 11px 14px;
+      border-radius: var(--rmd);
+      font-family: var(--fb);
+      font-size: .90rem; font-weight: 600;
+      outline: none;
+      transition: border-color .25s, box-shadow .25s, background .25s;
+      width: 100%;
+      appearance: none; -webkit-appearance: none;
+      cursor: pointer;
+    }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237c4dff' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      background-color: rgba(255,255,255,.75);
+      padding-right: 36px;
+    }
+    select:focus, input:focus {
+      border-color: var(--v);
+      background: rgba(255,255,255,.97);
+      box-shadow: 0 0 0 3px rgba(124,77,255,.11);
+    }
+    select option { background: #fff; color: var(--td); }
+
+    /* Toggle buttons — same pattern as predict.html */
+    .toggle-group { display: flex; gap: 10px; }
+    .toggle-label {
+      flex: 1;
+      padding: 11px 14px;
+      background: rgba(255,255,255,.70);
+      border: 1.5px solid rgba(124,77,255,.15);
+      color: var(--tm);
+      border-radius: var(--rmd);
+      font-family: var(--fb);
+      font-size: .88rem; font-weight: 700;
+      cursor: pointer;
+      transition: all .22s;
+      text-align: center;
+      user-select: none;
+    }
+    .toggle-label:hover {
+      background: rgba(124,77,255,.07);
+      border-color: rgba(124,77,255,.30);
+      color: var(--td);
+    }
+    .toggle-label:has(input:checked) {
+      background: rgba(124,77,255,.12);
+      border-color: var(--v);
+      color: var(--v);
+      box-shadow: 0 0 0 3px rgba(124,77,255,.09);
+    }
+    .toggle-radio { display: none; }
+
+    /* Submit row */
+    .submit-row {
+      display: flex; gap: 14px; align-items: center;
+      margin-top: 8px;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 36px; border-radius: 50px;
+      background: linear-gradient(135deg, var(--v), var(--r));
+      color: #fff;
+      font-family: var(--fb); font-weight: 700; font-size: .94rem;
+      border: none; cursor: pointer;
+      box-shadow: 0 6px 24px rgba(124,77,255,.28);
+      transition: transform .25s, box-shadow .25s;
+      position: relative; overflow: hidden;
+    }
+    .btn-primary::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,.15), transparent);
+      opacity: 0; transition: opacity .25s;
+    }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(124,77,255,.40); }
+    .btn-primary:hover::before { opacity: 1; }
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 28px; border-radius: 50px;
+      background: rgba(255,255,255,.80);
+      color: var(--tm);
+      font-family: var(--fb); font-weight: 700; font-size: .94rem;
+      border: 1.5px solid rgba(124,77,255,.18);
+      cursor: pointer;
+      transition: all .25s;
+    }
+    .btn-secondary:hover {
+      border-color: rgba(124,77,255,.35);
+      background: rgba(124,77,255,.06);
+      color: var(--v);
+      transform: translateY(-2px);
+    }
+
+    /* Result box */
+    .result-box {
+      margin-top: 28px;
+      background: linear-gradient(145deg, rgba(124,77,255,.07), rgba(240,98,146,.06));
+      border: 1.5px solid rgba(124,77,255,.22);
+      border-radius: var(--rxl);
+      padding: 28px 32px;
+      animation: fadeUp .5s ease both;
+    }
+    .result-tag {
+      font-size: .76rem; font-weight: 700;
+      color: var(--v); text-transform: uppercase;
+      letter-spacing: .08em; margin-bottom: 6px;
+    }
+    .result-price {
+      font-family: var(--fd);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--v), var(--r));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .result-meta {
+      margin-top: 10px; font-size: .80rem; color: var(--ts); font-weight: 500;
+    }
+    .result-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 10px; margin-top: 16px;
+    }
+    .res-chip {
+      background: rgba(255,255,255,.85);
+      border: 1px solid rgba(124,77,255,.10);
+      border-radius: var(--rmd);
+      padding: 10px 14px; text-align: center;
+    }
+    .res-chip-val { font-family: var(--fd); font-size: .88rem; font-weight: 800; color: var(--td); }
+    .res-chip-lbl { font-size: .68rem; color: var(--ts); font-weight: 600; margin-top: 2px; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    /* Footer */
+    .footer {
+      position: relative; z-index: 1;
+      padding: 32px 40px;
+      border-top: 1px solid rgba(124,77,255,.10);
+      margin-left: var(--sw);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 14px;
+    }
+    .footer-brand {
+      display: flex; align-items: center; gap: 8px;
+      text-decoration: none; color: var(--td);
+    }
+    .footer-logo-icon {
+      width: 28px; height: 28px;
+      background: linear-gradient(135deg, var(--v), var(--r));
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; font-size: 13px;
+    }
+    .footer-brand-name { font-family: var(--fd); font-weight: 700; font-size: .88rem; }
+    .footer-copy { font-size: .76rem; color: var(--ts); }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(124,77,255,.20); border-radius: 4px; }
+
+    @media (max-width: 900px) { .form-grid { grid-template-columns: 1fr; } .form-group.full { grid-column: 1; } }
+    @media (max-width: 820px) { .sidebar { display: none; } .main { padding: 22px 18px 44px; } .tnav-links { display: none; } .footer { margin-left: 0; } }
+    @media (max-width: 600px) { .form-card { padding: 22px 16px; } .submit-row { flex-direction: column; align-items: stretch; } .btn-primary,.btn-secondary { justify-content: center; } .result-grid { grid-template-columns: 1fr 1fr; } }
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <nav class="topnav">
+    <a href="#" class="logo-pill">
+      <div class="logo-ico">🛡️</div>
+      <span class="logo-name">InsureAI</span>
+    </a>
+    <ul class="tnav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/predict" class="nav-active">Predict</a></li>
+      <li><a href="/contact">Contact</a></li>
+      <li><a href="/about">About</a></li>
+    </ul>
+    <div class="user-chip">
+      <div class="uc-av">👤</div>
+    </div>
+  </nav>
+
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <span class="sl">Main Menu</span>
+      <a href="/" class="si"><div class="sico iv">🏠</div>Home</a>
+      <a href="/policies" class="si active"><div class="sico ir">🛡️</div>My Policies<span class="sbadge bnew">New</span></a>
+      <a href="/predict" class="si"><div class="sico it">📊</div>Predictions</a>
+      <a href="/insights" class="si"><div class="sico ia">💡</div>AI Insights<span class="sbadge bhot">Hot</span></a>
+      <a href="/analytics" class="si"><div class="sico ig">📈</div>Analytics</a>
+      <div class="sdiv"></div>
+      <span class="sl">Company</span>
+      <a href="/about" class="si"><div class="sico ib">ℹ️</div>About Us</a>
+      <a href="/contact" class="si"><div class="sico iv">📞</div>Contact</a>
+      <a href="/privacy" class="si"><div class="sico ir">📄</div>Privacy Policy</a>
+      <div class="sdiv"></div>
+      <span class="sl">Account</span>
+      <a href="/settings" class="si"><div class="sico iv">⚙️</div>Settings</a>
+      <div class="sidebar-user">
+        <div class="ucard">
+          <div class="uav">👤</div>
+          <div><div class="uname"></div><div class="urole">Free Plan</div></div>
+          <div class="udot"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+      <!-- Page Header -->
+      <div style="animation: fadeUp .6s ease both;">
+        <p class="pg-greet">🛡️ Insurance Premium Predictor</p>
+        <h1 class="pg-title">Enter Your <span class="hl">Health Details</span></h1>
+        <p class="pg-sub">Fill in all the details below — our Linear Regression model will estimate your annual insurance charges instantly.</p>
+      </div>
+
+      <!-- FORM CARD -->
+      <div class="form-card">
+        <form action="{{ url_for('predict') }}" method="post" id="predForm">
+
+          <!-- ── SECTION 1: Personal Info ── -->
+          <div class="section-label">
+            <div class="section-label-icon">👤</div>
+            <span class="section-label-text">Personal Information</span>
+          </div>
+
+          <div class="form-grid">
+
+            <!-- AGE -->
+            <div class="form-group">
+              <label for="age">Age (years)</label>
+              <select name="age" id="age" required>
+                <option value="" disabled selected>Select Age</option>
+                <!-- 18–64 -->
+                <option value="18">18</option><option value="19">19</option><option value="20">20</option>
+                <option value="21">21</option><option value="22">22</option><option value="23">23</option>
+                <option value="24">24</option><option value="25">25</option><option value="26">26</option>
+                <option value="27">27</option><option value="28">28</option><option value="29">29</option>
+                <option value="30">30</option><option value="31">31</option><option value="32">32</option>
+                <option value="33">33</option><option value="34">34</option><option value="35">35</option>
+                <option value="36">36</option><option value="37">37</option><option value="38">38</option>
+                <option value="39">39</option><option value="40">40</option><option value="41">41</option>
+                <option value="42">42</option><option value="43">43</option><option value="44">44</option>
+                <option value="45">45</option><option value="46">46</option><option value="47">47</option>
+                <option value="48">48</option><option value="49">49</option><option value="50">50</option>
+                <option value="51">51</option><option value="52">52</option><option value="53">53</option>
+                <option value="54">54</option><option value="55">55</option><option value="56">56</option>
+                <option value="57">57</option><option value="58">58</option><option value="59">59</option>
+                <option value="60">60</option><option value="61">61</option><option value="62">62</option>
+                <option value="63">63</option><option value="64">64</option>
+              </select>
+            </div>
+
+            <!-- GENDER -->
+            <div class="form-group">
+              <label>Gender</label>
+              <div class="toggle-group">
+                <label class="toggle-label">
+                  <input class="toggle-radio" type="radio" name="gender" value="male" checked> 👨 Male
+                </label>
+                <label class="toggle-label">
+                  <input class="toggle-radio" type="radio" name="gender" value="female"> 👩 Female
+                </label>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="section-divider"></div>
+
+          <!-- ── SECTION 2: Health Info ── -->
+          <div class="section-label">
+            <div class="section-label-icon">🩺</div>
+            <span class="section-label-text">Health Information</span>
+          </div>
+
+          <div class="form-grid">
+
+            <!-- BMI -->
+            <div class="form-group">
+              <label for="bmi">BMI (Body Mass Index)</label>
+              <select name="bmi" id="bmi" required>
+                <option value="" disabled selected>Select BMI Range</option>
+                <option value="15.5">Underweight  — Below 18.5  (≈ 15.5)</option>
+                <option value="21.7">Normal       — 18.5 – 24.9 (≈ 21.7)</option>
+                <option value="27.3">Overweight   — 25.0 – 29.9 (≈ 27.3)</option>
+                <option value="32.5">Obese I      — 30.0 – 34.9 (≈ 32.5)</option>
+                <option value="37.5">Obese II     — 35.0 – 39.9 (≈ 37.5)</option>
+                <option value="43.0">Obese III    — 40.0+       (≈ 43.0)</option>
+              </select>
+            </div>
+
+            <!-- CHILDREN -->
+            <div class="form-group">
+              <label for="children">Children / Dependents</label>
+              <select name="children" id="children" required>
+                <option value="" disabled selected>Select No. of Children</option>
+                <option value="0">0  —  No dependents</option>
+                <option value="1">1  —  One child</option>
+                <option value="2">2  —  Two children</option>
+                <option value="3">3  —  Three children</option>
+                <option value="4">4  —  Four children</option>
+                <option value="5">5  —  Five children</option>
+              </select>
+            </div>
+
+          </div>
+
+          <div class="section-divider"></div>
+
+          <!-- ── SECTION 3: Lifestyle & Region ── -->
+          <div class="section-label">
+            <div class="section-label-icon">🌍</div>
+            <span class="section-label-text">Lifestyle & Region</span>
+          </div>
+
+          <div class="form-grid">
+
+            <!-- SMOKER -->
+            <div class="form-group">
+              <label>Smoking Status</label>
+              <div class="toggle-group">
+                <label class="toggle-label">
+                  <input class="toggle-radio" type="radio" name="smoker" value="no" checked> 🚭 Non-Smoker
+                </label>
+                <label class="toggle-label">
+                  <input class="toggle-radio" type="radio" name="smoker" value="yes"> 🚬 Smoker
+                </label>
+              </div>
+            </div>
+
+            <!-- REGION -->
+            <div class="form-group">
+              <label for="region">Region</label>
+              <select name="region" id="region" required>
+                <option value="" disabled selected>Select Region</option>
+                <option value="southwest">🌵 Southwest</option>
+                <option value="southeast">🌴 Southeast</option>
+                <option value="northwest">🌲 Northwest</option>
+                <option value="northeast">🏙️ Northeast</option>
+              </select>
+            </div>
+
+          </div>
+
+          <!-- Submit -->
+          <div class="section-divider"></div>
+          <div class="submit-row">
+            <button type="submit" class="btn-primary">
+              <span>✨</span> Predict Premium
+            </button>
+            <button type="reset" class="btn-secondary">
+              ↺ Reset
+            </button>
+          </div>
+
+
+
+        </form>
+        
+        <!--ye baala option prediction ko show karata h -->
+        {% if prediction %}
+<div class="result-box">
+  <div class="result-tag">Estimated Premium</div>
+  <div class="result-price">₹ {{ prediction[0] }}</div>
+</div>
+{% endif %}
+      </div>
+
+    </main>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <a href="#" class="footer-brand">
+      <div class="footer-logo-icon">🛡️</div>
+      <span class="footer-brand-name">InsureAI</span>
+    </a>
+    <p class="footer-copy">© InsureAI · Built with ❤️ &amp; Linear Regression</p>
+  </footer>
+
+
+
+</body>
+</html>
